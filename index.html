@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Clientes 360</title>
     
-    <!-- Configuración para Pantalla de Inicio en iOS (PWA) y Favicon -->
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778020925/Dise%C3%B1o_sin_t%C3%ADtulo_1_pvnyid.png">
     <link rel="apple-touch-icon" href="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778020925/Dise%C3%B1o_sin_t%C3%ADtulo_1_pvnyid.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,7 +20,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Utilidades iOS */
         .ios-bg { background-color: #F2F2F7; }
         .ios-card { background-color: #FFFFFF; }
         .ios-blue { color: #007AFF; }
@@ -32,7 +30,6 @@
             -webkit-backdrop-filter: blur(12px);
         }
 
-        /* Animaciones iOS y Modales Responsivos */
         .slide-up-modal {
             transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease;
         }
@@ -60,19 +57,28 @@
         .fade-in { animation: fadeIn 0.3s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Ocultar scrollbar */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Estilo para inputs de dinero */
+        .currency-input { position: relative; }
+        .currency-input::before {
+            content: '$';
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            font-weight: 500;
+        }
+        .currency-input input { padding-left: 2rem; }
     </style>
 </head>
 <body class="text-slate-900 bg-black md:bg-gray-100 h-screen w-screen overflow-hidden flex justify-center items-center">
 
-    <!-- Contenedor principal adaptable -->
     <div id="app-container" class="w-full h-full md:max-w-6xl ios-bg relative overflow-hidden md:shadow-2xl md:rounded-3xl md:h-[90vh] md:border md:border-gray-200 flex flex-col md:flex-row">
         
-        <!-- ========================================== -->
-        <!-- PANTALLA DE AUTENTICACIÓN (Bloqueo)          -->
-        <!-- ========================================== -->
+        <!-- PANTALLA DE AUTENTICACIÓN -->
         <div id="auth-screen" class="absolute inset-0 ios-bg z-50 flex flex-col items-center justify-center px-6 transition-opacity duration-300">
             <div class="w-full max-w-sm mx-auto flex flex-col items-center">
                 <img src="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778020925/Dise%C3%B1o_sin_t%C3%ADtulo_1_pvnyid.png" alt="Clientes 360 Logo" class="w-24 h-24 md:w-32 md:h-32 rounded-3xl mb-6 shadow-xl object-cover">
@@ -87,20 +93,16 @@
             </div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- NAVEGACIÓN (Bottom en Móvil / Sidebar en PC) -->
-        <!-- ========================================== -->
+        <!-- NAVEGACIÓN -->
         <nav id="main-nav" class="absolute md:relative bottom-0 w-full md:w-64 glass-nav md:bg-white md:backdrop-filter-none border-t md:border-t-0 md:border-r border-gray-200/60 pb-safe pt-2 md:pt-10 px-6 md:px-4 flex md:flex-col justify-around md:justify-start items-center md:items-start z-30 pb-4 md:space-y-2 hidden">
-            <!-- Header Sidebar (Solo visible en Desktop) -->
             <div class="hidden md:block mb-8 px-4 w-full text-center">
                 <img src="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778020925/Dise%C3%B1o_sin_t%C3%ADtulo_1_pvnyid.png" alt="Clientes 360 Logo" class="w-16 h-16 mx-auto rounded-2xl shadow-md mb-3 object-cover">
                 <h2 class="font-bold text-xl tracking-tight">Clientes 360</h2>
             </div>
 
-            <!-- Botones Navegación -->
             <button onclick="switchTab('home')" class="flex flex-col md:flex-row items-center md:px-4 md:py-3 w-auto md:w-full rounded-xl text-[#007AFF] md:bg-blue-50 nav-btn transition-colors" data-tab="home">
                 <svg class="w-6 h-6 mb-1 md:mb-0 md:mr-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L4 9v12h5v-7h6v7h5V9z"/></svg>
-                <span class="text-[10px] md:text-sm font-semibold">Clientes</span>
+                <span class="text-[10px] md:text-sm font-semibold">Proyectos</span>
             </button>
             <button onclick="switchTab('settings')" class="flex flex-col md:flex-row items-center md:px-4 md:py-3 w-auto md:w-full rounded-xl text-gray-400 hover:bg-gray-100 transition-colors nav-btn" data-tab="settings">
                 <svg class="w-6 h-6 mb-1 md:mb-0 md:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -108,47 +110,64 @@
             </button>
         </nav>
 
-        <!-- ========================================== -->
-        <!-- APLICACIÓN PRINCIPAL (Contenido)             -->
-        <!-- ========================================== -->
+        <!-- CONTENIDO PRINCIPAL -->
         <div id="main-app" class="flex-1 flex flex-col hidden h-full relative">
-            
-            <div class="flex-1 overflow-y-auto no-scrollbar pb-24 md:pb-12 relative w-full px-4 md:px-8" id="scroll-container">
+            <div class="flex-1 overflow-y-auto no-scrollbar pb-24 md:pb-12 relative w-full px-4 md:px-8 pt-10" id="scroll-container">
                 
-                <!-- PESTAÑA: CLIENTES (HOME) -->
-                <div id="tab-home" class="tab-content pt-12 md:pt-16 max-w-5xl mx-auto">
+                <!-- PESTAÑA: HOME -->
+                <div id="tab-home" class="tab-content max-w-5xl mx-auto">
+                    
                     <div class="flex justify-between items-end mb-6">
-                        <h1 class="text-4xl md:text-5xl font-bold tracking-tight">Clientes</h1>
-                        <button onclick="openClientModal()" class="w-9 h-9 md:w-10 md:h-10 bg-gray-200 md:bg-white md:shadow-sm rounded-full flex items-center justify-center text-[#007AFF] hover:bg-gray-300 md:hover:bg-gray-50 active:scale-90 transition-transform">
-                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+                        <div>
+                            <h1 class="text-3xl md:text-4xl font-bold tracking-tight">Proyectos</h1>
+                            <p class="text-gray-500 text-sm mt-1" id="current-date"></p>
+                        </div>
+                        <button onclick="openClientModal()" class="w-10 h-10 bg-ios-blue shadow-lg shadow-blue-500/30 rounded-full flex items-center justify-center text-white active:scale-90 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
                         </button>
                     </div>
 
-                    <!-- Buscador iOS Style Responsivo -->
-                    <div class="relative mb-8 w-full md:max-w-md">
+                    <!-- Widgets Financieros (Scroll horizontal en móvil) -->
+                    <div class="flex overflow-x-auto no-scrollbar space-x-4 mb-6 pb-2">
+                        <div class="min-w-[140px] ios-card rounded-2xl p-4 shadow-sm border border-gray-100 flex-1">
+                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Activos</p>
+                            <p class="text-2xl font-bold text-slate-800" id="stat-active">0</p>
+                        </div>
+                        <div class="min-w-[160px] ios-card rounded-2xl p-4 shadow-sm border border-gray-100 flex-1">
+                            <p class="text-xs text-green-600 font-semibold uppercase tracking-wider mb-1">Cobrado</p>
+                            <p class="text-2xl font-bold text-green-600" id="stat-paid">$0</p>
+                        </div>
+                        <div class="min-w-[160px] ios-card rounded-2xl p-4 shadow-sm border border-gray-100 border-l-4 border-l-red-500 flex-1">
+                            <p class="text-xs text-red-500 font-semibold uppercase tracking-wider mb-1">Por Cobrar</p>
+                            <p class="text-2xl font-bold text-slate-800" id="stat-pending">$0</p>
+                        </div>
+                    </div>
+
+                    <!-- Buscador -->
+                    <div class="relative mb-6 w-full md:max-w-md">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </div>
-                        <input type="text" id="searchInput" onkeyup="renderClients()" placeholder="Buscar cliente..." class="w-full bg-gray-200/80 md:bg-white md:shadow-sm rounded-xl pl-10 pr-4 py-2.5 md:py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50 transition-all placeholder-gray-500">
+                        <input type="text" id="searchInput" onkeyup="renderClients()" placeholder="Buscar cliente o proyecto..." class="w-full bg-gray-200/80 md:bg-white md:shadow-sm rounded-xl pl-10 pr-4 py-2.5 md:py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50 transition-all placeholder-gray-500">
                     </div>
 
-                    <!-- Lista de Clientes (Grid Responsivo) -->
-                    <div id="clientsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    <!-- Lista de Clientes -->
+                    <div id="clientsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-5">
                         <!-- Inyectado vía JS -->
                     </div>
 
-                    <!-- Estado Vacío -->
-                    <div id="emptyState" class="hidden flex flex-col items-center justify-center py-20 text-center w-full">
-                        <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center text-gray-400 mb-4 shadow-inner">
-                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    <div id="emptyState" class="hidden flex flex-col items-center justify-center py-16 text-center w-full">
+                        <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center text-gray-400 mb-4">
+                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                         </div>
-                        <p class="text-gray-500 text-base">No hay clientes registrados aún.</p>
+                        <p class="text-gray-500 text-sm font-medium">No tienes proyectos activos.</p>
+                        <p class="text-gray-400 text-xs mt-1">Crea tu primer cliente para comenzar.</p>
                     </div>
                 </div>
 
                 <!-- PESTAÑA: AJUSTES -->
-                <div id="tab-settings" class="tab-content hidden pt-12 md:pt-16 max-w-2xl mx-auto">
-                    <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-8">Ajustes</h1>
+                <div id="tab-settings" class="tab-content hidden max-w-2xl mx-auto pt-6">
+                    <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-8">Ajustes</h1>
                     
                     <div class="ios-card rounded-2xl overflow-hidden shadow-sm md:shadow-md border md:border-gray-100">
                         <div class="px-5 py-4 border-b border-gray-100 flex items-center bg-gray-50/50">
@@ -156,21 +175,21 @@
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                             </div>
                             <div class="flex-1">
-                                <p class="text-base font-semibold">Seguridad de la Cuenta</p>
+                                <p class="text-base font-semibold">Seguridad</p>
                             </div>
                         </div>
                         <div class="px-5 py-6">
-                            <h3 class="text-sm font-semibold mb-4 text-gray-500 uppercase tracking-wider">Cambiar Contraseña</h3>
-                            <input type="password" id="old-pwd" placeholder="Contraseña Actual" class="w-full bg-gray-100 rounded-xl px-4 py-3 text-sm md:text-base mb-3 focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50 transition-all">
-                            <input type="password" id="new-pwd" placeholder="Nueva Contraseña" class="w-full bg-gray-100 rounded-xl px-4 py-3 text-sm md:text-base mb-5 focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50 transition-all">
-                            <button onclick="changePassword()" class="w-full bg-ios-blue text-white text-base font-semibold rounded-xl py-3 shadow-md hover:bg-blue-600 active:scale-95 transition-all">Actualizar Contraseña</button>
+                            <h3 class="text-xs font-bold mb-4 text-gray-400 uppercase tracking-wider">Cambiar Contraseña</h3>
+                            <input type="password" id="old-pwd" placeholder="Contraseña Actual" class="w-full bg-gray-100 rounded-xl px-4 py-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50">
+                            <input type="password" id="new-pwd" placeholder="Nueva Contraseña" class="w-full bg-gray-100 rounded-xl px-4 py-3 text-sm mb-5 focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50">
+                            <button onclick="changePassword()" class="w-full bg-ios-blue text-white text-sm font-semibold rounded-xl py-3 shadow-md hover:bg-blue-600 active:scale-95 transition-all">Actualizar Contraseña</button>
                             <p id="pwd-msg" class="text-sm mt-3 text-center hidden"></p>
                         </div>
                     </div>
                     
-                    <div class="mt-10 text-center">
-                        <button onclick="lockApp()" class="text-red-500 font-semibold text-base md:text-lg active:opacity-50 transition-opacity bg-red-50 px-6 py-3 rounded-xl hover:bg-red-100">Cerrar Sesión / Bloquear</button>
-                        <p class="text-sm text-gray-400 mt-6">Clientes 360 v3.0 Responsivo</p>
+                    <div class="mt-10 text-center pb-10">
+                        <button onclick="lockApp()" class="text-red-500 font-semibold text-sm md:text-base active:opacity-50 transition-opacity bg-red-50 px-6 py-3 rounded-xl hover:bg-red-100">Cerrar Sesión / Bloquear</button>
+                        <p class="text-xs text-gray-400 mt-6">Clientes 360 - Edición Diseñadores</p>
                     </div>
                 </div>
 
@@ -178,74 +197,161 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- MODAL: CREAR/EDITAR CLIENTE                -->
+        <!-- MODAL: CREAR/EDITAR CLIENTE (FORMULARIO)   -->
         <!-- ========================================== -->
         <div id="modal-overlay" class="absolute inset-0 bg-black/50 md:bg-black/40 z-40 hidden transition-opacity opacity-0 backdrop-blur-sm" onclick="closeClientModal()"></div>
-        <div id="clientModal" class="absolute inset-x-0 bottom-0 md:inset-auto md:w-full md:max-w-lg ios-bg rounded-t-3xl md:rounded-2xl shadow-2xl z-50 h-[85%] md:h-auto md:max-h-[85vh] slide-up-modal flex flex-col">
+        <div id="clientModal" class="absolute inset-x-0 bottom-0 md:inset-auto md:w-full md:max-w-xl ios-bg rounded-t-3xl md:rounded-2xl shadow-2xl z-50 h-[90%] md:h-auto md:max-h-[90vh] slide-up-modal flex flex-col">
             
-            <div class="flex justify-between items-center px-4 md:px-6 py-4 border-b border-gray-200 glass-nav md:bg-white md:backdrop-filter-none rounded-t-3xl md:rounded-t-2xl">
-                <button onclick="closeClientModal()" class="text-[#007AFF] text-sm md:text-base hover:opacity-80 transition-opacity">Cancelar</button>
-                <h3 class="font-semibold text-base md:text-lg" id="modal-title">Nuevo Cliente</h3>
-                <button onclick="saveClient()" class="text-[#007AFF] text-sm md:text-base font-semibold hover:opacity-80 transition-opacity">Guardar</button>
+            <div class="flex justify-between items-center px-4 md:px-6 py-4 border-b border-gray-200 glass-nav md:bg-white md:backdrop-filter-none rounded-t-3xl md:rounded-t-2xl shrink-0">
+                <button onclick="closeClientModal()" class="text-[#007AFF] text-sm md:text-base hover:opacity-80">Cancelar</button>
+                <h3 class="font-semibold text-base md:text-lg" id="modal-title">Nuevo Proyecto</h3>
+                <button onclick="saveClient()" class="text-[#007AFF] text-sm md:text-base font-semibold hover:opacity-80">Guardar</button>
             </div>
             
-            <div class="flex-1 overflow-y-auto px-4 md:px-6 py-6 space-y-6 bg-[#F2F2F7]">
+            <div class="flex-1 overflow-y-auto px-4 md:px-6 py-6 space-y-6 bg-[#F2F2F7] pb-32">
                 <input type="hidden" id="clientId">
                 
-                <div class="ios-card rounded-xl px-4 py-2 border border-gray-100 shadow-sm">
-                    <input type="text" id="clientName" placeholder="Nombre de la empresa / cliente" class="w-full py-2 md:py-3 text-sm md:text-base focus:outline-none bg-transparent">
-                </div>
-
-                <div class="ios-card rounded-xl border border-gray-100 shadow-sm divide-y divide-gray-100">
-                    <div class="px-4 py-3 md:py-4 flex justify-between items-center hover:bg-gray-50 transition-colors rounded-t-xl">
-                        <span class="text-sm md:text-base font-medium">Estado</span>
-                        <select id="clientStatus" class="text-sm md:text-base text-gray-500 bg-transparent focus:outline-none text-right dir-rtl cursor-pointer">
-                            <option value="Lead">Lead</option>
-                            <option value="En Progreso">En Progreso</option>
-                            <option value="Pausado">Pausado</option>
-                            <option value="Completado">Completado</option>
-                        </select>
-                    </div>
-                    <div class="px-4 py-3 md:py-4 flex justify-between items-center hover:bg-gray-50 transition-colors">
-                        <span class="text-sm md:text-base font-medium">Suscripción</span>
-                        <select id="clientSub" onchange="toggleDateInput()" class="text-sm md:text-base text-gray-500 bg-transparent focus:outline-none text-right dir-rtl cursor-pointer">
-                            <option value="Ninguna">Ninguna / Único</option>
-                            <option value="Mensual">Mensual</option>
-                            <option value="Anual">Anual</option>
-                            <option value="Mantenimiento">Mantenimiento</option>
-                        </select>
-                    </div>
-                    <div id="expirationContainer" class="px-4 py-3 md:py-4 flex justify-between items-center hover:bg-gray-50 transition-colors rounded-b-xl hidden">
-                        <span class="text-sm md:text-base font-medium">Vence el</span>
-                        <input type="date" id="clientExpDate" class="text-sm md:text-base text-[#007AFF] bg-transparent focus:outline-none cursor-pointer">
+                <!-- SECCIÓN 1: INFO CLIENTE -->
+                <div>
+                    <p class="text-xs font-semibold text-gray-500 uppercase ml-2 mb-2">Información del Cliente</p>
+                    <div class="ios-card rounded-xl border border-gray-100 shadow-sm divide-y divide-gray-100">
+                        <input type="text" id="clientName" placeholder="Nombre de la empresa o cliente" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent rounded-t-xl font-medium">
+                        <input type="tel" id="clientPhone" placeholder="Teléfono / WhatsApp (ej: +57300...)" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent">
+                        <input type="email" id="clientEmail" placeholder="Correo electrónico" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent rounded-b-xl">
                     </div>
                 </div>
 
-                <div class="ios-card rounded-xl px-4 py-3 border border-gray-100 shadow-sm">
-                    <textarea id="clientNotes" rows="5" placeholder="Notas, requerimientos, accesos..." class="w-full text-sm md:text-base focus:outline-none resize-none bg-transparent"></textarea>
+                <!-- SECCIÓN 2: DETALLES DEL PROYECTO -->
+                <div>
+                    <p class="text-xs font-semibold text-gray-500 uppercase ml-2 mb-2">Detalles del Proyecto</p>
+                    <div class="ios-card rounded-xl border border-gray-100 shadow-sm divide-y divide-gray-100">
+                        <div class="px-4 py-3 flex justify-between items-center">
+                            <span class="text-sm font-medium">Servicio</span>
+                            <select id="clientService" class="text-sm text-gray-500 bg-transparent focus:outline-none text-right dir-rtl outline-none">
+                                <option value="Branding">Branding / Logo</option>
+                                <option value="Redes Sociales">Redes Sociales</option>
+                                <option value="Diseño Web">Diseño Web / UI</option>
+                                <option value="Impresos">Material Impreso</option>
+                                <option value="Ilustración">Ilustración</option>
+                                <option value="Retainer">Retainer Mensual</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="px-4 py-3 flex justify-between items-center">
+                            <span class="text-sm font-medium">Estado</span>
+                            <select id="clientStatus" class="text-sm text-gray-500 bg-transparent focus:outline-none text-right dir-rtl">
+                                <option value="Cotizando">Cotizando (Lead)</option>
+                                <option value="En Progreso">En Progreso</option>
+                                <option value="En Revisión">En Revisión (Cliente)</option>
+                                <option value="Finalizado">Finalizado</option>
+                                <option value="Pausado">Pausado</option>
+                            </select>
+                        </div>
+                        <div class="px-4 py-3 flex justify-between items-center">
+                            <span class="text-sm font-medium">Fecha de Entrega</span>
+                            <input type="date" id="clientDeadline" class="text-sm text-[#007AFF] bg-transparent focus:outline-none">
+                        </div>
+                        <input type="url" id="clientAssets" placeholder="Link de archivos (Drive, Figma, etc...)" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent text-[#007AFF]">
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 3: FINANZAS -->
+                <div>
+                    <p class="text-xs font-semibold text-gray-500 uppercase ml-2 mb-2">Finanzas</p>
+                    <div class="ios-card rounded-xl border border-gray-100 shadow-sm divide-y divide-gray-100">
+                        <div class="currency-input">
+                            <input type="number" id="clientPrice" placeholder="Precio Total del Proyecto" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent rounded-t-xl" min="0">
+                        </div>
+                        <div class="currency-input">
+                            <input type="number" id="clientPaid" placeholder="Abono / Dinero Pagado" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent rounded-b-xl text-green-600" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 4: NOTAS -->
+                <div>
+                    <p class="text-xs font-semibold text-gray-500 uppercase ml-2 mb-2">Notas y Requerimientos</p>
+                    <div class="ios-card rounded-xl px-4 py-3 border border-gray-100 shadow-sm">
+                        <textarea id="clientNotes" rows="4" placeholder="Brief del cliente, colores, referencias..." class="w-full text-sm focus:outline-none resize-none bg-transparent"></textarea>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- ========================================== -->
-        <!-- MODAL: VER NOTAS COMPLETAS                 -->
+        <!-- MODAL: PERFIL 360 DEL CLIENTE (VISUALIZAR) -->
         <!-- ========================================== -->
-        <div id="notesModal" class="absolute inset-x-0 bottom-0 md:inset-auto md:w-full md:max-w-md bg-white rounded-t-3xl md:rounded-2xl shadow-2xl z-50 h-[60%] md:h-auto md:max-h-[70vh] slide-up-modal flex flex-col">
-            <div class="flex justify-between items-center px-4 md:px-6 py-4 border-b border-gray-100 bg-gray-50 md:rounded-t-2xl">
-                <span class="w-12"></span> <!-- Espaciador -->
-                <h3 class="font-semibold text-base" id="notesModalTitle">Notas</h3>
-                <button onclick="closeNotesModal()" class="w-12 text-right text-[#007AFF] font-semibold text-base hover:opacity-80 transition-opacity">OK</button>
+        <div id="profileModal" class="absolute inset-x-0 bottom-0 md:inset-auto md:w-full md:max-w-md bg-white rounded-t-3xl md:rounded-2xl shadow-2xl z-50 h-[85%] md:h-auto md:max-h-[85vh] slide-up-modal flex flex-col">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50 md:rounded-t-2xl shrink-0">
+                <span class="w-12"></span>
+                <h3 class="font-semibold text-sm text-gray-500 uppercase tracking-wider">Perfil del Proyecto</h3>
+                <button onclick="closeProfileModal()" class="w-12 text-right text-[#007AFF] font-bold text-sm hover:opacity-80">Cerrar</button>
             </div>
-            <div class="flex-1 overflow-y-auto px-6 py-6 bg-white md:rounded-b-2xl">
-                <p class="text-sm md:text-base text-gray-700 whitespace-pre-wrap leading-relaxed" id="notesModalContent"></p>
+            
+            <div class="flex-1 overflow-y-auto bg-white md:rounded-b-2xl pb-10">
+                <!-- Cabecera Perfil -->
+                <div class="px-6 py-6 text-center border-b border-gray-100">
+                    <div class="w-16 h-16 bg-gradient-to-tr from-blue-500 to-indigo-500 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl font-bold shadow-md mb-3" id="profileInitials"></div>
+                    <h2 class="text-xl font-bold text-slate-800" id="profileName">Nombre</h2>
+                    <span id="profileStatusBadge" class="inline-block mt-2 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border">Estado</span>
+                </div>
+
+                <!-- Acciones Rápidas -->
+                <div class="flex justify-center space-x-6 py-4 border-b border-gray-100" id="profileActions">
+                    <!-- Inyectados por JS (WhatsApp, Email, Folder) -->
+                </div>
+
+                <!-- Detalles -->
+                <div class="px-6 py-5 space-y-4">
+                    
+                    <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                        <div>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Servicio</p>
+                            <p class="text-sm font-semibold text-slate-700" id="profileService"></p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Entrega</p>
+                            <p class="text-sm font-semibold text-slate-700" id="profileDeadline"></p>
+                        </div>
+                    </div>
+
+                    <!-- Estado Financiero Visual -->
+                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase mb-2">Finanzas</p>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-slate-600 font-medium">Total: <span id="profileTotal" class="font-bold"></span></span>
+                            <span class="text-red-500 font-medium text-xs">Deuda: <span id="profileDebt" class="font-bold"></span></span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mb-1 overflow-hidden mt-2">
+                            <div id="profileProgress" class="bg-green-500 h-2 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <p class="text-xs text-green-600 text-right mt-1 font-semibold" id="profilePaidText"></p>
+                    </div>
+
+                    <div id="profileNotesContainer" class="bg-yellow-50/50 p-4 rounded-2xl border border-yellow-100/50">
+                        <p class="text-[10px] text-yellow-600 font-bold uppercase mb-2">Notas / Brief</p>
+                        <p class="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed italic" id="profileNotes"></p>
+                    </div>
+
+                </div>
             </div>
         </div>
 
     </div>
 
-    <!-- Script de Lógica Principal -->
+    <!-- SCRIPT DE LÓGICA -->
     <script>
-        // --- 1. SEGURIDAD Y CRIPTOGRAFÍA ---
+        // --- UTILIDADES ---
+        const formatMoney = (amount) => {
+            if (!amount || isNaN(amount)) return '$0';
+            return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(amount);
+        };
+
+        const getInitials = (name) => {
+            return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        };
+
+        // --- 1. SEGURIDAD ---
         async function hashPassword(password) {
             const msgUint8 = new TextEncoder().encode(password);
             const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
@@ -253,7 +359,6 @@
             return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
-        // --- 2. ANTI-XSS ---
         const escapeHTML = (str) => {
             if (!str) return '';
             return String(str).replace(/[&<>'"]/g, tag => ({
@@ -261,24 +366,22 @@
             }[tag]));
         };
 
-        // --- 3. ESTADO Y ALMACENAMIENTO ---
-        let clients = JSON.parse(localStorage.getItem('clientes360_clients')) || [];
+        // --- 2. ESTADO Y DATOS ---
+        let clients = JSON.parse(localStorage.getItem('clientes360_pro_clients')) || [];
         
-        // --- 4. SISTEMA DE AUTENTICACIÓN ---
+        // --- 3. AUTENTICACIÓN ---
         async function checkAuthState() {
-            const savedHash = localStorage.getItem('clientes360_auth');
-            const title = document.getElementById('auth-title');
-            const sub = document.getElementById('auth-subtitle');
+            const savedHash = localStorage.getItem('clientes360_pro_auth');
             const btn = document.getElementById('auth-btn');
 
             if (!savedHash) {
-                title.textContent = "Bienvenido";
-                sub.textContent = "Crea una contraseña maestra para tu CRM";
+                document.getElementById('auth-title').textContent = "Bienvenido";
+                document.getElementById('auth-subtitle').textContent = "Crea una contraseña maestra";
                 btn.textContent = "Crear y Entrar";
                 btn.dataset.mode = "setup";
             } else {
-                title.textContent = "Clientes 360";
-                sub.textContent = "Ingresa tu contraseña para acceder";
+                document.getElementById('auth-title').textContent = "Clientes 360";
+                document.getElementById('auth-subtitle').textContent = "Ingresa tu contraseña";
                 btn.textContent = "Desbloquear";
                 btn.dataset.mode = "login";
             }
@@ -286,27 +389,24 @@
 
         async function handleAuth() {
             const input = document.getElementById('auth-password');
-            const errorMsg = document.getElementById('auth-error');
             const btn = document.getElementById('auth-btn');
             const pwd = input.value.trim();
-
             if (!pwd) return;
 
             const hashedInput = await hashPassword(pwd);
 
             if (btn.dataset.mode === "setup") {
-                localStorage.setItem('clientes360_auth', hashedInput);
+                localStorage.setItem('clientes360_pro_auth', hashedInput);
                 unlockApp();
             } else {
-                const savedHash = localStorage.getItem('clientes360_auth');
-                if (hashedInput === savedHash) {
+                if (hashedInput === localStorage.getItem('clientes360_pro_auth')) {
                     unlockApp();
                 } else {
-                    errorMsg.classList.remove('hidden');
+                    document.getElementById('auth-error').classList.remove('hidden');
                     input.classList.add('border-red-500', 'bg-red-50');
                     setTimeout(() => {
                         input.classList.remove('border-red-500', 'bg-red-50');
-                        errorMsg.classList.add('hidden');
+                        document.getElementById('auth-error').classList.add('hidden');
                     }, 2000);
                 }
             }
@@ -319,6 +419,7 @@
                 document.getElementById('auth-screen').classList.add('hidden');
                 document.getElementById('main-app').classList.remove('hidden');
                 document.getElementById('main-nav').classList.remove('hidden');
+                setDate();
                 renderClients();
             }, 300);
         }
@@ -338,33 +439,23 @@
             const newInput = document.getElementById('new-pwd').value;
             const msg = document.getElementById('pwd-msg');
             
-            if (!oldInput || !newInput) {
-                showMessage(msg, "Llena ambos campos", "text-red-500");
-                return;
-            }
+            if (!oldInput || !newInput) return;
 
             const oldHash = await hashPassword(oldInput);
-            const savedHash = localStorage.getItem('clientes360_auth');
-
-            if (oldHash === savedHash) {
+            if (oldHash === localStorage.getItem('clientes360_pro_auth')) {
                 const newHash = await hashPassword(newInput);
-                localStorage.setItem('clientes360_auth', newHash);
-                showMessage(msg, "¡Contraseña actualizada exitosamente!", "text-green-600");
-                document.getElementById('old-pwd').value = '';
-                document.getElementById('new-pwd').value = '';
+                localStorage.setItem('clientes360_pro_auth', newHash);
+                msg.textContent = "Contraseña actualizada";
+                msg.className = "text-sm mt-3 text-center font-medium text-green-600 fade-in";
+                msg.classList.remove('hidden');
             } else {
-                showMessage(msg, "Contraseña actual incorrecta", "text-red-500");
+                msg.textContent = "Contraseña actual incorrecta";
+                msg.className = "text-sm mt-3 text-center font-medium text-red-500 fade-in";
+                msg.classList.remove('hidden');
             }
+            setTimeout(() => msg.classList.add('hidden'), 3000);
         }
 
-        function showMessage(element, text, colorClass) {
-            element.textContent = text;
-            element.className = `text-sm mt-3 text-center font-medium ${colorClass} fade-in`;
-            element.classList.remove('hidden');
-            setTimeout(() => element.classList.add('hidden'), 3000);
-        }
-
-        // --- 5. NAVEGACIÓN TIPO iOS RESPONSIVA ---
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
@@ -384,42 +475,34 @@
             });
         }
 
-        // --- 6. LOGICA DE CLIENTES ---
+        // --- 4. CRUD CLIENTES ---
         const generateId = () => crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
 
-        function saveClientsToStorage() {
-            localStorage.setItem('clientes360_clients', JSON.stringify(clients));
-        }
-
-        function toggleDateInput() {
-            const subType = document.getElementById('clientSub').value;
-            const container = document.getElementById('expirationContainer');
-            subType !== 'Ninguna' ? container.classList.remove('hidden') : container.classList.add('hidden');
-        }
-
         function openClientModal(id = null) {
-            document.getElementById('clientName').value = '';
-            document.getElementById('clientStatus').value = 'Lead';
-            document.getElementById('clientSub').value = 'Ninguna';
-            document.getElementById('clientExpDate').value = '';
-            document.getElementById('clientNotes').value = '';
-            document.getElementById('clientId').value = '';
-            document.getElementById('modal-title').textContent = 'Nuevo Cliente';
+            // Reset
+            ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientAssets', 'clientPrice', 'clientPaid', 'clientNotes'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('clientService').value = 'Branding';
+            document.getElementById('clientStatus').value = 'Cotizando';
+            document.getElementById('modal-title').textContent = 'Nuevo Proyecto';
 
             if (id) {
                 const c = clients.find(x => x.id === id);
                 if (c) {
-                    document.getElementById('modal-title').textContent = 'Editar Cliente';
+                    document.getElementById('modal-title').textContent = 'Editar Proyecto';
                     document.getElementById('clientId').value = c.id;
                     document.getElementById('clientName').value = c.name;
+                    document.getElementById('clientPhone').value = c.phone || '';
+                    document.getElementById('clientEmail').value = c.email || '';
+                    document.getElementById('clientService').value = c.service || 'Branding';
                     document.getElementById('clientStatus').value = c.status;
-                    document.getElementById('clientSub').value = c.subscription;
-                    document.getElementById('clientNotes').value = c.notes;
-                    if (c.subscription !== 'Ninguna') document.getElementById('clientExpDate').value = c.expDate;
+                    document.getElementById('clientDeadline').value = c.deadline || '';
+                    document.getElementById('clientAssets').value = c.assets || '';
+                    document.getElementById('clientPrice').value = c.price || '';
+                    document.getElementById('clientPaid').value = c.paid || '';
+                    document.getElementById('clientNotes').value = c.notes || '';
                 }
             }
             
-            toggleDateInput();
             document.getElementById('modal-overlay').classList.remove('hidden');
             setTimeout(() => {
                 document.getElementById('modal-overlay').classList.remove('opacity-0');
@@ -435,15 +518,20 @@
 
         function saveClient() {
             const name = document.getElementById('clientName').value.trim();
-            if (!name) { alert('El nombre es requerido'); return; }
+            if (!name) { alert('El nombre del cliente es obligatorio'); return; }
 
             const id = document.getElementById('clientId').value;
             const newClient = {
                 id: id || generateId(),
                 name: name,
+                phone: document.getElementById('clientPhone').value.trim(),
+                email: document.getElementById('clientEmail').value.trim(),
+                service: document.getElementById('clientService').value,
                 status: document.getElementById('clientStatus').value,
-                subscription: document.getElementById('clientSub').value,
-                expDate: document.getElementById('clientExpDate').value,
+                deadline: document.getElementById('clientDeadline').value,
+                assets: document.getElementById('clientAssets').value.trim(),
+                price: parseFloat(document.getElementById('clientPrice').value) || 0,
+                paid: parseFloat(document.getElementById('clientPaid').value) || 0,
                 notes: document.getElementById('clientNotes').value
             };
 
@@ -454,56 +542,155 @@
                 clients.unshift(newClient);
             }
 
-            saveClientsToStorage();
+            localStorage.setItem('clientes360_pro_clients', JSON.stringify(clients));
             closeClientModal();
             renderClients();
         }
 
         function deleteClient(id) {
-            if (confirm('¿Eliminar cliente permanentemente?')) {
+            if (confirm('¿Eliminar proyecto permanentemente?')) {
                 clients = clients.filter(c => c.id !== id);
-                saveClientsToStorage();
+                localStorage.setItem('clientes360_pro_clients', JSON.stringify(clients));
                 renderClients();
             }
         }
 
-        function openNotesModal(id) {
+        // --- 5. MODAL 360 (PERFIL) ---
+        function openProfileModal(id) {
             const c = clients.find(x => x.id === id);
-            if (c) {
-                document.getElementById('notesModalTitle').textContent = `Notas: ${c.name}`;
-                document.getElementById('notesModalContent').textContent = c.notes || 'Sin notas adicionales.';
-                document.getElementById('modal-overlay').classList.remove('hidden');
-                setTimeout(() => {
-                    document.getElementById('modal-overlay').classList.remove('opacity-0');
-                    document.getElementById('notesModal').classList.add('active');
-                }, 10);
+            if (!c) return;
+
+            document.getElementById('profileInitials').textContent = getInitials(c.name);
+            document.getElementById('profileName').textContent = escapeHTML(c.name);
+            
+            const badge = document.getElementById('profileStatusBadge');
+            badge.textContent = escapeHTML(c.status);
+            badge.className = `inline-block mt-2 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border ${getStatusColor(c.status)}`;
+
+            document.getElementById('profileService').textContent = escapeHTML(c.service);
+            
+            // Fecha bonita
+            let dateText = "Sin definir";
+            if (c.deadline) {
+                const d = new Date(c.deadline + 'T12:00:00');
+                dateText = d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
             }
+            document.getElementById('profileDeadline').textContent = dateText;
+
+            // Finanzas
+            const pending = c.price - c.paid;
+            const percent = c.price > 0 ? Math.min((c.paid / c.price) * 100, 100) : 0;
+            
+            document.getElementById('profileTotal').textContent = formatMoney(c.price);
+            document.getElementById('profileDebt').textContent = formatMoney(Math.max(pending, 0));
+            document.getElementById('profileProgress').style.width = `${percent}%`;
+            document.getElementById('profilePaidText').textContent = `${Math.round(percent)}% Pagado`;
+
+            // Notas
+            const notesEl = document.getElementById('profileNotes');
+            if (c.notes) {
+                notesEl.textContent = c.notes;
+                document.getElementById('profileNotesContainer').classList.remove('hidden');
+            } else {
+                document.getElementById('profileNotesContainer').classList.add('hidden');
+            }
+
+            // Acciones Rápidas (Iconos)
+            let actionsHTML = '';
+            
+            if (c.phone) {
+                const cleanPhone = c.phone.replace(/\D/g,'');
+                actionsHTML += `
+                    <a href="https://wa.me/${cleanPhone}" target="_blank" class="flex flex-col items-center group">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 group-hover:bg-green-200 transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>
+                        </div>
+                        <span class="text-[10px] font-semibold mt-1 text-gray-500">WhatsApp</span>
+                    </a>`;
+            }
+            if (c.email) {
+                actionsHTML += `
+                    <a href="mailto:${c.email}" class="flex flex-col items-center group">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 group-hover:bg-blue-200 transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <span class="text-[10px] font-semibold mt-1 text-gray-500">Correo</span>
+                    </a>`;
+            }
+            if (c.assets) {
+                actionsHTML += `
+                    <a href="${c.assets}" target="_blank" class="flex flex-col items-center group">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 group-hover:bg-purple-200 transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                        </div>
+                        <span class="text-[10px] font-semibold mt-1 text-gray-500">Archivos</span>
+                    </a>`;
+            }
+
+            if (!actionsHTML) actionsHTML = '<p class="text-xs text-gray-400">Sin datos de contacto guardados</p>';
+            document.getElementById('profileActions').innerHTML = actionsHTML;
+
+            document.getElementById('modal-overlay').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('modal-overlay').classList.remove('opacity-0');
+                document.getElementById('profileModal').classList.add('active');
+            }, 10);
         }
 
-        function closeNotesModal() {
-            document.getElementById('notesModal').classList.remove('active');
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.remove('active');
             document.getElementById('modal-overlay').classList.add('opacity-0');
             setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 300);
         }
 
-        // --- 7. RENDERIZADO DE LA INTERFAZ ---
+        // --- 6. RENDER UI ---
         function getStatusColor(status) {
             return {
-                'Lead': 'bg-blue-100 text-blue-700 border-blue-200',
+                'Cotizando': 'bg-gray-100 text-gray-700 border-gray-200',
                 'En Progreso': 'bg-amber-100 text-amber-700 border-amber-200',
-                'Pausado': 'bg-gray-100 text-gray-700 border-gray-200',
-                'Completado': 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                'En Revisión': 'bg-purple-100 text-purple-700 border-purple-200',
+                'Finalizado': 'bg-emerald-100 text-emerald-700 border-emerald-200',
+                'Pausado': 'bg-red-50 text-red-700 border-red-200'
             }[status] || 'bg-gray-100 text-gray-700 border-gray-200';
         }
 
+        function updateStats() {
+            const activeClients = clients.filter(c => c.status !== 'Finalizado' && c.status !== 'Pausado');
+            
+            let totalPaid = 0;
+            let totalPending = 0;
+
+            clients.forEach(c => {
+                totalPaid += (c.paid || 0);
+                const pending = (c.price || 0) - (c.paid || 0);
+                if (pending > 0 && c.status !== 'Finalizado') {
+                    totalPending += pending;
+                }
+            });
+
+            document.getElementById('stat-active').textContent = activeClients.length;
+            document.getElementById('stat-paid').textContent = formatMoney(totalPaid);
+            document.getElementById('stat-pending').textContent = formatMoney(totalPending);
+        }
+
+        function setDate() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = new Date().toLocaleDateString('es-ES', options);
+        }
+
         function renderClients() {
+            updateStats();
+            
             const query = document.getElementById('searchInput').value.toLowerCase();
             const list = document.getElementById('clientsList');
             const empty = document.getElementById('emptyState');
             
             list.innerHTML = '';
             
-            const filtered = clients.filter(c => c.name.toLowerCase().includes(query));
+            const filtered = clients.filter(c => 
+                c.name.toLowerCase().includes(query) || 
+                (c.service && c.service.toLowerCase().includes(query))
+            );
 
             if (filtered.length === 0) {
                 empty.classList.remove('hidden');
@@ -514,40 +701,33 @@
                 
                 filtered.forEach(c => {
                     const safeName = escapeHTML(c.name);
-                    const safeNotes = escapeHTML(c.notes);
-                    const isSub = c.subscription !== 'Ninguna';
-                    
-                    let subText = c.subscription;
-                    let expAlert = '';
-                    
-                    if (isSub && c.expDate) {
-                        const days = Math.ceil((new Date(c.expDate) - new Date().setHours(0,0,0,0)) / (1000 * 60 * 60 * 24));
-                        if (days < 0) expAlert = `<span class="text-xs text-red-500 font-bold ml-2">(Vencida)</span>`;
-                        else if (days <= 5) expAlert = `<span class="text-xs text-orange-500 font-bold ml-2">(Vence en ${days}d)</span>`;
-                    }
+                    const pending = (c.price || 0) - (c.paid || 0);
+                    const isOverdue = c.deadline && new Date(c.deadline) < new Date(new Date().setHours(0,0,0,0)) && c.status !== 'Finalizado';
 
                     const card = `
-                        <div class="ios-card rounded-2xl p-5 shadow-sm border border-gray-100 relative hover:shadow-md transition-shadow flex flex-col justify-between group">
+                        <div class="ios-card rounded-2xl p-4 shadow-sm border border-gray-100 relative hover:shadow-md transition-shadow flex flex-col justify-between group cursor-pointer" onclick="openProfileModal('${c.id}')">
                             <div>
-                                <div class="flex justify-between items-start mb-1">
-                                    <h3 class="font-bold text-lg md:text-xl leading-tight truncate pr-4 text-slate-800">${safeName}</h3>
-                                    <span class="text-[10px] md:text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border ${getStatusColor(c.status)}">${escapeHTML(c.status)}</span>
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-bold text-lg leading-tight truncate pr-2 text-slate-800">${safeName}</h3>
+                                    <span class="shrink-0 text-[9px] font-bold px-2 py-1 rounded border uppercase ${getStatusColor(c.status)}">${escapeHTML(c.status)}</span>
                                 </div>
                                 
-                                <div class="mt-3 text-sm text-gray-500 flex items-center font-medium">
-                                    <svg class="w-4 h-4 mr-1.5 ${isSub ? 'text-[#007AFF]' : 'text-gray-400'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    ${escapeHTML(subText)} ${expAlert}
+                                <div class="text-xs text-gray-500 font-medium flex items-center mb-3">
+                                    <span class="bg-gray-100 px-2 py-0.5 rounded mr-2 text-gray-600">${escapeHTML(c.service)}</span>
+                                    ${c.deadline ? `<span class="${isOverdue ? 'text-red-500 font-bold' : ''}">📅 ${new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', {month:'short', day:'numeric'})}</span>` : ''}
                                 </div>
 
-                                ${safeNotes ? `
-                                <div onclick="openNotesModal('${c.id}')" class="mt-4 bg-gray-50/80 hover:bg-gray-100 rounded-xl p-3 text-sm text-gray-600 italic truncate cursor-pointer transition-colors border border-gray-100/50">
-                                    "${safeNotes}"
-                                </div>` : ''}
-                            </div>
-
-                            <div class="mt-5 pt-4 border-t border-gray-50 flex justify-end space-x-2">
-                                <button onclick="deleteClient('${c.id}')" class="text-xs md:text-sm text-red-500 font-medium active:scale-95 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors">Eliminar</button>
-                                <button onclick="openClientModal('${c.id}')" class="text-xs md:text-sm text-[#007AFF] font-semibold active:scale-95 bg-blue-50 px-4 py-1.5 rounded-lg hover:bg-blue-100 transition-colors">Editar</button>
+                                <div class="flex justify-between items-end mt-2 pt-3 border-t border-gray-50">
+                                    <div>
+                                        <p class="text-[10px] text-gray-400 font-bold uppercase mb-0.5">Por cobrar</p>
+                                        <p class="text-sm font-bold ${pending > 0 ? 'text-red-500' : 'text-green-500'}">${pending > 0 ? formatMoney(pending) : 'Pagado'}</p>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button onclick="event.stopPropagation(); openClientModal('${c.id}')" class="w-8 h-8 rounded-full bg-blue-50 text-[#007AFF] flex items-center justify-center hover:bg-blue-100 active:scale-90 transition-all">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -556,15 +736,13 @@
             }
         }
 
-        // --- INICIALIZACIÓN ---
+        // --- INICIO ---
         window.onload = () => {
             checkAuthState();
-            
-            document.getElementById('auth-password').addEventListener('keypress', function (e) {
+            document.getElementById('auth-password').addEventListener('keypress', e => {
                 if (e.key === 'Enter') handleAuth();
             });
         };
-
     </script>
 </body>
 </html>
