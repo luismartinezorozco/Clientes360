@@ -47,6 +47,9 @@
                 top: 50%;
                 bottom: auto;
                 right: auto;
+                /* Optimizacion laptop: Nunca exceder el tamaño de la ventana */
+                max-height: 96%;
+                width: 90%;
             }
             .slide-up-modal.active {
                 transform: translate(-50%, -50%) scale(1);
@@ -76,7 +79,8 @@
 </head>
 <body class="text-slate-900 bg-black md:bg-gray-100 h-screen w-screen overflow-hidden flex justify-center items-center">
 
-    <div id="app-container" class="w-full h-full md:max-w-6xl ios-bg relative overflow-hidden md:shadow-2xl md:rounded-3xl md:h-[90vh] md:border md:border-gray-200 flex flex-col md:flex-row">
+    <!-- Optimización: h-[95vh] para aprovechar más alto en laptops pequeñas -->
+    <div id="app-container" class="w-full h-full md:max-w-6xl ios-bg relative overflow-hidden md:shadow-2xl md:rounded-3xl md:h-[95vh] lg:h-[90vh] md:border md:border-gray-200 flex flex-col md:flex-row">
         
         <!-- PANTALLA DE AUTENTICACIÓN -->
         <div id="auth-screen" class="absolute inset-0 ios-bg z-50 flex flex-col items-center justify-center px-6 transition-opacity duration-300">
@@ -93,53 +97,55 @@
             </div>
         </div>
 
-        <!-- NAVEGACIÓN -->
-        <nav id="main-nav" class="absolute md:relative bottom-0 w-full md:w-64 glass-nav md:bg-white md:backdrop-filter-none border-t md:border-t-0 md:border-r border-gray-200/60 pb-safe pt-2 md:pt-10 px-6 md:px-4 flex md:flex-col justify-around md:justify-start items-center md:items-start z-30 pb-4 md:space-y-2 hidden">
-            <div class="hidden md:block mb-8 px-4 w-full text-center">
-                <img src="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778020925/Dise%C3%B1o_sin_t%C3%ADtulo_1_pvnyid.png" alt="Clientes 360 Logo" class="w-16 h-16 mx-auto rounded-2xl shadow-md mb-3 object-cover">
-                <h2 class="font-bold text-xl tracking-tight">Clientes 360</h2>
+        <!-- NAVEGACIÓN LATERAL/INFERIOR -->
+        <!-- Optimización: md:w-56 en vez de 64 para no comerse la pantalla del laptop -->
+        <nav id="main-nav" class="absolute md:relative bottom-0 w-full md:w-56 lg:w-64 glass-nav md:bg-white md:backdrop-filter-none border-t md:border-t-0 md:border-r border-gray-200/60 pb-safe pt-2 md:pt-8 px-6 md:px-4 flex md:flex-col justify-around md:justify-start items-center md:items-start z-30 pb-4 md:space-y-2 hidden">
+            <div class="hidden md:block mb-8 px-2 w-full text-center">
+                <img src="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778020925/Dise%C3%B1o_sin_t%C3%ADtulo_1_pvnyid.png" alt="Clientes 360 Logo" class="w-14 h-14 mx-auto rounded-2xl shadow-md mb-3 object-cover">
+                <h2 class="font-bold text-lg lg:text-xl tracking-tight truncate">Clientes 360</h2>
             </div>
 
             <button onclick="switchTab('home')" class="flex flex-col md:flex-row items-center md:px-4 md:py-3 w-auto md:w-full rounded-xl text-[#007AFF] md:bg-blue-50 nav-btn transition-colors" data-tab="home">
-                <svg class="w-6 h-6 mb-1 md:mb-0 md:mr-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L4 9v12h5v-7h6v7h5V9z"/></svg>
-                <span class="text-[10px] md:text-sm font-semibold">Proyectos</span>
+                <svg class="w-6 h-6 mb-1 md:mb-0 md:mr-3 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L4 9v12h5v-7h6v7h5V9z"/></svg>
+                <span class="text-[10px] md:text-sm font-semibold truncate">Proyectos</span>
             </button>
             <button onclick="switchTab('settings')" class="flex flex-col md:flex-row items-center md:px-4 md:py-3 w-auto md:w-full rounded-xl text-gray-400 hover:bg-gray-100 transition-colors nav-btn" data-tab="settings">
-                <svg class="w-6 h-6 mb-1 md:mb-0 md:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                <span class="text-[10px] md:text-sm font-medium">Ajustes</span>
+                <svg class="w-6 h-6 mb-1 md:mb-0 md:mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span class="text-[10px] md:text-sm font-medium truncate">Ajustes</span>
             </button>
         </nav>
 
         <!-- CONTENIDO PRINCIPAL -->
         <div id="main-app" class="flex-1 flex flex-col hidden h-full relative">
-            <div class="flex-1 overflow-y-auto no-scrollbar pb-24 md:pb-12 relative w-full px-4 md:px-8 pt-10" id="scroll-container">
+            <!-- Optimización: md:pb-8 en lugar de 12, pt-6 en lugar de pt-10 -->
+            <div class="flex-1 overflow-y-auto no-scrollbar pb-24 md:pb-8 relative w-full px-4 md:px-8 pt-8 md:pt-6" id="scroll-container">
                 
                 <!-- PESTAÑA: HOME -->
                 <div id="tab-home" class="tab-content max-w-5xl mx-auto">
                     
                     <div class="flex justify-between items-end mb-6">
                         <div>
-                            <h1 class="text-3xl md:text-4xl font-bold tracking-tight">Proyectos</h1>
+                            <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">Proyectos</h1>
                             <p class="text-gray-500 text-sm mt-1" id="current-date"></p>
                         </div>
-                        <button onclick="openClientModal()" class="w-10 h-10 bg-ios-blue shadow-lg shadow-blue-500/30 rounded-full flex items-center justify-center text-white active:scale-90 transition-transform">
+                        <button onclick="openClientModal()" class="w-10 h-10 bg-ios-blue shadow-lg shadow-blue-500/30 rounded-full flex items-center justify-center text-white active:scale-90 transition-transform shrink-0">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
                         </button>
                     </div>
 
-                    <!-- Widgets Financieros (Scroll horizontal en móvil) -->
-                    <div class="flex overflow-x-auto no-scrollbar space-x-4 mb-6 pb-2">
-                        <div class="min-w-[140px] ios-card rounded-2xl p-4 shadow-sm border border-gray-100 flex-1">
+                    <!-- Widgets Financieros -->
+                    <div class="flex overflow-x-auto no-scrollbar space-x-3 md:space-x-4 mb-6 pb-2">
+                        <div class="min-w-[130px] md:min-w-[140px] ios-card rounded-2xl p-4 shadow-sm border border-gray-100 flex-1 shrink-0">
                             <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Activos</p>
-                            <p class="text-2xl font-bold text-slate-800" id="stat-active">0</p>
+                            <p class="text-2xl font-bold text-slate-800 truncate" id="stat-active">0</p>
                         </div>
-                        <div class="min-w-[160px] ios-card rounded-2xl p-4 shadow-sm border border-gray-100 flex-1">
+                        <div class="min-w-[140px] md:min-w-[160px] ios-card rounded-2xl p-4 shadow-sm border border-gray-100 flex-1 shrink-0">
                             <p class="text-xs text-green-600 font-semibold uppercase tracking-wider mb-1">Cobrado</p>
-                            <p class="text-2xl font-bold text-green-600" id="stat-paid">$0</p>
+                            <p class="text-2xl font-bold text-green-600 truncate" id="stat-paid">$0</p>
                         </div>
-                        <div class="min-w-[160px] ios-card rounded-2xl p-4 shadow-sm border border-gray-100 border-l-4 border-l-red-500 flex-1">
+                        <div class="min-w-[140px] md:min-w-[160px] ios-card rounded-2xl p-4 shadow-sm border border-gray-100 border-l-4 border-l-red-500 flex-1 shrink-0">
                             <p class="text-xs text-red-500 font-semibold uppercase tracking-wider mb-1">Por Cobrar</p>
-                            <p class="text-2xl font-bold text-slate-800" id="stat-pending">$0</p>
+                            <p class="text-2xl font-bold text-slate-800 truncate" id="stat-pending">$0</p>
                         </div>
                     </div>
 
@@ -167,15 +173,15 @@
 
                 <!-- PESTAÑA: AJUSTES -->
                 <div id="tab-settings" class="tab-content hidden max-w-2xl mx-auto pt-6">
-                    <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-8">Ajustes</h1>
+                    <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-8 text-slate-900">Ajustes</h1>
                     
                     <div class="ios-card rounded-2xl overflow-hidden shadow-sm md:shadow-md border md:border-gray-100">
                         <div class="px-5 py-4 border-b border-gray-100 flex items-center bg-gray-50/50">
-                            <div class="w-10 h-10 rounded-xl bg-blue-100 text-[#007AFF] flex items-center justify-center mr-4 shadow-sm">
+                            <div class="w-10 h-10 rounded-xl bg-blue-100 text-[#007AFF] flex items-center justify-center mr-4 shadow-sm shrink-0">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                             </div>
                             <div class="flex-1">
-                                <p class="text-base font-semibold">Seguridad</p>
+                                <p class="text-base font-semibold text-slate-800">Seguridad</p>
                             </div>
                         </div>
                         <div class="px-5 py-6">
@@ -200,34 +206,37 @@
         <!-- MODAL: CREAR/EDITAR CLIENTE (FORMULARIO)   -->
         <!-- ========================================== -->
         <div id="modal-overlay" class="absolute inset-0 bg-black/50 md:bg-black/40 z-40 hidden transition-opacity opacity-0 backdrop-blur-sm" onclick="closeClientModal()"></div>
-        <div id="clientModal" class="absolute inset-x-0 bottom-0 md:inset-auto md:w-full md:max-w-xl ios-bg rounded-t-3xl md:rounded-2xl shadow-2xl z-50 h-[90%] md:h-auto md:max-h-[90vh] slide-up-modal flex flex-col">
+        
+        <!-- Optimización Modal Formulario: max-h-[96%] estricto para evitar salida de la caja -->
+        <div id="clientModal" class="absolute inset-x-0 bottom-0 md:inset-auto md:w-full md:max-w-xl ios-bg rounded-t-3xl md:rounded-2xl shadow-2xl z-50 h-[90%] md:h-auto md:max-h-[96%] slide-up-modal flex flex-col overflow-hidden">
             
             <div class="flex justify-between items-center px-4 md:px-6 py-4 border-b border-gray-200 glass-nav md:bg-white md:backdrop-filter-none rounded-t-3xl md:rounded-t-2xl shrink-0">
                 <button onclick="closeClientModal()" class="text-[#007AFF] text-sm md:text-base hover:opacity-80">Cancelar</button>
-                <h3 class="font-semibold text-base md:text-lg" id="modal-title">Nuevo Proyecto</h3>
+                <h3 class="font-semibold text-base md:text-lg text-slate-800" id="modal-title">Nuevo Proyecto</h3>
                 <button onclick="saveClient()" class="text-[#007AFF] text-sm md:text-base font-semibold hover:opacity-80">Guardar</button>
             </div>
             
-            <div class="flex-1 overflow-y-auto px-4 md:px-6 py-6 space-y-6 bg-[#F2F2F7] pb-32">
+            <!-- Optimización paddings: pb-32 es para movil, md:pb-6 para laptops -->
+            <div class="flex-1 overflow-y-auto px-4 md:px-6 py-6 space-y-5 md:space-y-6 bg-[#F2F2F7] pb-32 md:pb-6 w-full">
                 <input type="hidden" id="clientId">
                 
                 <!-- SECCIÓN 1: INFO CLIENTE -->
-                <div>
+                <div class="w-full">
                     <p class="text-xs font-semibold text-gray-500 uppercase ml-2 mb-2">Información del Cliente</p>
-                    <div class="ios-card rounded-xl border border-gray-100 shadow-sm divide-y divide-gray-100">
-                        <input type="text" id="clientName" placeholder="Nombre de la empresa o cliente" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent rounded-t-xl font-medium">
-                        <input type="tel" id="clientPhone" placeholder="Teléfono / WhatsApp (ej: +57300...)" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent">
-                        <input type="email" id="clientEmail" placeholder="Correo electrónico" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent rounded-b-xl">
+                    <div class="ios-card rounded-xl border border-gray-100 shadow-sm divide-y divide-gray-100 w-full">
+                        <input type="text" id="clientName" placeholder="Nombre de la empresa o cliente" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent rounded-t-xl font-medium text-slate-800">
+                        <input type="tel" id="clientPhone" placeholder="Teléfono / WhatsApp (ej: +57300...)" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent text-slate-800">
+                        <input type="email" id="clientEmail" placeholder="Correo electrónico" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent rounded-b-xl text-slate-800">
                     </div>
                 </div>
 
                 <!-- SECCIÓN 2: DETALLES DEL PROYECTO -->
-                <div>
+                <div class="w-full">
                     <p class="text-xs font-semibold text-gray-500 uppercase ml-2 mb-2">Detalles del Proyecto</p>
-                    <div class="ios-card rounded-xl border border-gray-100 shadow-sm divide-y divide-gray-100">
+                    <div class="ios-card rounded-xl border border-gray-100 shadow-sm divide-y divide-gray-100 w-full">
                         <div class="px-4 py-3 flex justify-between items-center">
-                            <span class="text-sm font-medium">Servicio</span>
-                            <select id="clientService" class="text-sm text-gray-500 bg-transparent focus:outline-none text-right dir-rtl outline-none">
+                            <span class="text-sm font-medium text-slate-700">Servicio</span>
+                            <select id="clientService" class="text-sm text-gray-500 bg-transparent focus:outline-none text-right dir-rtl outline-none truncate max-w-[60%]">
                                 <option value="Branding">Branding / Logo</option>
                                 <option value="Redes Sociales">Redes Sociales</option>
                                 <option value="Diseño Web">Diseño Web / UI</option>
@@ -238,8 +247,8 @@
                             </select>
                         </div>
                         <div class="px-4 py-3 flex justify-between items-center">
-                            <span class="text-sm font-medium">Estado</span>
-                            <select id="clientStatus" class="text-sm text-gray-500 bg-transparent focus:outline-none text-right dir-rtl">
+                            <span class="text-sm font-medium text-slate-700">Estado</span>
+                            <select id="clientStatus" class="text-sm text-gray-500 bg-transparent focus:outline-none text-right dir-rtl truncate max-w-[60%]">
                                 <option value="Cotizando">Cotizando (Lead)</option>
                                 <option value="En Progreso">En Progreso</option>
                                 <option value="En Revisión">En Revisión (Cliente)</option>
@@ -248,31 +257,31 @@
                             </select>
                         </div>
                         <div class="px-4 py-3 flex justify-between items-center">
-                            <span class="text-sm font-medium">Fecha de Entrega</span>
-                            <input type="date" id="clientDeadline" class="text-sm text-[#007AFF] bg-transparent focus:outline-none">
+                            <span class="text-sm font-medium text-slate-700">Fecha de Entrega</span>
+                            <input type="date" id="clientDeadline" class="text-sm text-[#007AFF] bg-transparent focus:outline-none shrink-0">
                         </div>
-                        <input type="url" id="clientAssets" placeholder="Link de archivos (Drive, Figma, etc...)" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent text-[#007AFF]">
+                        <input type="url" id="clientAssets" placeholder="Link de archivos (Drive, Figma...)" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent text-[#007AFF]">
                     </div>
                 </div>
 
                 <!-- SECCIÓN 3: FINANZAS -->
-                <div>
+                <div class="w-full">
                     <p class="text-xs font-semibold text-gray-500 uppercase ml-2 mb-2">Finanzas</p>
-                    <div class="ios-card rounded-xl border border-gray-100 shadow-sm divide-y divide-gray-100">
-                        <div class="currency-input">
-                            <input type="number" id="clientPrice" placeholder="Precio Total del Proyecto" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent rounded-t-xl" min="0">
+                    <div class="ios-card rounded-xl border border-gray-100 shadow-sm divide-y divide-gray-100 w-full">
+                        <div class="currency-input w-full">
+                            <input type="number" id="clientPrice" placeholder="Precio Total del Proyecto" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent rounded-t-xl text-slate-800" min="0">
                         </div>
-                        <div class="currency-input">
-                            <input type="number" id="clientPaid" placeholder="Abono / Dinero Pagado" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent rounded-b-xl text-green-600" min="0">
+                        <div class="currency-input w-full">
+                            <input type="number" id="clientPaid" placeholder="Abono / Dinero Pagado" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent rounded-b-xl text-green-600 font-medium" min="0">
                         </div>
                     </div>
                 </div>
 
                 <!-- SECCIÓN 4: NOTAS -->
-                <div>
+                <div class="w-full">
                     <p class="text-xs font-semibold text-gray-500 uppercase ml-2 mb-2">Notas y Requerimientos</p>
-                    <div class="ios-card rounded-xl px-4 py-3 border border-gray-100 shadow-sm">
-                        <textarea id="clientNotes" rows="4" placeholder="Brief del cliente, colores, referencias..." class="w-full text-sm focus:outline-none resize-none bg-transparent"></textarea>
+                    <div class="ios-card rounded-xl px-4 py-3 border border-gray-100 shadow-sm w-full">
+                        <textarea id="clientNotes" rows="4" placeholder="Brief del cliente, colores, referencias..." class="w-full text-sm focus:outline-none resize-none bg-transparent text-slate-800"></textarea>
                     </div>
                 </div>
             </div>
@@ -281,56 +290,57 @@
         <!-- ========================================== -->
         <!-- MODAL: PERFIL 360 DEL CLIENTE (VISUALIZAR) -->
         <!-- ========================================== -->
-        <div id="profileModal" class="absolute inset-x-0 bottom-0 md:inset-auto md:w-full md:max-w-md bg-white rounded-t-3xl md:rounded-2xl shadow-2xl z-50 h-[85%] md:h-auto md:max-h-[85vh] slide-up-modal flex flex-col">
+        <!-- Optimización Modal Perfil: max-h-[96%] para laptop -->
+        <div id="profileModal" class="absolute inset-x-0 bottom-0 md:inset-auto md:w-full md:max-w-md bg-white rounded-t-3xl md:rounded-2xl shadow-2xl z-50 h-[85%] md:h-auto md:max-h-[96%] slide-up-modal flex flex-col overflow-hidden">
             <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50 md:rounded-t-2xl shrink-0">
                 <span class="w-12"></span>
-                <h3 class="font-semibold text-sm text-gray-500 uppercase tracking-wider">Perfil del Proyecto</h3>
+                <h3 class="font-semibold text-sm text-gray-500 uppercase tracking-wider truncate px-2">Perfil del Proyecto</h3>
                 <button onclick="closeProfileModal()" class="w-12 text-right text-[#007AFF] font-bold text-sm hover:opacity-80">Cerrar</button>
             </div>
             
-            <div class="flex-1 overflow-y-auto bg-white md:rounded-b-2xl pb-10">
+            <div class="flex-1 overflow-y-auto bg-white md:rounded-b-2xl pb-10 w-full">
                 <!-- Cabecera Perfil -->
-                <div class="px-6 py-6 text-center border-b border-gray-100">
-                    <div class="w-16 h-16 bg-gradient-to-tr from-blue-500 to-indigo-500 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl font-bold shadow-md mb-3" id="profileInitials"></div>
-                    <h2 class="text-xl font-bold text-slate-800" id="profileName">Nombre</h2>
+                <div class="px-6 py-6 text-center border-b border-gray-100 w-full">
+                    <div class="w-16 h-16 bg-gradient-to-tr from-blue-500 to-indigo-500 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl font-bold shadow-md mb-3 shrink-0" id="profileInitials"></div>
+                    <h2 class="text-xl font-bold text-slate-800 break-words" id="profileName">Nombre</h2>
                     <span id="profileStatusBadge" class="inline-block mt-2 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border">Estado</span>
                 </div>
 
                 <!-- Acciones Rápidas -->
-                <div class="flex justify-center space-x-6 py-4 border-b border-gray-100" id="profileActions">
-                    <!-- Inyectados por JS (WhatsApp, Email, Folder) -->
+                <div class="flex justify-center space-x-4 md:space-x-6 py-4 border-b border-gray-100 w-full" id="profileActions">
+                    <!-- Inyectados por JS -->
                 </div>
 
                 <!-- Detalles -->
-                <div class="px-6 py-5 space-y-4">
+                <div class="px-6 py-5 space-y-4 w-full">
                     
-                    <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                        <div>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Servicio</p>
-                            <p class="text-sm font-semibold text-slate-700" id="profileService"></p>
+                    <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100 w-full">
+                        <div class="overflow-hidden">
+                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-1 truncate">Servicio</p>
+                            <p class="text-sm font-semibold text-slate-700 truncate" id="profileService"></p>
                         </div>
-                        <div>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Entrega</p>
-                            <p class="text-sm font-semibold text-slate-700" id="profileDeadline"></p>
+                        <div class="overflow-hidden">
+                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-1 truncate">Entrega</p>
+                            <p class="text-sm font-semibold text-slate-700 truncate" id="profileDeadline"></p>
                         </div>
                     </div>
 
                     <!-- Estado Financiero Visual -->
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 w-full">
                         <p class="text-[10px] text-gray-400 font-bold uppercase mb-2">Finanzas</p>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="text-slate-600 font-medium">Total: <span id="profileTotal" class="font-bold"></span></span>
-                            <span class="text-red-500 font-medium text-xs">Deuda: <span id="profileDebt" class="font-bold"></span></span>
+                        <div class="flex justify-between text-sm mb-1 w-full">
+                            <span class="text-slate-600 font-medium truncate pr-2">Total: <span id="profileTotal" class="font-bold"></span></span>
+                            <span class="text-red-500 font-medium text-xs truncate">Deuda: <span id="profileDebt" class="font-bold"></span></span>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2 mb-1 overflow-hidden mt-2">
+                        <div class="w-full bg-gray-200 rounded-full h-2 mb-1 overflow-hidden mt-2 shrink-0">
                             <div id="profileProgress" class="bg-green-500 h-2 rounded-full" style="width: 0%"></div>
                         </div>
                         <p class="text-xs text-green-600 text-right mt-1 font-semibold" id="profilePaidText"></p>
                     </div>
 
-                    <div id="profileNotesContainer" class="bg-yellow-50/50 p-4 rounded-2xl border border-yellow-100/50">
+                    <div id="profileNotesContainer" class="bg-yellow-50/50 p-4 rounded-2xl border border-yellow-100/50 w-full">
                         <p class="text-[10px] text-yellow-600 font-bold uppercase mb-2">Notas / Brief</p>
-                        <p class="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed italic" id="profileNotes"></p>
+                        <p class="text-sm text-gray-700 whitespace-pre-wrap break-words leading-relaxed italic" id="profileNotes"></p>
                     </div>
 
                 </div>
@@ -479,7 +489,6 @@
         const generateId = () => crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
 
         function openClientModal(id = null) {
-            // Reset
             ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientAssets', 'clientPrice', 'clientPaid', 'clientNotes'].forEach(id => document.getElementById(id).value = '');
             document.getElementById('clientService').value = 'Branding';
             document.getElementById('clientStatus').value = 'Cotizando';
@@ -569,7 +578,6 @@
 
             document.getElementById('profileService').textContent = escapeHTML(c.service);
             
-            // Fecha bonita
             let dateText = "Sin definir";
             if (c.deadline) {
                 const d = new Date(c.deadline + 'T12:00:00');
@@ -601,33 +609,33 @@
             if (c.phone) {
                 const cleanPhone = c.phone.replace(/\D/g,'');
                 actionsHTML += `
-                    <a href="https://wa.me/${cleanPhone}" target="_blank" class="flex flex-col items-center group">
-                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 group-hover:bg-green-200 transition-colors">
+                    <a href="https://wa.me/${cleanPhone}" target="_blank" class="flex flex-col items-center group shrink-0">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 group-hover:bg-green-200 transition-colors shadow-sm">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>
                         </div>
-                        <span class="text-[10px] font-semibold mt-1 text-gray-500">WhatsApp</span>
+                        <span class="text-[10px] font-semibold mt-1.5 text-gray-500">WhatsApp</span>
                     </a>`;
             }
             if (c.email) {
                 actionsHTML += `
-                    <a href="mailto:${c.email}" class="flex flex-col items-center group">
-                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 group-hover:bg-blue-200 transition-colors">
+                    <a href="mailto:${c.email}" class="flex flex-col items-center group shrink-0">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 group-hover:bg-blue-200 transition-colors shadow-sm">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                         </div>
-                        <span class="text-[10px] font-semibold mt-1 text-gray-500">Correo</span>
+                        <span class="text-[10px] font-semibold mt-1.5 text-gray-500">Correo</span>
                     </a>`;
             }
             if (c.assets) {
                 actionsHTML += `
-                    <a href="${c.assets}" target="_blank" class="flex flex-col items-center group">
-                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 group-hover:bg-purple-200 transition-colors">
+                    <a href="${c.assets}" target="_blank" class="flex flex-col items-center group shrink-0">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 group-hover:bg-purple-200 transition-colors shadow-sm">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                         </div>
-                        <span class="text-[10px] font-semibold mt-1 text-gray-500">Archivos</span>
+                        <span class="text-[10px] font-semibold mt-1.5 text-gray-500">Archivos</span>
                     </a>`;
             }
 
-            if (!actionsHTML) actionsHTML = '<p class="text-xs text-gray-400">Sin datos de contacto guardados</p>';
+            if (!actionsHTML) actionsHTML = '<p class="text-xs text-gray-400 w-full text-center">Sin datos de contacto guardados</p>';
             document.getElementById('profileActions').innerHTML = actionsHTML;
 
             document.getElementById('modal-overlay').classList.remove('hidden');
@@ -705,24 +713,24 @@
                     const isOverdue = c.deadline && new Date(c.deadline) < new Date(new Date().setHours(0,0,0,0)) && c.status !== 'Finalizado';
 
                     const card = `
-                        <div class="ios-card rounded-2xl p-4 shadow-sm border border-gray-100 relative hover:shadow-md transition-shadow flex flex-col justify-between group cursor-pointer" onclick="openProfileModal('${c.id}')">
+                        <div class="ios-card rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100 relative hover:shadow-md transition-shadow flex flex-col justify-between group cursor-pointer overflow-hidden" onclick="openProfileModal('${c.id}')">
                             <div>
-                                <div class="flex justify-between items-start mb-2">
+                                <div class="flex justify-between items-start mb-2 w-full">
                                     <h3 class="font-bold text-lg leading-tight truncate pr-2 text-slate-800">${safeName}</h3>
                                     <span class="shrink-0 text-[9px] font-bold px-2 py-1 rounded border uppercase ${getStatusColor(c.status)}">${escapeHTML(c.status)}</span>
                                 </div>
                                 
-                                <div class="text-xs text-gray-500 font-medium flex items-center mb-3">
-                                    <span class="bg-gray-100 px-2 py-0.5 rounded mr-2 text-gray-600">${escapeHTML(c.service)}</span>
-                                    ${c.deadline ? `<span class="${isOverdue ? 'text-red-500 font-bold' : ''}">📅 ${new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', {month:'short', day:'numeric'})}</span>` : ''}
+                                <div class="text-xs text-gray-500 font-medium flex items-center mb-3 flex-wrap gap-1 w-full overflow-hidden">
+                                    <span class="bg-gray-100 px-2 py-0.5 rounded text-gray-600 truncate max-w-full">${escapeHTML(c.service)}</span>
+                                    ${c.deadline ? `<span class="shrink-0 ${isOverdue ? 'text-red-500 font-bold' : ''}">📅 ${new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', {month:'short', day:'numeric'})}</span>` : ''}
                                 </div>
 
-                                <div class="flex justify-between items-end mt-2 pt-3 border-t border-gray-50">
-                                    <div>
-                                        <p class="text-[10px] text-gray-400 font-bold uppercase mb-0.5">Por cobrar</p>
-                                        <p class="text-sm font-bold ${pending > 0 ? 'text-red-500' : 'text-green-500'}">${pending > 0 ? formatMoney(pending) : 'Pagado'}</p>
+                                <div class="flex justify-between items-end mt-2 pt-3 border-t border-gray-50 w-full">
+                                    <div class="truncate pr-2">
+                                        <p class="text-[10px] text-gray-400 font-bold uppercase mb-0.5 truncate">Por cobrar</p>
+                                        <p class="text-sm font-bold truncate ${pending > 0 ? 'text-red-500' : 'text-green-500'}">${pending > 0 ? formatMoney(pending) : 'Pagado'}</p>
                                     </div>
-                                    <div class="flex space-x-2">
+                                    <div class="flex space-x-2 shrink-0">
                                         <button onclick="event.stopPropagation(); openClientModal('${c.id}')" class="w-8 h-8 rounded-full bg-blue-50 text-[#007AFF] flex items-center justify-center hover:bg-blue-100 active:scale-90 transition-all">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                         </button>
