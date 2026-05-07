@@ -449,15 +449,14 @@
                         <div class="px-5 py-4 border-b border-gray-50 flex flex-col w-full bg-gray-50/30">
                             <span class="text-sm font-semibold text-slate-800 mb-2">Servicio(s)</span>
                             <div class="flex flex-wrap gap-2" id="serviceTags">
-                                <button type="button" onclick="toggleService(this)" class="srv-btn selected px-3 py-1.5 rounded-lg border border-blue-200 text-[#007AFF] bg-[#F0F7FF] text-xs font-semibold transition-colors" data-val="Branding">Branding</button>
-                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="Redes Sociales">Redes Sociales</button>
-                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="Diseño Web">Diseño Web</button>
-                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="Impresos">Impresos</button>
-                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="Ilustración">Ilustración</button>
-                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="Retainer">Retainer</button>
+                                <button type="button" onclick="toggleService(this)" class="srv-btn selected px-3 py-1.5 rounded-lg border border-blue-200 text-[#007AFF] bg-[#F0F7FF] text-xs font-semibold transition-colors" data-val="Creación de Marca">Creación de Marca</button>
+                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="Catálogos Digitales">Catálogos Digitales</button>
+                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="vCard Digital">vCard Digital</button>
+                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="Tarjetas NFC">Tarjetas NFC</button>
+                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="Páginas Web">Páginas Web</button>
                                 <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="Otro">Otro</button>
                             </div>
-                            <input type="hidden" id="clientService" value="Branding">
+                            <input type="hidden" id="clientService" value="Creación de Marca">
                         </div>
                         <div class="px-5 py-3.5 flex justify-between items-center">
                             <span class="text-sm font-semibold text-slate-800">Estado</span>
@@ -1076,12 +1075,19 @@
             
             ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientPrice', 'clientPaid', 'clientNotes'].forEach(id => document.getElementById(id).value = '');
             
-            // Reiniciar botones de servicios múltiples
+            // Reiniciar botones de servicios múltiples y establecer el valor por defecto
             document.querySelectorAll('.srv-btn').forEach(btn => {
                 btn.classList.remove('selected', 'border-blue-200', 'text-[#007AFF]', 'bg-[#F0F7FF]');
                 btn.classList.add('border-gray-200', 'text-gray-500', 'bg-white');
+                
+                if (btn.dataset.val === 'Creación de Marca') {
+                    btn.classList.add('selected');
+                    btn.classList.replace('border-gray-200', 'border-blue-200');
+                    btn.classList.replace('text-gray-500', 'text-[#007AFF]');
+                    btn.classList.replace('bg-white', 'bg-[#F0F7FF]');
+                }
             });
-            document.getElementById('clientService').value = '';
+            document.getElementById('clientService').value = 'Creación de Marca';
 
             document.getElementById('clientStatus').value = 'Cotizando';
             document.getElementById('clientProgress').value = 0;
@@ -1103,7 +1109,12 @@
                     
                     document.getElementById('clientService').value = c.service || '';
                     const activeServices = (c.service || '').split(',').map(s => s.trim());
+                    
+                    // Limpiar la selección por defecto y aplicar las del cliente
                     document.querySelectorAll('.srv-btn').forEach(btn => {
+                        btn.classList.remove('selected', 'border-blue-200', 'text-[#007AFF]', 'bg-[#F0F7FF]');
+                        btn.classList.add('border-gray-200', 'text-gray-500', 'bg-white');
+                        
                         if(activeServices.includes(btn.dataset.val)) {
                             btn.classList.add('selected');
                             btn.classList.replace('border-gray-200', 'border-blue-200');
@@ -1476,7 +1487,7 @@
                     const isOverdue = c.deadline && new Date(c.deadline) < new Date(new Date().setHours(0,0,0,0)) && c.status !== 'Finalizado';
                     const prog = parseInt(c.progress) || 0;
                     
-                    const servicesPills = (c.service || 'Branding').split(',').map(s => `<span class="bg-gray-50 px-2 py-1 rounded-md border border-gray-100 text-gray-600 shrink-0 whitespace-nowrap">${escapeHTML(s.trim())}</span>`).join('');
+                    const servicesPills = (c.service || 'Creación de Marca').split(',').map(s => `<span class="bg-gray-50 px-2 py-1 rounded-md border border-gray-100 text-gray-600 shrink-0 whitespace-nowrap">${escapeHTML(s.trim())}</span>`).join('');
 
                     const card = `
                         <div class="bg-white rounded-[20px] p-5 premium-shadow border border-gray-100 relative hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between group cursor-pointer overflow-hidden" onclick="openProfileModal('${escapeHTML(c.id)}')">
