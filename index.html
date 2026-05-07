@@ -161,18 +161,21 @@
                     </div>
                 </div>
 
-                <!-- Assets Card -->
-                <div class="ios-card rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
-                    <div class="flex items-center w-full md:w-auto">
-                        <div class="w-12 h-12 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center shrink-0 mr-4">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                <!-- Gestor de Archivos Nativo -->
+                <div class="ios-card rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 mb-6">
+                    <div class="flex items-center mb-5">
+                        <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center shrink-0 mr-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                         </div>
                         <div>
                             <h4 class="font-bold text-slate-800 text-sm">Archivos y Entregables</h4>
-                            <p class="text-xs text-gray-500">Imágenes, avances y archivos finales.</p>
+                            <p class="text-xs text-gray-500">Selecciona un archivo para verlo aquí mismo.</p>
                         </div>
                     </div>
-                    <button id="cp-assets-btn" onclick="openAssetsModal()" class="w-full md:w-auto text-center bg-slate-900 text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-slate-800 transition-colors">Ver Archivos</button>
+                    
+                    <div id="cp-assets-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Aquí se inyectan los botones nativos de archivos -->
+                    </div>
                 </div>
 
                 <!-- Finanzas Card -->
@@ -386,7 +389,20 @@
                             <span class="text-sm font-medium text-slate-700">Fecha de Entrega</span>
                             <input type="date" id="clientDeadline" class="text-sm text-[#007AFF] bg-transparent focus:outline-none shrink-0">
                         </div>
-                        <input type="url" id="clientAssets" placeholder="Link de archivos (Drive, Figma...)" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent text-[#007AFF] border-t border-gray-100">
+                    </div>
+                </div>
+
+                <!-- SECCIÓN: ENLACES MULTIPLES DE DRIVE -->
+                <div class="w-full">
+                    <p class="text-xs font-semibold text-gray-500 uppercase ml-2 mb-2">Entregables (Archivos/Carpetas)</p>
+                    <div class="ios-card rounded-xl border border-gray-100 shadow-sm p-4 w-full">
+                        <div id="assets-fields-container" class="space-y-3 mb-3">
+                            <!-- Los inputs se inyectan aquí -->
+                        </div>
+                        <button type="button" onclick="addAssetField()" class="w-full py-2.5 bg-blue-50 text-[#007AFF] rounded-xl text-sm font-semibold flex items-center justify-center hover:bg-blue-100 transition-colors">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            Añadir enlace (Drive, Figma...)
+                        </button>
                     </div>
                 </div>
 
@@ -488,18 +504,18 @@
         <div id="assetsModal" class="absolute inset-x-0 bottom-0 md:w-full md:max-w-4xl bg-white rounded-t-3xl md:rounded-2xl shadow-2xl z-50 h-[95%] md:h-[85%] slide-up-modal flex flex-col overflow-hidden">
             <div class="flex justify-between items-center px-4 md:px-6 py-4 border-b border-gray-200 bg-gray-50 md:rounded-t-2xl shrink-0">
                 <button onclick="closeAssetsModal()" class="text-[#007AFF] font-bold text-sm hover:opacity-80 px-2 py-1">Cerrar</button>
-                <h3 class="font-semibold text-sm text-gray-800 uppercase tracking-wider truncate px-2">Archivos del Proyecto</h3>
-                <!-- Enlace alternativo en caso de que el visor sea bloqueado por la web de origen -->
+                <h3 id="assetsModalTitle" class="font-semibold text-sm text-gray-800 uppercase tracking-wider truncate px-2">Archivo</h3>
+                <!-- Enlace alternativo -->
                 <a href="#" id="assetsExternalLink" target="_blank" class="text-gray-500 hover:text-[#007AFF] px-2 py-1 flex items-center" title="Abrir en pestaña externa">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                 </a>
             </div>
             
-            <!-- Banner Inteligente para informar sobre la seguridad de Drive -->
+            <!-- Banner Inteligente para carpetas de Drive (solo si es carpeta general) -->
             <div id="driveWarning" class="bg-blue-50 px-4 py-2 text-[10px] md:text-xs text-blue-600 border-b border-blue-100 hidden shrink-0 font-medium">
                 <div class="flex items-center justify-center">
                     <span class="mr-1.5">ℹ️</span> 
-                    <span>Por seguridad de Google, los documentos individuales se abrirán en una pestaña nueva segura.</span>
+                    <span>Navegación segura de Google activa. Para evitar abrir pestañas nuevas, pide a tu diseñador enlaces directos.</span>
                 </div>
             </div>
 
@@ -507,7 +523,7 @@
                 <!-- Loader simple -->
                 <div id="assetsLoader" class="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 z-0 pointer-events-none">
                     <svg class="animate-spin h-8 w-8 text-[#007AFF] mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    <p class="text-sm text-gray-500 font-medium">Cargando visor web...</p>
+                    <p class="text-sm text-gray-500 font-medium">Cargando visor seguro...</p>
                 </div>
                 <!-- Iframe donde se inyecta el Drive o Figma -->
                 <iframe id="assetsIframe" class="w-full h-full border-0 relative z-10" allowfullscreen onload="document.getElementById('assetsLoader').classList.add('hidden')"></iframe>
@@ -544,20 +560,13 @@
         function getEmbedUrl(url) {
             if (!url) return '';
             try {
-                // Si es un archivo de Google Drive (Ej: docs, hojas, imagenes)
-                if (url.includes('drive.google.com/file/d/')) {
-                    return url.replace(/\/view.*$/, '/preview');
-                }
-                // Si es una carpeta de Google Drive
+                if (url.includes('drive.google.com/file/d/')) return url.replace(/\/view.*$/, '/preview');
                 const folderMatch = url.match(/drive\.google\.com\/drive\/folders\/([a-zA-Z0-9_-]+)/);
-                if (folderMatch) {
-                    return `https://drive.google.com/embeddedfolderview?id=${folderMatch[1]}#grid`;
-                }
-                // Si es un enlace de Figma
+                if (folderMatch) return `https://drive.google.com/embeddedfolderview?id=${folderMatch[1]}#grid`;
                 if (url.includes('figma.com/file/') || url.includes('figma.com/design/')) {
                     return `https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(url)}`;
                 }
-                return url; // Si no es ninguno de los anteriores, intentar cargar tal cual
+                return url; 
             } catch (e) {
                 return url;
             }
@@ -600,7 +609,6 @@
                 return;
             } 
 
-            // Verificar si es ADMIN
             const hashedInput = await hashPassword(pwd);
             if (hashedInput === localStorage.getItem('clientes360_pro_auth')) {
                 unlockApp('admin');
@@ -608,7 +616,6 @@
                 return;
             }
 
-            // Verificar si es CLIENTE (PIN de 6 dígitos)
             const clientMatch = clients.find(c => c.clientCode === pwd);
             if (clientMatch) {
                 unlockApp('client', clientMatch);
@@ -616,7 +623,6 @@
                 return;
             }
 
-            // Error
             errorMsg.classList.remove('hidden');
             input.classList.add('border-red-500', 'bg-red-50');
             setTimeout(() => {
@@ -633,14 +639,12 @@
                 document.getElementById('auth-screen').classList.add('hidden');
                 
                 if (mode === 'admin') {
-                    // MODO AGENCIA
                     document.getElementById('main-app').classList.remove('hidden');
                     document.getElementById('main-nav').classList.remove('hidden');
                     document.getElementById('client-portal').classList.add('hidden');
                     setDate();
                     renderClients();
                 } else if (mode === 'client' && clientData) {
-                    // MODO CLIENTE
                     document.getElementById('main-app').classList.add('hidden');
                     document.getElementById('main-nav').classList.add('hidden');
                     document.getElementById('client-portal').classList.remove('hidden');
@@ -671,10 +675,7 @@
 
             const progress = c.progress || 0;
             document.getElementById('cp-progress-text').textContent = progress + '%';
-            // Animación suave de la barra
-            setTimeout(() => {
-                document.getElementById('cp-progress-bar').style.width = progress + '%';
-            }, 100);
+            setTimeout(() => { document.getElementById('cp-progress-bar').style.width = progress + '%'; }, 100);
 
             let dateText = "Por definir";
             if (c.deadline) {
@@ -683,19 +684,45 @@
             }
             document.getElementById('cp-deadline').textContent = dateText;
 
-            // Link de archivos - Ahora prepara los datos para el modal embebido
-            const btnAssets = document.getElementById('cp-assets-btn');
-            if (c.assets) {
-                btnAssets.dataset.url = c.assets; // Guardamos el link puro en el botón
-                btnAssets.textContent = "Ver Archivos";
-                btnAssets.classList.remove('opacity-50', 'pointer-events-none');
-            } else {
-                btnAssets.dataset.url = "";
-                btnAssets.textContent = "Archivos no disponibles";
-                btnAssets.classList.add('opacity-50', 'pointer-events-none');
+            // Renderizar la cuadrícula de archivos nativa
+            const assetsListEl = document.getElementById('cp-assets-list');
+            assetsListEl.innerHTML = '';
+            
+            // Adaptador para datos antiguos (si assets era un solo string)
+            let parsedAssets = [];
+            if (Array.isArray(c.assets)) {
+                parsedAssets = c.assets;
+            } else if (typeof c.assets === 'string' && c.assets.trim() !== '') {
+                parsedAssets = [{ name: 'Carpeta Principal', url: c.assets }];
             }
 
-            // Finanzas
+            if (parsedAssets.length > 0) {
+                parsedAssets.forEach(asset => {
+                    const isFolder = asset.url.includes('folders');
+                    const icon = isFolder 
+                        ? `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>`
+                        : `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>`;
+                    
+                    const btnHtml = `
+                        <button onclick="openAssetsModal('${asset.url}', '${escapeHTML(asset.name)}')" class="flex items-center text-left bg-white border border-gray-200 p-3 rounded-xl hover:bg-blue-50 hover:border-blue-200 hover:shadow-sm transition-all group active:scale-95">
+                            <div class="w-10 h-10 rounded-lg bg-gray-100 text-gray-500 group-hover:bg-[#007AFF] group-hover:text-white flex items-center justify-center shrink-0 mr-3 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">${icon}</svg>
+                            </div>
+                            <div class="flex-1 overflow-hidden">
+                                <p class="text-sm font-semibold text-slate-800 truncate">${escapeHTML(asset.name)}</p>
+                                <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">${isFolder ? 'Carpeta' : 'Archivo'}</p>
+                            </div>
+                        </button>
+                    `;
+                    assetsListEl.insertAdjacentHTML('beforeend', btnHtml);
+                });
+            } else {
+                assetsListEl.innerHTML = `
+                    <div class="col-span-full p-4 border border-dashed border-gray-200 rounded-xl text-center">
+                        <p class="text-sm text-gray-500">Aún no hay archivos compartidos.</p>
+                    </div>`;
+            }
+
             const pending = (c.price || 0) - (c.paid || 0);
             document.getElementById('cp-price').textContent = formatMoney(c.price);
             document.getElementById('cp-paid').textContent = formatMoney(c.paid);
@@ -703,8 +730,7 @@
         }
 
         // --- MANEJO DEL VISOR DE ARCHIVOS ---
-        function openAssetsModal() {
-            const url = document.getElementById('cp-assets-btn').dataset.url;
+        function openAssetsModal(url, title = 'Archivo') {
             if (!url) return;
 
             const iframe = document.getElementById('assetsIframe');
@@ -712,21 +738,19 @@
             const loader = document.getElementById('assetsLoader');
             const driveWarning = document.getElementById('driveWarning');
             
-            // Mostrar u ocultar el aviso inteligente si es Drive
-            if (url.includes('drive.google.com')) {
+            document.getElementById('assetsModalTitle').textContent = title;
+            externalLink.href = url;
+            
+            // Mostrar u ocultar el aviso inteligente si es una CARPETA de Drive
+            if (url.includes('drive.google.com/drive/folders')) {
                 driveWarning.classList.remove('hidden');
             } else {
                 driveWarning.classList.add('hidden');
             }
 
-            // Configurar el link externo por si falla el iframe
-            externalLink.href = url;
-            
-            // Mostrar loader y configurar la fuente del iframe con link traducido
             loader.classList.remove('hidden');
             iframe.src = getEmbedUrl(url);
 
-            // Mostrar el modal elegante
             document.getElementById('modal-overlay').classList.remove('hidden');
             setTimeout(() => {
                 document.getElementById('modal-overlay').classList.remove('opacity-0');
@@ -736,11 +760,36 @@
 
         function closeAssetsModal() {
             document.getElementById('assetsModal').classList.remove('active');
-            // Limpiar iframe para parar videos o descargas en segundo plano
-            setTimeout(() => {
-                document.getElementById('assetsIframe').src = '';
-            }, 300);
+            setTimeout(() => { document.getElementById('assetsIframe').src = ''; }, 300);
             checkAndHideOverlay();
+        }
+
+        // --- GESTIÓN DE ENLACES MÚLTIPLES EN EL FORMULARIO ADMIN ---
+        function addAssetField(name = '', url = '') {
+            const container = document.getElementById('assets-fields-container');
+            const fieldHTML = `
+                <div class="asset-item flex flex-col gap-2 bg-gray-50 p-3 rounded-xl border border-gray-200 relative group">
+                    <button type="button" onclick="this.parentElement.remove()" class="absolute -top-2 -right-2 w-6 h-6 bg-red-100 text-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500 hover:text-white shadow-sm">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                    <input type="text" placeholder="Nombre (ej: Logo, Manual...)" value="${escapeHTML(name)}" class="asset-name w-full px-3 py-2 text-sm bg-white rounded-lg border border-gray-100 focus:outline-none focus:ring-1 focus:ring-[#007AFF] text-slate-800 font-medium">
+                    <input type="url" placeholder="Link (Drive, Figma...)" value="${escapeHTML(url)}" class="asset-url w-full px-3 py-2 text-sm bg-white rounded-lg border border-gray-100 focus:outline-none focus:ring-1 focus:ring-[#007AFF] text-[#007AFF]">
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', fieldHTML);
+        }
+
+        function getAssetsFromForm() {
+            const items = document.querySelectorAll('.asset-item');
+            const assetsArray = [];
+            items.forEach(item => {
+                const name = item.querySelector('.asset-name').value.trim();
+                const url = item.querySelector('.asset-url').value.trim();
+                if (url) {
+                    assetsArray.push({ name: name || 'Archivo', url: url });
+                }
+            });
+            return assetsArray;
         }
 
         // --- UTILIDADES ADMIN ---
@@ -790,12 +839,15 @@
         }
 
         function openClientModal(id = null) {
-            ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientAssets', 'clientPrice', 'clientPaid', 'clientNotes'].forEach(id => document.getElementById(id).value = '');
+            ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientPrice', 'clientPaid', 'clientNotes'].forEach(id => document.getElementById(id).value = '');
             document.getElementById('clientService').value = 'Branding';
             document.getElementById('clientStatus').value = 'Cotizando';
             document.getElementById('clientProgress').value = 0;
             document.getElementById('progressVal').textContent = '0%';
             document.getElementById('modal-title').textContent = 'Nuevo Proyecto';
+            
+            const assetsContainer = document.getElementById('assets-fields-container');
+            assetsContainer.innerHTML = '';
 
             if (id) {
                 const c = clients.find(x => x.id === id);
@@ -808,13 +860,23 @@
                     document.getElementById('clientService').value = c.service || 'Branding';
                     document.getElementById('clientStatus').value = c.status;
                     document.getElementById('clientDeadline').value = c.deadline || '';
-                    document.getElementById('clientAssets').value = c.assets || '';
                     document.getElementById('clientPrice').value = c.price || '';
                     document.getElementById('clientPaid').value = c.paid || '';
                     document.getElementById('clientNotes').value = c.notes || '';
                     document.getElementById('clientProgress').value = c.progress || 0;
                     document.getElementById('progressVal').textContent = (c.progress || 0) + '%';
+                    
+                    // Cargar enlaces
+                    if (Array.isArray(c.assets)) {
+                        c.assets.forEach(a => addAssetField(a.name, a.url));
+                    } else if (typeof c.assets === 'string' && c.assets.trim() !== '') {
+                        addAssetField('Carpeta Principal', c.assets);
+                    }
                 }
+            }
+            
+            if (assetsContainer.children.length === 0) {
+                addAssetField(); // Un campo por defecto
             }
             
             document.getElementById('modal-overlay').classList.remove('hidden');
@@ -854,11 +916,11 @@
                 status: document.getElementById('clientStatus').value,
                 progress: parseInt(document.getElementById('clientProgress').value) || 0,
                 deadline: document.getElementById('clientDeadline').value,
-                assets: document.getElementById('clientAssets').value.trim(),
+                assets: getAssetsFromForm(), // Guardamos el array
                 price: parseFloat(document.getElementById('clientPrice').value) || 0,
                 paid: parseFloat(document.getElementById('clientPaid').value) || 0,
                 notes: document.getElementById('clientNotes').value,
-                clientCode: existingClient ? existingClient.clientCode : null // mantener PIN si ya existe
+                clientCode: existingClient ? existingClient.clientCode : null
             };
 
             if (id) {
@@ -902,7 +964,6 @@
             if(!currentProfileId) return;
             const c = clients.find(x => x.id === currentProfileId);
             if(c) {
-                // Genera un PIN aleatorio de 6 dígitos
                 c.clientCode = Math.floor(100000 + Math.random() * 900000).toString();
                 localStorage.setItem('clientes360_pro_clients', JSON.stringify(clients));
                 
@@ -926,7 +987,6 @@
 
             document.getElementById('profileService').textContent = escapeHTML(c.service);
             
-            // Lógica del PIN
             const pinDisplay = document.getElementById('profilePINDisplay');
             const btnGenerate = document.getElementById('btnGeneratePIN');
             if(c.clientCode) {
@@ -970,10 +1030,11 @@
             if (c.email) {
                 actionsHTML += `<a href="mailto:${c.email}" class="flex flex-col items-center group shrink-0"><div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 group-hover:bg-blue-200 transition-colors shadow-sm"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg></div><span class="text-[10px] font-semibold mt-1.5 text-gray-500">Correo</span></a>`;
             }
-            if (c.assets) {
-                // Al estar del lado del admin, el botón manda el enlace crudo si quieren, 
-                // o podríamos mostrar el modal también, lo mantendremos en nueva pestaña para el admin por simplicidad.
-                actionsHTML += `<a href="${c.assets}" target="_blank" class="flex flex-col items-center group shrink-0"><div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 group-hover:bg-purple-200 transition-colors shadow-sm"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg></div><span class="text-[10px] font-semibold mt-1.5 text-gray-500">Archivos</span></a>`;
+            
+            // Para el admin, seguimos mostrando el botón "Archivos" que abre el primer link externo (por simplicidad administrativa)
+            let primaryAsset = Array.isArray(c.assets) && c.assets.length > 0 ? c.assets[0].url : (typeof c.assets === 'string' ? c.assets : null);
+            if (primaryAsset) {
+                actionsHTML += `<a href="${primaryAsset}" target="_blank" class="flex flex-col items-center group shrink-0"><div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 group-hover:bg-purple-200 transition-colors shadow-sm"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg></div><span class="text-[10px] font-semibold mt-1.5 text-gray-500">Archivos (${Array.isArray(c.assets) ? c.assets.length : 1})</span></a>`;
             }
             
             actionsHTML += `<button onclick="openClientModal('${c.id}')" class="flex flex-col items-center group shrink-0"><div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 group-hover:bg-amber-200 transition-colors shadow-sm"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></div><span class="text-[10px] font-semibold mt-1.5 text-gray-500">Editar</span></button>`;
@@ -1076,7 +1137,6 @@
                                     ${c.deadline ? `<span class="shrink-0 ${isOverdue ? 'text-red-500 font-bold' : ''}">📅 ${new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', {month:'short', day:'numeric'})}</span>` : ''}
                                 </div>
 
-                                <!-- Barra de progreso pequeña -->
                                 <div class="w-full bg-gray-100 rounded-full h-1.5 mb-3 overflow-hidden">
                                     <div class="bg-blue-500 h-1.5 rounded-full" style="width: ${prog}%"></div>
                                 </div>
