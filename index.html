@@ -172,7 +172,6 @@
                             <p class="text-xs text-gray-500">Imágenes, avances y archivos finales.</p>
                         </div>
                     </div>
-                    <!-- Cambiado de <a> a <button> para abrir el modal interno -->
                     <button id="cp-assets-btn" onclick="openAssetsModal()" class="w-full md:w-auto text-center bg-slate-900 text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-slate-800 transition-colors">Ver Archivos</button>
                 </div>
 
@@ -484,18 +483,22 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- MODAL: VISOR DE ARCHIVOS (IFRAME)          -->
+        <!-- MODAL: VISOR DE ARCHIVOS (IFRAME FULLSCREEN) -->
         <!-- ========================================== -->
-        <div id="assetsModal" class="absolute inset-x-0 bottom-0 md:w-full md:max-w-4xl bg-white rounded-t-3xl md:rounded-2xl shadow-2xl z-50 h-[95%] md:h-[85%] slide-up-modal flex flex-col overflow-hidden">
-            <div class="flex justify-between items-center px-4 md:px-6 py-4 border-b border-gray-200 bg-gray-50 md:rounded-t-2xl shrink-0">
-                <button onclick="closeAssetsModal()" class="text-[#007AFF] font-bold text-sm hover:opacity-80 px-2 py-1">Cerrar</button>
-                <h3 class="font-semibold text-sm text-gray-800 uppercase tracking-wider truncate px-2">Archivos del Proyecto</h3>
+        <div id="assetsModal" class="fixed inset-0 w-full h-[100dvh] bg-white z-[100] flex flex-col transition-transform duration-300 translate-y-full">
+            <div class="flex justify-between items-center px-4 py-4 border-b border-gray-200 bg-white shrink-0 shadow-sm">
+                <div class="flex items-center">
+                    <button onclick="closeAssetsModal()" class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full text-slate-700 hover:bg-gray-200 mr-3 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <h3 class="font-bold text-sm text-slate-800">Archivos del Proyecto</h3>
+                </div>
                 <!-- Enlace alternativo en caso de que el visor sea bloqueado por la web de origen -->
-                <a href="#" id="assetsExternalLink" target="_blank" class="text-gray-500 hover:text-[#007AFF] px-2 py-1 flex items-center" title="Forzar abrir en otra pestaña si no carga">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                <a href="#" id="assetsExternalLink" target="_blank" class="w-8 h-8 flex items-center justify-center bg-blue-50 rounded-full text-[#007AFF] hover:bg-blue-100 transition-colors" title="Abrir en pestaña externa">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                 </a>
             </div>
-            <div class="flex-1 w-full relative bg-gray-100">
+            <div class="flex-1 w-full relative bg-gray-50">
                 <!-- Loader simple -->
                 <div id="assetsLoader" class="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 z-0 pointer-events-none">
                     <svg class="animate-spin h-8 w-8 text-[#007AFF] mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
@@ -710,21 +713,21 @@
             loader.classList.remove('hidden');
             iframe.src = getEmbedUrl(url);
 
-            // Mostrar el modal
-            document.getElementById('modal-overlay').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('modal-overlay').classList.remove('opacity-0');
-                document.getElementById('assetsModal').classList.add('active');
-            }, 10);
+            // Mostrar el modal a pantalla completa
+            const modal = document.getElementById('assetsModal');
+            modal.classList.remove('translate-y-full');
+            modal.classList.add('translate-y-0');
         }
 
         function closeAssetsModal() {
-            document.getElementById('assetsModal').classList.remove('active');
+            const modal = document.getElementById('assetsModal');
+            modal.classList.remove('translate-y-0');
+            modal.classList.add('translate-y-full');
+            
             // Limpiar iframe para parar videos o descargas en segundo plano
             setTimeout(() => {
                 document.getElementById('assetsIframe').src = '';
             }, 300);
-            checkAndHideOverlay();
         }
 
         // --- UTILIDADES ADMIN ---
@@ -815,8 +818,7 @@
 
         function checkAndHideOverlay() {
             if(!document.getElementById('clientModal').classList.contains('active') && 
-               !document.getElementById('profileModal').classList.contains('active') &&
-               !document.getElementById('assetsModal').classList.contains('active')) {
+               !document.getElementById('profileModal').classList.contains('active')) {
                 document.getElementById('modal-overlay').classList.add('opacity-0');
                 setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 300);
             }
