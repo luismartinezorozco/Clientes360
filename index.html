@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Clientes 360</title>
+    <title>EQBITO 360</title>
     
+    <!-- Favicon estándar para el navegador (transparente) -->
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778115294/nachito_show_c3ua1j.png">
-    <link rel="apple-touch-icon" href="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778115294/nachito_show_c3ua1j.png">
+    
+    <!-- Icono específico para la pantalla de inicio de iPhone (JPG con fondo) -->
+    <link rel="apple-touch-icon" href="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778117779/nachito_show_yi5p4d.jpg">
+    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Clientes 360">
+    <meta name="apple-mobile-web-app-title" content="EQBITO 360">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -112,8 +116,8 @@
         <div id="auth-screen" class="absolute inset-0 ios-bg z-50 flex flex-col items-center justify-center px-6 transition-opacity duration-300">
             <div class="w-full max-w-sm mx-auto flex flex-col items-center">
                 <!-- Se agrega mix-blend-multiply para eliminar contornos blancos en iOS -->
-                <img src="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778115294/nachito_show_c3ua1j.png" alt="Clientes 360 Logo" class="w-28 h-28 md:w-36 md:h-36 mb-6 object-contain mix-blend-multiply bg-transparent border-0 outline-none" style="-webkit-appearance: none;">
-                <h1 id="auth-title" class="text-2xl md:text-3xl font-bold mb-2 text-center">Clientes 360</h1>
+                <img src="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778115294/nachito_show_c3ua1j.png" alt="EQBITO 360 Logo" class="w-28 h-28 md:w-36 md:h-36 mb-6 object-contain mix-blend-multiply bg-transparent border-0 outline-none" style="-webkit-appearance: none;">
+                <h1 id="auth-title" class="text-2xl md:text-3xl font-bold mb-2 text-center">EQBITO 360</h1>
                 <p id="auth-subtitle" class="text-slate-500 mb-8 text-center text-sm md:text-base">Ingresa tu contraseña o PIN de cliente</p>
                 
                 <div class="w-full">
@@ -198,7 +202,7 @@
                     </div>
                 </div>
                 
-                <p class="text-center text-xs text-gray-400 mt-10">Desarrollado con Clientes 360</p>
+                <p class="text-center text-xs text-gray-400 mt-10">Desarrollado con EQBITO 360</p>
             </div>
         </div>
 
@@ -207,8 +211,8 @@
         <!-- ========================================== -->
         <nav id="main-nav" class="absolute md:relative bottom-0 w-full md:w-56 lg:w-64 glass-nav md:bg-white md:backdrop-filter-none border-t md:border-t-0 md:border-r border-gray-200/60 pb-safe pt-2 md:pt-8 px-6 md:px-4 flex md:flex-col justify-around md:justify-start items-center md:items-start z-30 pb-4 md:space-y-2 hidden">
             <div class="hidden md:block mb-8 px-2 w-full text-center">
-                <img src="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778115294/nachito_show_c3ua1j.png" alt="Clientes 360 Logo" class="w-16 h-16 mx-auto mb-3 object-contain mix-blend-multiply bg-transparent border-0 outline-none" style="-webkit-appearance: none;">
-                <h2 class="font-bold text-lg lg:text-xl tracking-tight truncate">Clientes 360</h2>
+                <img src="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778115294/nachito_show_c3ua1j.png" alt="EQBITO 360 Logo" class="w-16 h-16 mx-auto mb-3 object-contain mix-blend-multiply bg-transparent border-0 outline-none" style="-webkit-appearance: none;">
+                <h2 class="font-bold text-lg lg:text-xl tracking-tight truncate">EQBITO 360</h2>
             </div>
 
             <button onclick="switchTab('home')" class="flex flex-col md:flex-row items-center md:px-4 md:py-3 w-auto md:w-full rounded-xl text-[#007AFF] md:bg-blue-50 nav-btn transition-colors" data-tab="home">
@@ -320,7 +324,7 @@
                     
                     <div class="mt-10 text-center pb-10">
                         <button onclick="lockApp()" class="text-red-500 font-semibold text-sm md:text-base active:opacity-50 transition-opacity bg-red-50 px-6 py-3 rounded-xl hover:bg-red-100">Cerrar Sesión / Bloquear</button>
-                        <p class="text-xs text-gray-400 mt-6">Clientes 360 - Edición Diseñadores</p>
+                        <p class="text-xs text-gray-400 mt-6">EQBITO 360 - Edición Diseñadores</p>
                     </div>
                 </div>
 
@@ -573,12 +577,13 @@
             }
         }
 
-        let clients = JSON.parse(localStorage.getItem('clientes360_pro_clients')) || [];
+        // Se cambiaron las llaves de LocalStorage para reflejar el nuevo nombre
+        let clients = JSON.parse(localStorage.getItem('eqbito360_clients')) || [];
         let currentFilter = 'all';
         let currentProfileId = null; 
         
         async function checkAuthState() {
-            const savedHash = localStorage.getItem('clientes360_pro_auth');
+            const savedHash = localStorage.getItem('eqbito360_auth');
             const btn = document.getElementById('auth-btn');
             const subtitle = document.getElementById('auth-subtitle');
 
@@ -588,7 +593,7 @@
                 btn.textContent = "Crear y Entrar";
                 btn.dataset.mode = "setup";
             } else {
-                document.getElementById('auth-title').textContent = "Clientes 360";
+                document.getElementById('auth-title').textContent = "EQBITO 360";
                 subtitle.innerHTML = "Ingresa tu contraseña o <span class='text-[#007AFF] font-medium'>PIN de cliente</span>";
                 btn.textContent = "Acceder";
                 btn.dataset.mode = "login";
@@ -604,14 +609,14 @@
 
             if (btn.dataset.mode === "setup") {
                 const hashedInput = await hashPassword(pwd);
-                localStorage.setItem('clientes360_pro_auth', hashedInput);
+                localStorage.setItem('eqbito360_auth', hashedInput);
                 unlockApp('admin');
                 input.value = '';
                 return;
             } 
 
             const hashedInput = await hashPassword(pwd);
-            if (hashedInput === localStorage.getItem('clientes360_pro_auth')) {
+            if (hashedInput === localStorage.getItem('eqbito360_auth')) {
                 unlockApp('admin');
                 input.value = '';
                 return;
@@ -800,9 +805,9 @@
             const msg = document.getElementById('pwd-msg');
             if (!oldInput || !newInput) return;
             const oldHash = await hashPassword(oldInput);
-            if (oldHash === localStorage.getItem('clientes360_pro_auth')) {
+            if (oldHash === localStorage.getItem('eqbito360_auth')) {
                 const newHash = await hashPassword(newInput);
-                localStorage.setItem('clientes360_pro_auth', newHash);
+                localStorage.setItem('eqbito360_auth', newHash);
                 msg.textContent = "Contraseña actualizada";
                 msg.className = "text-sm mt-3 text-center font-medium text-green-600 fade-in";
                 msg.classList.remove('hidden');
@@ -931,7 +936,7 @@
                 clients.unshift(newClient);
             }
 
-            localStorage.setItem('clientes360_pro_clients', JSON.stringify(clients));
+            localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
             closeClientModal();
             renderClients();
             
@@ -944,7 +949,7 @@
             if (!currentProfileId) return;
             if (confirm('¿Estás seguro de eliminar este proyecto permanentemente? Esta acción no se puede deshacer.')) {
                 clients = clients.filter(c => c.id !== currentProfileId);
-                localStorage.setItem('clientes360_pro_clients', JSON.stringify(clients));
+                localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
                 closeProfileModal();
                 renderClients();
             }
@@ -955,7 +960,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clients, null, 2));
             const downloadAnchorNode = document.createElement('a');
             downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", `clientes360_respaldo_${new Date().toISOString().split('T')[0]}.json`);
+            downloadAnchorNode.setAttribute("download", `eqbito360_respaldo_${new Date().toISOString().split('T')[0]}.json`);
             document.body.appendChild(downloadAnchorNode);
             downloadAnchorNode.click();
             downloadAnchorNode.remove();
@@ -966,7 +971,7 @@
             const c = clients.find(x => x.id === currentProfileId);
             if(c) {
                 c.clientCode = Math.floor(100000 + Math.random() * 900000).toString();
-                localStorage.setItem('clientes360_pro_clients', JSON.stringify(clients));
+                localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
                 
                 document.getElementById('profilePINDisplay').textContent = `PIN: ${c.clientCode}`;
                 document.getElementById('profilePINDisplay').classList.add('text-2xl', 'tracking-widest');
