@@ -78,6 +78,30 @@
             font-weight: 500;
         }
         .currency-input input { padding-left: 2rem; }
+
+        /* Estilo para el slider de progreso */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #007AFF;
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: #E5E7EB;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body class="text-slate-900 bg-black md:bg-gray-100 h-screen w-screen overflow-hidden flex justify-center items-center">
@@ -89,17 +113,94 @@
             <div class="w-full max-w-sm mx-auto flex flex-col items-center">
                 <img src="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778020925/Dise%C3%B1o_sin_t%C3%ADtulo_1_pvnyid.png" alt="Clientes 360 Logo" class="w-24 h-24 md:w-32 md:h-32 rounded-3xl mb-6 shadow-xl object-cover">
                 <h1 id="auth-title" class="text-2xl md:text-3xl font-bold mb-2 text-center">Clientes 360</h1>
-                <p id="auth-subtitle" class="text-slate-500 mb-8 text-center text-sm md:text-base">Ingresa tu contraseña para acceder</p>
+                <p id="auth-subtitle" class="text-slate-500 mb-8 text-center text-sm md:text-base">Ingresa tu contraseña o PIN de cliente</p>
                 
                 <div class="w-full">
-                    <input type="password" id="auth-password" placeholder="Contraseña" class="w-full ios-card rounded-xl px-4 py-3 md:py-4 text-center text-lg shadow-sm border border-slate-200 focus:outline-none focus:border-[#007AFF] focus:ring-1 focus:ring-[#007AFF] transition-all mb-4">
-                    <button onclick="handleAuth()" id="auth-btn" class="w-full bg-ios-blue text-white font-semibold rounded-xl py-3 md:py-4 shadow-md hover:bg-blue-600 transition-colors active:scale-95 text-lg">Desbloquear</button>
+                    <input type="password" id="auth-password" placeholder="Contraseña o PIN" class="w-full ios-card rounded-xl px-4 py-3 md:py-4 text-center text-lg shadow-sm border border-slate-200 focus:outline-none focus:border-[#007AFF] focus:ring-1 focus:ring-[#007AFF] transition-all mb-4">
+                    <button onclick="handleAuth()" id="auth-btn" class="w-full bg-ios-blue text-white font-semibold rounded-xl py-3 md:py-4 shadow-md hover:bg-blue-600 transition-colors active:scale-95 text-lg">Acceder</button>
                 </div>
-                <p id="auth-error" class="text-red-500 text-sm mt-4 hidden fade-in">Contraseña incorrecta</p>
+                <p id="auth-error" class="text-red-500 text-sm mt-4 hidden fade-in text-center font-medium">Credenciales incorrectas</p>
             </div>
         </div>
 
-        <!-- NAVEGACIÓN LATERAL/INFERIOR -->
+        <!-- ========================================== -->
+        <!-- ENTORNO DEL CLIENTE (CLIENT PORTAL)        -->
+        <!-- ========================================== -->
+        <div id="client-portal" class="flex-1 w-full h-full flex flex-col hidden relative bg-gray-50 overflow-y-auto">
+            <div class="glass-nav sticky top-0 z-10 px-6 py-4 flex justify-between items-center border-b border-gray-200 shadow-sm">
+                <div class="flex items-center">
+                    <img src="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778020925/Dise%C3%B1o_sin_t%C3%ADtulo_1_pvnyid.png" alt="Logo" class="w-8 h-8 rounded-lg shadow-sm mr-3 object-cover">
+                    <h2 class="font-bold text-slate-800 text-sm">Portal de Cliente</h2>
+                </div>
+                <button onclick="lockApp()" class="text-red-500 text-xs font-bold hover:opacity-80 px-3 py-1.5 bg-red-50 rounded-lg">Cerrar Sesión</button>
+            </div>
+
+            <div class="p-6 md:p-10 max-w-2xl mx-auto w-full pb-20">
+                <h1 class="text-2xl md:text-3xl font-bold text-slate-900 mb-1">Hola, <span id="cp-name" class="text-[#007AFF]">Cliente</span></h1>
+                <p class="text-gray-500 text-sm mb-8">Aquí puedes monitorear el progreso de tu proyecto.</p>
+
+                <!-- Status Card -->
+                <div class="ios-card rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 mb-6">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Proyecto Activo</p>
+                            <h3 class="font-bold text-lg text-slate-800" id="cp-service">Servicio</h3>
+                        </div>
+                        <span id="cp-status" class="text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border">Estado</span>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-sm mb-2 font-semibold">
+                            <span class="text-slate-700">Progreso del trabajo</span>
+                            <span class="text-[#007AFF]" id="cp-progress-text">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 mb-1 overflow-hidden">
+                            <div id="cp-progress-bar" class="bg-[#007AFF] h-3 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-2 text-right">Fecha estimada: <span id="cp-deadline" class="font-semibold text-gray-600">--</span></p>
+                    </div>
+                </div>
+
+                <!-- Assets Card -->
+                <div class="ios-card rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center w-full md:w-auto">
+                        <div class="w-12 h-12 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center shrink-0 mr-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">Archivos y Entregables</h4>
+                            <p class="text-xs text-gray-500">Imágenes, avances y archivos finales.</p>
+                        </div>
+                    </div>
+                    <a href="#" id="cp-assets-btn" target="_blank" class="w-full md:w-auto text-center bg-slate-900 text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-slate-800 transition-colors">Ver Archivos</a>
+                </div>
+
+                <!-- Finanzas Card -->
+                <div class="ios-card rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100">
+                    <p class="text-[10px] text-gray-400 font-bold uppercase mb-4">Resumen Financiero</p>
+                    <div class="grid grid-cols-2 gap-4 divide-x divide-gray-100">
+                        <div>
+                            <p class="text-xs text-gray-500 mb-1">Total Acordado</p>
+                            <p class="font-bold text-slate-800" id="cp-price">$0</p>
+                        </div>
+                        <div class="pl-4">
+                            <p class="text-xs text-gray-500 mb-1">Abonado</p>
+                            <p class="font-bold text-green-600" id="cp-paid">$0</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+                        <span class="text-sm font-medium text-slate-600">Saldo Pendiente:</span>
+                        <span class="text-lg font-bold text-red-500" id="cp-debt">$0</span>
+                    </div>
+                </div>
+                
+                <p class="text-center text-xs text-gray-400 mt-10">Desarrollado con Clientes 360</p>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- NAVEGACIÓN LATERAL/INFERIOR (ADMIN)        -->
+        <!-- ========================================== -->
         <nav id="main-nav" class="absolute md:relative bottom-0 w-full md:w-56 lg:w-64 glass-nav md:bg-white md:backdrop-filter-none border-t md:border-t-0 md:border-r border-gray-200/60 pb-safe pt-2 md:pt-8 px-6 md:px-4 flex md:flex-col justify-around md:justify-start items-center md:items-start z-30 pb-4 md:space-y-2 hidden">
             <div class="hidden md:block mb-8 px-2 w-full text-center">
                 <img src="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778020925/Dise%C3%B1o_sin_t%C3%ADtulo_1_pvnyid.png" alt="Clientes 360 Logo" class="w-14 h-14 mx-auto rounded-2xl shadow-md mb-3 object-cover">
@@ -116,7 +217,7 @@
             </button>
         </nav>
 
-        <!-- CONTENIDO PRINCIPAL -->
+        <!-- CONTENIDO PRINCIPAL (ADMIN) -->
         <div id="main-app" class="flex-1 flex flex-col hidden h-full relative">
             <div class="flex-1 overflow-y-auto no-scrollbar pb-24 md:pb-8 relative w-full px-4 md:px-8 pt-8 md:pt-6" id="scroll-container">
                 
@@ -158,7 +259,6 @@
                             <input type="text" id="searchInput" onkeyup="renderClients()" placeholder="Buscar cliente o proyecto..." class="w-full bg-gray-200/80 md:bg-white md:shadow-sm rounded-xl pl-10 pr-4 py-2.5 md:py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50 transition-all placeholder-gray-500">
                         </div>
                         
-                        <!-- Píldoras de Filtrado -->
                         <div class="flex space-x-2 overflow-x-auto no-scrollbar pb-1">
                             <button onclick="setFilter('all')" id="filter-all" class="filter-btn px-3 py-1.5 bg-slate-800 text-white rounded-full text-xs font-semibold shrink-0 transition-colors">Todos</button>
                             <button onclick="setFilter('active')" id="filter-active" class="filter-btn px-3 py-1.5 bg-gray-200 text-slate-600 rounded-full text-xs font-semibold shrink-0 transition-colors">Activos</button>
@@ -275,11 +375,18 @@
                                 <option value="Pausado">Pausado</option>
                             </select>
                         </div>
+                        <div class="px-4 py-3 flex flex-col justify-center">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-slate-700">Progreso (%)</span>
+                                <span class="text-sm font-bold text-[#007AFF]" id="progressVal">0%</span>
+                            </div>
+                            <input type="range" id="clientProgress" min="0" max="100" value="0" oninput="document.getElementById('progressVal').textContent = this.value + '%'">
+                        </div>
                         <div class="px-4 py-3 flex justify-between items-center">
                             <span class="text-sm font-medium text-slate-700">Fecha de Entrega</span>
                             <input type="date" id="clientDeadline" class="text-sm text-[#007AFF] bg-transparent focus:outline-none shrink-0">
                         </div>
-                        <input type="url" id="clientAssets" placeholder="Link de archivos (Drive, Figma...)" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent text-[#007AFF]">
+                        <input type="url" id="clientAssets" placeholder="Link de archivos (Drive, Figma...)" class="w-full px-4 py-3 text-sm focus:outline-none bg-transparent text-[#007AFF] border-t border-gray-100">
                     </div>
                 </div>
 
@@ -309,7 +416,7 @@
         <!-- ========================================== -->
         <!-- MODAL: PERFIL 360 DEL CLIENTE (VISUALIZAR) -->
         <!-- ========================================== -->
-        <div id="profileModal" class="absolute inset-x-0 bottom-0 md:w-full md:max-w-md bg-white rounded-t-3xl md:rounded-2xl shadow-2xl z-50 h-[85%] md:h-auto md:max-h-[96%] slide-up-modal flex flex-col overflow-hidden">
+        <div id="profileModal" class="absolute inset-x-0 bottom-0 md:w-full md:max-w-md bg-white rounded-t-3xl md:rounded-2xl shadow-2xl z-50 h-[90%] md:h-auto md:max-h-[96%] slide-up-modal flex flex-col overflow-hidden">
             <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50 md:rounded-t-2xl shrink-0">
                 <span class="w-12"></span>
                 <h3 class="font-semibold text-sm text-gray-500 uppercase tracking-wider truncate px-2">Perfil del Proyecto</h3>
@@ -317,7 +424,7 @@
             </div>
             
             <div class="flex-1 overflow-y-auto bg-white md:rounded-b-2xl pb-10 w-full relative">
-                <div class="px-6 py-6 text-center border-b border-gray-100 w-full">
+                <div class="px-6 py-6 text-center border-b border-gray-100 w-full relative">
                     <div class="w-16 h-16 bg-gradient-to-tr from-blue-500 to-indigo-500 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl font-bold shadow-md mb-3 shrink-0" id="profileInitials"></div>
                     <h2 class="text-xl font-bold text-slate-800 break-words" id="profileName">Nombre</h2>
                     <span id="profileStatusBadge" class="inline-block mt-2 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border">Estado</span>
@@ -325,10 +432,20 @@
 
                 <!-- Botones de Acción Rápida -->
                 <div class="flex justify-center space-x-4 md:space-x-6 py-4 border-b border-gray-100 w-full" id="profileActions">
-                    <!-- Inyectados por JS (WhatsApp, Mail, Archivos, Editar) -->
+                    <!-- Inyectados por JS -->
                 </div>
 
                 <div class="px-6 py-5 space-y-4 w-full">
+                    
+                    <!-- NUEVO: SECCIÓN DE ACCESO CLIENTE -->
+                    <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100 w-full flex justify-between items-center">
+                        <div>
+                            <p class="text-[10px] text-blue-600 font-bold uppercase mb-0.5">Acceso Portal Cliente</p>
+                            <p class="text-sm font-semibold text-slate-800" id="profilePINDisplay">Sin acceso generado</p>
+                        </div>
+                        <button onclick="generateClientPIN()" class="bg-white text-[#007AFF] text-xs font-bold px-3 py-1.5 rounded-lg border border-blue-200 shadow-sm active:scale-95 transition-transform" id="btnGeneratePIN">Generar PIN</button>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100 w-full">
                         <div class="overflow-hidden">
                             <p class="text-[10px] text-gray-400 font-bold uppercase mb-1 truncate">Servicio</p>
@@ -357,7 +474,6 @@
                         <p class="text-sm text-gray-700 whitespace-pre-wrap break-words leading-relaxed italic" id="profileNotes"></p>
                     </div>
 
-                    <!-- Botón Eliminar en el Perfil -->
                     <button onclick="deleteCurrentClient()" class="w-full mt-8 py-3.5 bg-red-50/80 text-red-600 text-sm font-semibold rounded-xl hover:bg-red-100 transition-colors flex items-center justify-center border border-red-100">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         Eliminar Proyecto
@@ -394,21 +510,22 @@
 
         let clients = JSON.parse(localStorage.getItem('clientes360_pro_clients')) || [];
         let currentFilter = 'all';
-        let currentProfileId = null; // Para poder eliminar desde el perfil
+        let currentProfileId = null; 
         
         async function checkAuthState() {
             const savedHash = localStorage.getItem('clientes360_pro_auth');
             const btn = document.getElementById('auth-btn');
+            const subtitle = document.getElementById('auth-subtitle');
 
             if (!savedHash) {
                 document.getElementById('auth-title').textContent = "Bienvenido";
-                document.getElementById('auth-subtitle').textContent = "Crea una contraseña maestra";
+                subtitle.textContent = "Crea una contraseña maestra";
                 btn.textContent = "Crear y Entrar";
                 btn.dataset.mode = "setup";
             } else {
                 document.getElementById('auth-title').textContent = "Clientes 360";
-                document.getElementById('auth-subtitle').textContent = "Ingresa tu contraseña";
-                btn.textContent = "Desbloquear";
+                subtitle.innerHTML = "Ingresa tu contraseña o <span class='text-[#007AFF] font-medium'>PIN de cliente</span>";
+                btn.textContent = "Acceder";
                 btn.dataset.mode = "login";
             }
         }
@@ -416,37 +533,64 @@
         async function handleAuth() {
             const input = document.getElementById('auth-password');
             const btn = document.getElementById('auth-btn');
+            const errorMsg = document.getElementById('auth-error');
             const pwd = input.value.trim();
             if (!pwd) return;
 
-            const hashedInput = await hashPassword(pwd);
-
             if (btn.dataset.mode === "setup") {
+                const hashedInput = await hashPassword(pwd);
                 localStorage.setItem('clientes360_pro_auth', hashedInput);
-                unlockApp();
-            } else {
-                if (hashedInput === localStorage.getItem('clientes360_pro_auth')) {
-                    unlockApp();
-                } else {
-                    document.getElementById('auth-error').classList.remove('hidden');
-                    input.classList.add('border-red-500', 'bg-red-50');
-                    setTimeout(() => {
-                        input.classList.remove('border-red-500', 'bg-red-50');
-                        document.getElementById('auth-error').classList.add('hidden');
-                    }, 2000);
-                }
+                unlockApp('admin');
+                input.value = '';
+                return;
+            } 
+
+            // Verificar si es ADMIN
+            const hashedInput = await hashPassword(pwd);
+            if (hashedInput === localStorage.getItem('clientes360_pro_auth')) {
+                unlockApp('admin');
+                input.value = '';
+                return;
             }
+
+            // Verificar si es CLIENTE (PIN de 6 dígitos)
+            const clientMatch = clients.find(c => c.clientCode === pwd);
+            if (clientMatch) {
+                unlockApp('client', clientMatch);
+                input.value = '';
+                return;
+            }
+
+            // Error
+            errorMsg.classList.remove('hidden');
+            input.classList.add('border-red-500', 'bg-red-50');
+            setTimeout(() => {
+                input.classList.remove('border-red-500', 'bg-red-50');
+                errorMsg.classList.add('hidden');
+            }, 2000);
             input.value = '';
         }
 
-        function unlockApp() {
+        function unlockApp(mode, clientData = null) {
             document.getElementById('auth-screen').classList.add('opacity-0', 'pointer-events-none');
+            
             setTimeout(() => {
                 document.getElementById('auth-screen').classList.add('hidden');
-                document.getElementById('main-app').classList.remove('hidden');
-                document.getElementById('main-nav').classList.remove('hidden');
-                setDate();
-                renderClients();
+                
+                if (mode === 'admin') {
+                    // MODO AGENCIA
+                    document.getElementById('main-app').classList.remove('hidden');
+                    document.getElementById('main-nav').classList.remove('hidden');
+                    document.getElementById('client-portal').classList.add('hidden');
+                    setDate();
+                    renderClients();
+                } else if (mode === 'client' && clientData) {
+                    // MODO CLIENTE
+                    document.getElementById('main-app').classList.add('hidden');
+                    document.getElementById('main-nav').classList.add('hidden');
+                    document.getElementById('client-portal').classList.remove('hidden');
+                    renderClientPortal(clientData);
+                }
             }, 300);
         }
 
@@ -455,18 +599,61 @@
             setTimeout(() => {
                 document.getElementById('main-app').classList.add('hidden');
                 document.getElementById('main-nav').classList.add('hidden');
+                document.getElementById('client-portal').classList.add('hidden');
                 document.getElementById('auth-screen').classList.remove('opacity-0', 'pointer-events-none');
                 checkAuthState();
             }, 50);
         }
 
+        // --- RENDER PORTAL DE CLIENTE ---
+        function renderClientPortal(c) {
+            document.getElementById('cp-name').textContent = escapeHTML(c.name);
+            document.getElementById('cp-service').textContent = escapeHTML(c.service);
+            
+            const statusBadge = document.getElementById('cp-status');
+            statusBadge.textContent = escapeHTML(c.status);
+            statusBadge.className = `text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border ${getStatusColor(c.status)}`;
+
+            const progress = c.progress || 0;
+            document.getElementById('cp-progress-text').textContent = progress + '%';
+            // Animación suave de la barra
+            setTimeout(() => {
+                document.getElementById('cp-progress-bar').style.width = progress + '%';
+            }, 100);
+
+            let dateText = "Por definir";
+            if (c.deadline) {
+                const d = new Date(c.deadline + 'T12:00:00');
+                dateText = d.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+            }
+            document.getElementById('cp-deadline').textContent = dateText;
+
+            // Link de archivos
+            const btnAssets = document.getElementById('cp-assets-btn');
+            if (c.assets) {
+                btnAssets.href = c.assets;
+                btnAssets.textContent = "Ver Archivos";
+                btnAssets.classList.remove('opacity-50', 'pointer-events-none');
+            } else {
+                btnAssets.href = "#";
+                btnAssets.textContent = "Archivos no disponibles";
+                btnAssets.classList.add('opacity-50', 'pointer-events-none');
+            }
+
+            // Finanzas
+            const pending = (c.price || 0) - (c.paid || 0);
+            document.getElementById('cp-price').textContent = formatMoney(c.price);
+            document.getElementById('cp-paid').textContent = formatMoney(c.paid);
+            document.getElementById('cp-debt').textContent = formatMoney(Math.max(pending, 0));
+        }
+
+
+        // --- UTILIDADES ADMIN ---
         async function changePassword() {
             const oldInput = document.getElementById('old-pwd').value;
             const newInput = document.getElementById('new-pwd').value;
             const msg = document.getElementById('pwd-msg');
-            
             if (!oldInput || !newInput) return;
-
             const oldHash = await hashPassword(oldInput);
             if (oldHash === localStorage.getItem('clientes360_pro_auth')) {
                 const newHash = await hashPassword(newInput);
@@ -485,36 +672,33 @@
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-            
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 const svg = btn.querySelector('svg');
                 if (btn.dataset.tab === tabId) {
                     btn.classList.remove('text-gray-400', 'hover:bg-gray-100');
                     btn.classList.add('text-[#007AFF]', 'md:bg-blue-50');
                     btn.querySelector('span').classList.replace('font-medium', 'font-semibold');
-                    
                     if(tabId === 'home') svg.innerHTML = '<path d="M12 3L4 9v12h5v-7h6v7h5V9z"/>';
                 } else {
                     btn.classList.remove('text-[#007AFF]', 'md:bg-blue-50');
                     btn.classList.add('text-gray-400', 'hover:bg-gray-100');
                     btn.querySelector('span').classList.replace('font-semibold', 'font-medium');
-                    
                     if(btn.dataset.tab === 'home') svg.innerHTML = '<path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path><polyline fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="9 22 9 12 15 12 15 22"></polyline>';
                 }
             });
         }
 
-        // --- GESTIÓN DE MODALES GENERAL ---
         function closeModals() {
             closeClientModal();
             closeProfileModal();
         }
 
-        // --- CRUD PROYECTOS ---
         function openClientModal(id = null) {
             ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientAssets', 'clientPrice', 'clientPaid', 'clientNotes'].forEach(id => document.getElementById(id).value = '');
             document.getElementById('clientService').value = 'Branding';
             document.getElementById('clientStatus').value = 'Cotizando';
+            document.getElementById('clientProgress').value = 0;
+            document.getElementById('progressVal').textContent = '0%';
             document.getElementById('modal-title').textContent = 'Nuevo Proyecto';
 
             if (id) {
@@ -532,6 +716,8 @@
                     document.getElementById('clientPrice').value = c.price || '';
                     document.getElementById('clientPaid').value = c.paid || '';
                     document.getElementById('clientNotes').value = c.notes || '';
+                    document.getElementById('clientProgress').value = c.progress || 0;
+                    document.getElementById('progressVal').textContent = (c.progress || 0) + '%';
                 }
             }
             
@@ -560,6 +746,8 @@
             if (!name) { alert('El nombre del cliente es obligatorio'); return; }
 
             const id = document.getElementById('clientId').value;
+            const existingClient = clients.find(c => c.id === id);
+
             const newClient = {
                 id: id || generateId(),
                 name: name,
@@ -567,11 +755,13 @@
                 email: document.getElementById('clientEmail').value.trim(),
                 service: document.getElementById('clientService').value,
                 status: document.getElementById('clientStatus').value,
+                progress: parseInt(document.getElementById('clientProgress').value) || 0,
                 deadline: document.getElementById('clientDeadline').value,
                 assets: document.getElementById('clientAssets').value.trim(),
                 price: parseFloat(document.getElementById('clientPrice').value) || 0,
                 paid: parseFloat(document.getElementById('clientPaid').value) || 0,
-                notes: document.getElementById('clientNotes').value
+                notes: document.getElementById('clientNotes').value,
+                clientCode: existingClient ? existingClient.clientCode : null // mantener PIN si ya existe
             };
 
             if (id) {
@@ -585,7 +775,6 @@
             closeClientModal();
             renderClients();
             
-            // Si el perfil estaba abierto y editamos sus datos, lo recargamos visualmente
             if(currentProfileId === id) {
                 openProfileModal(id);
             }
@@ -601,26 +790,34 @@
             }
         }
 
-        // --- EXPORTAR DATOS ---
         function exportData() {
-            if(clients.length === 0) {
-                alert("No hay proyectos para respaldar.");
-                return;
-            }
+            if(clients.length === 0) { alert("No hay proyectos para respaldar."); return; }
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clients, null, 2));
             const downloadAnchorNode = document.createElement('a');
             downloadAnchorNode.setAttribute("href", dataStr);
             downloadAnchorNode.setAttribute("download", `clientes360_respaldo_${new Date().toISOString().split('T')[0]}.json`);
-            document.body.appendChild(downloadAnchorNode); // requerido para Firefox
+            document.body.appendChild(downloadAnchorNode);
             downloadAnchorNode.click();
             downloadAnchorNode.remove();
         }
 
-        // --- PERFIL CLIENTE ---
+        function generateClientPIN() {
+            if(!currentProfileId) return;
+            const c = clients.find(x => x.id === currentProfileId);
+            if(c) {
+                // Genera un PIN aleatorio de 6 dígitos
+                c.clientCode = Math.floor(100000 + Math.random() * 900000).toString();
+                localStorage.setItem('clientes360_pro_clients', JSON.stringify(clients));
+                
+                document.getElementById('profilePINDisplay').textContent = `PIN: ${c.clientCode}`;
+                document.getElementById('profilePINDisplay').classList.add('text-2xl', 'tracking-widest');
+                document.getElementById('btnGeneratePIN').textContent = "Regenerar";
+            }
+        }
+
         function openProfileModal(id) {
             const c = clients.find(x => x.id === id);
             if (!c) return;
-            
             currentProfileId = id;
 
             document.getElementById('profileInitials').textContent = getInitials(c.name);
@@ -632,6 +829,19 @@
 
             document.getElementById('profileService').textContent = escapeHTML(c.service);
             
+            // Lógica del PIN
+            const pinDisplay = document.getElementById('profilePINDisplay');
+            const btnGenerate = document.getElementById('btnGeneratePIN');
+            if(c.clientCode) {
+                pinDisplay.textContent = `PIN: ${c.clientCode}`;
+                pinDisplay.classList.add('text-xl', 'tracking-widest');
+                btnGenerate.textContent = "Regenerar";
+            } else {
+                pinDisplay.textContent = "Sin acceso generado";
+                pinDisplay.classList.remove('text-xl', 'tracking-widest');
+                btnGenerate.textContent = "Generar PIN";
+            }
+
             let dateText = "Sin definir";
             if (c.deadline) {
                 const d = new Date(c.deadline + 'T12:00:00');
@@ -658,41 +868,16 @@
             let actionsHTML = '';
             if (c.phone) {
                 const cleanPhone = c.phone.replace(/\D/g,'');
-                actionsHTML += `
-                    <a href="https://wa.me/${cleanPhone}" target="_blank" class="flex flex-col items-center group shrink-0">
-                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 group-hover:bg-green-200 transition-colors shadow-sm">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>
-                        </div>
-                        <span class="text-[10px] font-semibold mt-1.5 text-gray-500">WhatsApp</span>
-                    </a>`;
+                actionsHTML += `<a href="https://wa.me/${cleanPhone}" target="_blank" class="flex flex-col items-center group shrink-0"><div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 group-hover:bg-green-200 transition-colors shadow-sm"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg></div><span class="text-[10px] font-semibold mt-1.5 text-gray-500">WhatsApp</span></a>`;
             }
             if (c.email) {
-                actionsHTML += `
-                    <a href="mailto:${c.email}" class="flex flex-col items-center group shrink-0">
-                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 group-hover:bg-blue-200 transition-colors shadow-sm">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        </div>
-                        <span class="text-[10px] font-semibold mt-1.5 text-gray-500">Correo</span>
-                    </a>`;
+                actionsHTML += `<a href="mailto:${c.email}" class="flex flex-col items-center group shrink-0"><div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 group-hover:bg-blue-200 transition-colors shadow-sm"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg></div><span class="text-[10px] font-semibold mt-1.5 text-gray-500">Correo</span></a>`;
             }
             if (c.assets) {
-                actionsHTML += `
-                    <a href="${c.assets}" target="_blank" class="flex flex-col items-center group shrink-0">
-                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 group-hover:bg-purple-200 transition-colors shadow-sm">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
-                        </div>
-                        <span class="text-[10px] font-semibold mt-1.5 text-gray-500">Archivos</span>
-                    </a>`;
+                actionsHTML += `<a href="${c.assets}" target="_blank" class="flex flex-col items-center group shrink-0"><div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 group-hover:bg-purple-200 transition-colors shadow-sm"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg></div><span class="text-[10px] font-semibold mt-1.5 text-gray-500">Archivos</span></a>`;
             }
             
-            // Botón de EDITAR añadido a las Acciones Rápidas
-            actionsHTML += `
-                <button onclick="openClientModal('${c.id}')" class="flex flex-col items-center group shrink-0">
-                    <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 group-hover:bg-amber-200 transition-colors shadow-sm">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                    </div>
-                    <span class="text-[10px] font-semibold mt-1.5 text-gray-500">Editar</span>
-                </button>`;
+            actionsHTML += `<button onclick="openClientModal('${c.id}')" class="flex flex-col items-center group shrink-0"><div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 group-hover:bg-amber-200 transition-colors shadow-sm"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></div><span class="text-[10px] font-semibold mt-1.5 text-gray-500">Editar</span></button>`;
 
             document.getElementById('profileActions').innerHTML = actionsHTML;
 
@@ -709,18 +894,12 @@
             checkAndHideOverlay();
         }
 
-        // --- FILTROS Y RENDERIZADO UI ---
         function setFilter(filter) {
             currentFilter = filter;
-            
-            // Reset botones
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.className = 'filter-btn px-3 py-1.5 bg-gray-200 text-slate-600 rounded-full text-xs font-semibold shrink-0 transition-colors';
             });
-            
-            // Activar actual
             document.getElementById(`filter-${filter}`).className = 'filter-btn px-3 py-1.5 bg-slate-800 text-white rounded-full text-xs font-semibold shrink-0 transition-colors';
-            
             renderClients();
         }
 
@@ -763,20 +942,12 @@
             
             list.innerHTML = '';
             
-            // Aplicamos Filtros + Buscador
             const filtered = clients.filter(c => {
                 const matchSearch = c.name.toLowerCase().includes(query) || (c.service && c.service.toLowerCase().includes(query));
                 let matchFilter = true;
-                
-                if (currentFilter === 'active') {
-                    matchFilter = c.status !== 'Finalizado' && c.status !== 'Pausado';
-                } else if (currentFilter === 'debt') {
-                    const pending = (c.price || 0) - (c.paid || 0);
-                    matchFilter = pending > 0;
-                } else if (currentFilter === 'completed') {
-                    matchFilter = c.status === 'Finalizado';
-                }
-
+                if (currentFilter === 'active') matchFilter = c.status !== 'Finalizado' && c.status !== 'Pausado';
+                else if (currentFilter === 'debt') matchFilter = (c.price || 0) - (c.paid || 0) > 0;
+                else if (currentFilter === 'completed') matchFilter = c.status === 'Finalizado';
                 return matchSearch && matchFilter;
             });
 
@@ -791,6 +962,7 @@
                     const safeName = escapeHTML(c.name);
                     const pending = (c.price || 0) - (c.paid || 0);
                     const isOverdue = c.deadline && new Date(c.deadline) < new Date(new Date().setHours(0,0,0,0)) && c.status !== 'Finalizado';
+                    const prog = c.progress || 0;
 
                     const card = `
                         <div class="ios-card rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100 relative hover:shadow-md transition-shadow flex flex-col justify-between group cursor-pointer overflow-hidden" onclick="openProfileModal('${c.id}')">
@@ -803,6 +975,11 @@
                                 <div class="text-xs text-gray-500 font-medium flex items-center mb-3 flex-wrap gap-1 w-full overflow-hidden">
                                     <span class="bg-gray-100 px-2 py-0.5 rounded text-gray-600 truncate max-w-full">${escapeHTML(c.service)}</span>
                                     ${c.deadline ? `<span class="shrink-0 ${isOverdue ? 'text-red-500 font-bold' : ''}">📅 ${new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', {month:'short', day:'numeric'})}</span>` : ''}
+                                </div>
+
+                                <!-- Barra de progreso pequeña -->
+                                <div class="w-full bg-gray-100 rounded-full h-1.5 mb-3 overflow-hidden">
+                                    <div class="bg-blue-500 h-1.5 rounded-full" style="width: ${prog}%"></div>
                                 </div>
 
                                 <div class="flex justify-between items-end mt-2 pt-3 border-t border-gray-50 w-full">
