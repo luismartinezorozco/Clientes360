@@ -796,6 +796,10 @@
                 if (url.includes('figma.com/file/') || url.includes('figma.com/design/')) {
                     return `https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(url)}`;
                 }
+                // Transformación automática para Box.com (convierte link normal a explorador nativo)
+                if (url.includes('app.box.com/s/') || url.includes('app.box.com/v/')) {
+                    return url.replace('app.box.com/s/', 'app.box.com/embed/s/').replace('app.box.com/v/', 'app.box.com/embed/v/');
+                }
                 return url; 
             } catch (e) {
                 return url;
