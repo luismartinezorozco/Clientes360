@@ -143,10 +143,10 @@
                     <button onclick="handleAuth()" id="auth-btn" class="w-full bg-[#007AFF] text-white font-semibold rounded-2xl py-3.5 md:py-4 shadow-lg shadow-blue-500/25 hover:bg-blue-600 transition-colors active:scale-[0.98] text-lg">Acceder</button>
                 </div>
                 <p id="auth-error" class="text-red-500 text-sm mt-4 hidden fade-in text-center font-medium bg-red-50 px-4 py-2 rounded-lg">Credenciales incorrectas</p>
-                <!-- Indicador de estado de conexión -->
+                <!-- Indicador de estado de conexión oculto por defecto -->
                 <p id="cloud-status" class="text-gray-400 text-xs mt-6 flex items-center font-medium">
                     <span class="w-2 h-2 rounded-full bg-gray-300 mr-2 animate-pulse" id="cloud-dot"></span> 
-                    <span id="cloud-text">Conectando a la nube...</span>
+                    <span id="cloud-text">Sincronizando...</span>
                 </p>
             </div>
         </div>
@@ -237,6 +237,22 @@
                         <span class="text-xl font-bold text-red-500 tracking-tight" id="cp-debt">$0</span>
                     </div>
                 </div>
+
+                <!-- Redes Sociales de la Agencia -->
+                <a href="https://instagram.com/eqbstudio" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-[24px] p-5 premium-shadow border border-pink-100/50 mt-6 flex items-center justify-between group active:scale-[0.98] transition-all">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white flex items-center justify-center shrink-0 mr-4 shadow-md shadow-pink-500/20">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 7.5h.01M12 16.5a4.5 4.5 0 100-9 4.5 4.5 0 000 9zm-7.5-6v4.5A4.5 4.5 0 009 19.5h6a4.5 4.5 0 004.5-4.5V10.5A4.5 4.5 0 0015 6H9a4.5 4.5 0 00-4.5 4.5z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-[#bc1888] font-bold uppercase tracking-wider mb-0.5">Síguenos en Instagram</p>
+                            <h4 class="font-bold text-slate-800 text-sm tracking-tight">@eqbstudio</h4>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-pink-500 group-hover:bg-pink-50 transition-colors shadow-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path></svg>
+                    </div>
+                </a>
                 
                 <div class="mt-12 mb-4 flex justify-center items-center opacity-50">
                     <img src="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778118273/nachito_show_wcs5j9.png" class="w-4 h-4 mr-2 grayscale mix-blend-multiply select-none pointer-events-none" alt="Icon">
@@ -430,17 +446,18 @@
                 <div class="w-full">
                     <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider ml-3 mb-2">Detalles del Proyecto</p>
                     <div class="bg-white rounded-2xl border border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)] divide-y divide-gray-100 w-full overflow-hidden">
-                        <div class="px-5 py-3.5 flex justify-between items-center">
-                            <span class="text-sm font-semibold text-slate-800">Servicio</span>
-                            <select id="clientService" class="text-sm text-gray-500 font-medium bg-transparent focus:outline-none text-right dir-rtl outline-none truncate max-w-[60%]">
-                                <option value="Branding">Branding / Logo</option>
-                                <option value="Redes Sociales">Redes Sociales</option>
-                                <option value="Diseño Web">Diseño Web / UI</option>
-                                <option value="Impresos">Material Impreso</option>
-                                <option value="Ilustración">Ilustración</option>
-                                <option value="Retainer">Retainer Mensual</option>
-                                <option value="Otro">Otro</option>
-                            </select>
+                        <div class="px-5 py-4 border-b border-gray-50 flex flex-col w-full bg-gray-50/30">
+                            <span class="text-sm font-semibold text-slate-800 mb-2">Servicio(s)</span>
+                            <div class="flex flex-wrap gap-2" id="serviceTags">
+                                <button type="button" onclick="toggleService(this)" class="srv-btn selected px-3 py-1.5 rounded-lg border border-blue-200 text-[#007AFF] bg-[#F0F7FF] text-xs font-semibold transition-colors" data-val="Branding">Branding</button>
+                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="Redes Sociales">Redes Sociales</button>
+                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="Diseño Web">Diseño Web</button>
+                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="Impresos">Impresos</button>
+                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="Ilustración">Ilustración</button>
+                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="Retainer">Retainer</button>
+                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold hover:bg-gray-50 transition-colors" data-val="Otro">Otro</button>
+                            </div>
+                            <input type="hidden" id="clientService" value="Branding">
                         </div>
                         <div class="px-5 py-3.5 flex justify-between items-center">
                             <span class="text-sm font-semibold text-slate-800">Estado</span>
@@ -686,12 +703,10 @@
 
         // Inicializar Firebase Auth y conectar a Firestore
         signInAnonymously(auth).then(() => {
-            const cloudText = document.getElementById('cloud-text');
-            const cloudDot = document.getElementById('cloud-dot');
-            if(cloudText) {
-                cloudText.textContent = "Conectado a la nube de EQBITO";
-                cloudDot.classList.replace('bg-gray-300', 'bg-emerald-500');
-                cloudDot.classList.remove('animate-pulse');
+            const cloudStatus = document.getElementById('cloud-status');
+            if(cloudStatus) {
+                // Ocultar el mensaje por completo cuando la conexión sea exitosa
+                cloudStatus.classList.add('hidden');
             }
 
             // Escuchar cambios en tiempo real desde la colección "proyectos_eqbito"
@@ -1060,7 +1075,14 @@
             document.getElementById('profileModal').classList.remove('active');
             
             ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientPrice', 'clientPaid', 'clientNotes'].forEach(id => document.getElementById(id).value = '');
-            document.getElementById('clientService').value = 'Branding';
+            
+            // Reiniciar botones de servicios múltiples
+            document.querySelectorAll('.srv-btn').forEach(btn => {
+                btn.classList.remove('selected', 'border-blue-200', 'text-[#007AFF]', 'bg-[#F0F7FF]');
+                btn.classList.add('border-gray-200', 'text-gray-500', 'bg-white');
+            });
+            document.getElementById('clientService').value = '';
+
             document.getElementById('clientStatus').value = 'Cotizando';
             document.getElementById('clientProgress').value = 0;
             document.getElementById('progressVal').textContent = '0%';
@@ -1078,7 +1100,18 @@
                     document.getElementById('clientName').value = c.name;
                     document.getElementById('clientPhone').value = c.phone || '';
                     document.getElementById('clientEmail').value = c.email || '';
-                    document.getElementById('clientService').value = c.service || 'Branding';
+                    
+                    document.getElementById('clientService').value = c.service || '';
+                    const activeServices = (c.service || '').split(',').map(s => s.trim());
+                    document.querySelectorAll('.srv-btn').forEach(btn => {
+                        if(activeServices.includes(btn.dataset.val)) {
+                            btn.classList.add('selected');
+                            btn.classList.replace('border-gray-200', 'border-blue-200');
+                            btn.classList.replace('text-gray-500', 'text-[#007AFF]');
+                            btn.classList.replace('bg-white', 'bg-[#F0F7FF]');
+                        }
+                    });
+
                     document.getElementById('clientStatus').value = c.status;
                     document.getElementById('clientDeadline').value = c.deadline || '';
                     document.getElementById('clientPrice').value = c.price || '';
@@ -1306,8 +1339,12 @@
             let actionsHTML = '';
             if (c.phone) {
                 const cleanPhone = encodeURI(c.phone.replace(/\D/g,''));
+                const pin = c.clientCode || '(Genera tu PIN en tu perfil primero)';
+                const msg = `ingresa al link: eqbito.vercel.app\ncon el código: ${pin}`;
+                const encodedMsg = encodeURIComponent(msg);
+
                 actionsHTML += `
-                <a href="https://wa.me/${cleanPhone}" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center group shrink-0 w-[72px]">
+                <a href="https://wa.me/${cleanPhone}?text=${encodedMsg}" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center group shrink-0 w-[72px]">
                     <div class="w-[52px] h-[52px] squarcle bg-[#E8F8F5] flex items-center justify-center text-[#00C853] group-hover:bg-[#d1f1ea] group-active:scale-95 transition-all shadow-[0_2px_8px_rgba(0,200,83,0.15)] mb-2 border border-[#00C853]/10">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>
                     </div>
@@ -1438,6 +1475,8 @@
                     const pending = p - pd;
                     const isOverdue = c.deadline && new Date(c.deadline) < new Date(new Date().setHours(0,0,0,0)) && c.status !== 'Finalizado';
                     const prog = parseInt(c.progress) || 0;
+                    
+                    const servicesPills = (c.service || 'Branding').split(',').map(s => `<span class="bg-gray-50 px-2 py-1 rounded-md border border-gray-100 text-gray-600 shrink-0 whitespace-nowrap">${escapeHTML(s.trim())}</span>`).join('');
 
                     const card = `
                         <div class="bg-white rounded-[20px] p-5 premium-shadow border border-gray-100 relative hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between group cursor-pointer overflow-hidden" onclick="openProfileModal('${escapeHTML(c.id)}')">
@@ -1448,7 +1487,7 @@
                                 </div>
                                 
                                 <div class="text-[11px] text-gray-500 font-bold flex items-center mb-4 flex-wrap gap-1.5 w-full overflow-hidden">
-                                    <span class="bg-gray-50 px-2 py-1 rounded-md border border-gray-100 text-gray-600 truncate max-w-full">${escapeHTML(c.service)}</span>
+                                    ${servicesPills}
                                     ${c.deadline ? `<span class="shrink-0 flex items-center px-2 py-1 rounded-md ${isOverdue ? 'bg-red-50 text-red-500 border border-red-100' : 'bg-gray-50 border border-gray-100 text-gray-500'}"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>${new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', {month:'short', day:'numeric'})}</span>` : ''}
                                 </div>
 
@@ -1475,12 +1514,28 @@
             }
         }
 
+        function toggleService(btn) {
+            btn.classList.toggle('selected');
+            if(btn.classList.contains('selected')) {
+                btn.classList.replace('border-gray-200', 'border-blue-200');
+                btn.classList.replace('text-gray-500', 'text-[#007AFF]');
+                btn.classList.replace('bg-white', 'bg-[#F0F7FF]');
+            } else {
+                btn.classList.replace('border-blue-200', 'border-gray-200');
+                btn.classList.replace('text-[#007AFF]', 'text-gray-500');
+                btn.classList.replace('bg-[#F0F7FF]', 'bg-white');
+            }
+            const selected = Array.from(document.querySelectorAll('.srv-btn.selected')).map(b => b.dataset.val);
+            document.getElementById('clientService').value = selected.join(', ');
+        }
+
         // Exportar funciones globales para los onclicks de HTML
         Object.assign(window, {
             handleAuth, lockApp, switchTab, openClientModal, closeClientModal,
             saveClient, deleteCurrentClient, exportData, generateClientPIN,
             openProfileModal, closeProfileModal, setFilter, renderClients,
-            changePassword, openAssetsModal, closeAssetsModal, addAssetField
+            changePassword, openAssetsModal, closeAssetsModal, addAssetField,
+            toggleService
         });
 
         window.addEventListener('DOMContentLoaded', () => {
