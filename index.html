@@ -802,23 +802,13 @@
         }
         
         async function checkAuthState() {
-            const savedHash = localStorage.getItem('eqbito360_auth');
             const btn = document.getElementById('auth-btn');
             const subtitle = document.getElementById('auth-subtitle');
 
-            if (!savedHash) {
-                document.getElementById('auth-title').textContent = "EQBITO 360";
-                subtitle.innerHTML = "Ingresa tu contraseña de admin <br>o <span class='text-[#007AFF] font-semibold'>PIN de cliente</span>";
-                btn.textContent = "Acceder";
-                btn.dataset.mode = "setup";
-                btn.dataset.confirm = "false";
-            } else {
-                document.getElementById('auth-title').textContent = "EQBITO 360";
-                subtitle.innerHTML = "Ingresa tu contraseña o <span class='text-[#007AFF] font-semibold'>PIN de cliente</span>";
-                btn.textContent = "Acceder";
-                btn.dataset.mode = "login";
-                btn.dataset.confirm = "false";
-            }
+            document.getElementById('auth-title').textContent = "EQBITO 360";
+            subtitle.innerHTML = "Ingresa tu PIN de acceso";
+            btn.textContent = "Acceder";
+            btn.dataset.mode = "login";
         }
 
         async function handleAuth() {
@@ -836,7 +826,7 @@
                 return;
             }
 
-            // 2. PRIORIDAD 1: Verificar si es el PIN de un cliente
+            // 2. Verificar si es el PIN de un cliente
             const clientMatch = clients.find(c => c.clientCode === pwd);
             if (clientMatch) {
                 unlockApp('client', clientMatch);
@@ -844,40 +834,18 @@
                 return;
             }
 
-            // 3. Si no es cliente, y no hay admin guardado localmente (modo setup)
-            if (btn.dataset.mode === "setup") {
-                if (btn.dataset.confirm !== "true") {
-                    // Confirmación de seguridad para evitar que un error de tipeo del cliente cree una cuenta admin
-                    btn.dataset.confirm = "true";
-                    btn.textContent = "Crear Admin";
-                    errorMsg.textContent = "¿Eres el administrador? Presiona de nuevo para guardar esta clave.";
-                    errorMsg.className = "text-sm mt-4 text-center font-medium bg-amber-50 text-amber-600 px-4 py-2 rounded-lg fade-in block";
-                    
-                    setTimeout(() => {
-                        btn.dataset.confirm = "false";
-                        btn.textContent = "Acceder";
-                        errorMsg.className = "text-red-500 text-sm mt-4 hidden fade-in text-center font-medium bg-red-50 px-4 py-2 rounded-lg";
-                    }, 4000);
-                    return;
-                }
-
-                const hashedInput = await hashPassword(pwd);
-                localStorage.setItem('eqbito360_auth', hashedInput);
-                unlockApp('admin');
-                input.value = '';
-                checkAuthState(); // Refrescar UI para el futuro
-                return;
-            } 
-
-            // 4. Verificación de Administrador normal (si ya está configurado)
+            // 3. Verificación de Administrador (PIN Maestro hardcodeado o cambiado en ajustes)
+            const savedHash = localStorage.getItem('eqbito360_auth');
             const hashedInput = await hashPassword(pwd);
-            if (hashedInput === localStorage.getItem('eqbito360_auth')) {
+            
+            // Accede si escribe 9753 (Clave Maestra) o si escribe la que haya configurado en ajustes
+            if (pwd === "9753" || (savedHash && hashedInput === savedHash)) {
                 unlockApp('admin');
                 input.value = '';
                 return;
             }
 
-            // 5. Si falla todo, mostrar error
+            // 4. Si falla todo, mostrar error
             errorMsg.textContent = "Credenciales incorrectas";
             errorMsg.className = "text-sm mt-4 text-center font-medium bg-red-50 text-red-500 px-4 py-2 rounded-lg fade-in block";
             input.classList.add('border-red-500', 'ring-red-500/10');
@@ -1059,8 +1027,13 @@
             const msg = document.getElementById('pwd-msg');
             if (!oldInput || !newInput) return;
             
+            const savedHash = localStorage.getItem('eqbito360_auth');
             const oldHash = await hashPassword(oldInput);
-            if (oldHash === localStorage.getItem('eqbito360_auth')) {
+            
+            // Permite cambiarla si escribe la actual guardada o la maestra (9753)
+            const isAdmin = (oldInput === "9753" || (savedHash && oldHash === savedHash));
+            
+            if (isAdmin) {
                 const newHash = await hashPassword(newInput);
                 localStorage.setItem('eqbito360_auth', newHash);
                 msg.textContent = "Contraseña actualizada correctamente";
