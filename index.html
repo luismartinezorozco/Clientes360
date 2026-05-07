@@ -149,12 +149,22 @@
                         </div>
                     </div>
 
-                    <!-- Buscador -->
-                    <div class="relative mb-6 w-full md:max-w-md">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <!-- Buscador y Filtros -->
+                    <div class="mb-6 w-full md:max-w-md">
+                        <div class="relative mb-3">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </div>
+                            <input type="text" id="searchInput" onkeyup="renderClients()" placeholder="Buscar cliente o proyecto..." class="w-full bg-gray-200/80 md:bg-white md:shadow-sm rounded-xl pl-10 pr-4 py-2.5 md:py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50 transition-all placeholder-gray-500">
                         </div>
-                        <input type="text" id="searchInput" onkeyup="renderClients()" placeholder="Buscar cliente o proyecto..." class="w-full bg-gray-200/80 md:bg-white md:shadow-sm rounded-xl pl-10 pr-4 py-2.5 md:py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50 transition-all placeholder-gray-500">
+                        
+                        <!-- Píldoras de Filtrado -->
+                        <div class="flex space-x-2 overflow-x-auto no-scrollbar pb-1">
+                            <button onclick="setFilter('all')" id="filter-all" class="filter-btn px-3 py-1.5 bg-slate-800 text-white rounded-full text-xs font-semibold shrink-0 transition-colors">Todos</button>
+                            <button onclick="setFilter('active')" id="filter-active" class="filter-btn px-3 py-1.5 bg-gray-200 text-slate-600 rounded-full text-xs font-semibold shrink-0 transition-colors">Activos</button>
+                            <button onclick="setFilter('debt')" id="filter-debt" class="filter-btn px-3 py-1.5 bg-gray-200 text-slate-600 rounded-full text-xs font-semibold shrink-0 transition-colors">Con Deuda</button>
+                            <button onclick="setFilter('completed')" id="filter-completed" class="filter-btn px-3 py-1.5 bg-gray-200 text-slate-600 rounded-full text-xs font-semibold shrink-0 transition-colors">Finalizados</button>
+                        </div>
                     </div>
 
                     <!-- Lista de Clientes -->
@@ -166,8 +176,8 @@
                         <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center text-gray-400 mb-4">
                             <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                         </div>
-                        <p class="text-gray-500 text-sm font-medium">No tienes proyectos activos.</p>
-                        <p class="text-gray-400 text-xs mt-1">Crea tu primer cliente para comenzar.</p>
+                        <p class="text-gray-500 text-sm font-medium">No se encontraron proyectos.</p>
+                        <p class="text-gray-400 text-xs mt-1">Modifica tu búsqueda o crea uno nuevo.</p>
                     </div>
                 </div>
 
@@ -175,7 +185,7 @@
                 <div id="tab-settings" class="tab-content hidden max-w-2xl mx-auto pt-6">
                     <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-8 text-slate-900">Ajustes</h1>
                     
-                    <div class="ios-card rounded-2xl overflow-hidden shadow-sm md:shadow-md border md:border-gray-100">
+                    <div class="ios-card rounded-2xl overflow-hidden shadow-sm md:shadow-md border md:border-gray-100 mb-6">
                         <div class="px-5 py-4 border-b border-gray-100 flex items-center bg-gray-50/50">
                             <div class="w-10 h-10 rounded-xl bg-blue-100 text-[#007AFF] flex items-center justify-center mr-4 shadow-sm shrink-0">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
@@ -190,6 +200,17 @@
                             <input type="password" id="new-pwd" placeholder="Nueva Contraseña" class="w-full bg-gray-100 rounded-xl px-4 py-3 text-sm mb-5 focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50">
                             <button onclick="changePassword()" class="w-full bg-ios-blue text-white text-sm font-semibold rounded-xl py-3 shadow-md hover:bg-blue-600 active:scale-95 transition-all">Actualizar Contraseña</button>
                             <p id="pwd-msg" class="text-sm mt-3 text-center hidden"></p>
+                        </div>
+                    </div>
+
+                    <div class="ios-card rounded-2xl overflow-hidden shadow-sm md:shadow-md border md:border-gray-100">
+                        <div class="px-5 py-6">
+                            <h3 class="text-xs font-bold mb-4 text-gray-400 uppercase tracking-wider">Respaldo de Datos</h3>
+                            <p class="text-xs text-gray-500 mb-4">Descarga una copia de seguridad de todos tus proyectos para no perder tu información.</p>
+                            <button onclick="exportData()" class="w-full bg-gray-100 text-slate-800 text-sm font-semibold rounded-xl py-3 shadow-sm hover:bg-gray-200 active:scale-95 transition-all flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                Descargar Copia (JSON)
+                            </button>
                         </div>
                     </div>
                     
@@ -295,14 +316,16 @@
                 <button onclick="closeProfileModal()" class="w-12 text-right text-[#007AFF] font-bold text-sm hover:opacity-80">Cerrar</button>
             </div>
             
-            <div class="flex-1 overflow-y-auto bg-white md:rounded-b-2xl pb-10 w-full">
+            <div class="flex-1 overflow-y-auto bg-white md:rounded-b-2xl pb-10 w-full relative">
                 <div class="px-6 py-6 text-center border-b border-gray-100 w-full">
                     <div class="w-16 h-16 bg-gradient-to-tr from-blue-500 to-indigo-500 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl font-bold shadow-md mb-3 shrink-0" id="profileInitials"></div>
                     <h2 class="text-xl font-bold text-slate-800 break-words" id="profileName">Nombre</h2>
                     <span id="profileStatusBadge" class="inline-block mt-2 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border">Estado</span>
                 </div>
 
+                <!-- Botones de Acción Rápida -->
                 <div class="flex justify-center space-x-4 md:space-x-6 py-4 border-b border-gray-100 w-full" id="profileActions">
+                    <!-- Inyectados por JS (WhatsApp, Mail, Archivos, Editar) -->
                 </div>
 
                 <div class="px-6 py-5 space-y-4 w-full">
@@ -333,6 +356,12 @@
                         <p class="text-[10px] text-yellow-600 font-bold uppercase mb-2">Notas / Brief</p>
                         <p class="text-sm text-gray-700 whitespace-pre-wrap break-words leading-relaxed italic" id="profileNotes"></p>
                     </div>
+
+                    <!-- Botón Eliminar en el Perfil -->
+                    <button onclick="deleteCurrentClient()" class="w-full mt-8 py-3.5 bg-red-50/80 text-red-600 text-sm font-semibold rounded-xl hover:bg-red-100 transition-colors flex items-center justify-center border border-red-100">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        Eliminar Proyecto
+                    </button>
                 </div>
             </div>
         </div>
@@ -364,6 +393,8 @@
         };
 
         let clients = JSON.parse(localStorage.getItem('clientes360_pro_clients')) || [];
+        let currentFilter = 'all';
+        let currentProfileId = null; // Para poder eliminar desde el perfil
         
         async function checkAuthState() {
             const savedHash = localStorage.getItem('clientes360_pro_auth');
@@ -553,20 +584,44 @@
             localStorage.setItem('clientes360_pro_clients', JSON.stringify(clients));
             closeClientModal();
             renderClients();
+            
+            // Si el perfil estaba abierto y editamos sus datos, lo recargamos visualmente
+            if(currentProfileId === id) {
+                openProfileModal(id);
+            }
         }
 
-        function deleteClient(id) {
-            if (confirm('¿Eliminar proyecto permanentemente?')) {
-                clients = clients.filter(c => c.id !== id);
+        function deleteCurrentClient() {
+            if (!currentProfileId) return;
+            if (confirm('¿Estás seguro de eliminar este proyecto permanentemente? Esta acción no se puede deshacer.')) {
+                clients = clients.filter(c => c.id !== currentProfileId);
                 localStorage.setItem('clientes360_pro_clients', JSON.stringify(clients));
+                closeProfileModal();
                 renderClients();
             }
+        }
+
+        // --- EXPORTAR DATOS ---
+        function exportData() {
+            if(clients.length === 0) {
+                alert("No hay proyectos para respaldar.");
+                return;
+            }
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clients, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `clientes360_respaldo_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchorNode); // requerido para Firefox
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
         }
 
         // --- PERFIL CLIENTE ---
         function openProfileModal(id) {
             const c = clients.find(x => x.id === id);
             if (!c) return;
+            
+            currentProfileId = id;
 
             document.getElementById('profileInitials').textContent = getInitials(c.name);
             document.getElementById('profileName').textContent = escapeHTML(c.name);
@@ -629,8 +684,16 @@
                         <span class="text-[10px] font-semibold mt-1.5 text-gray-500">Archivos</span>
                     </a>`;
             }
+            
+            // Botón de EDITAR añadido a las Acciones Rápidas
+            actionsHTML += `
+                <button onclick="openClientModal('${c.id}')" class="flex flex-col items-center group shrink-0">
+                    <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 group-hover:bg-amber-200 transition-colors shadow-sm">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    </div>
+                    <span class="text-[10px] font-semibold mt-1.5 text-gray-500">Editar</span>
+                </button>`;
 
-            if (!actionsHTML) actionsHTML = '<p class="text-xs text-gray-400 w-full text-center">Sin datos de contacto guardados</p>';
             document.getElementById('profileActions').innerHTML = actionsHTML;
 
             document.getElementById('modal-overlay').classList.remove('hidden');
@@ -642,10 +705,25 @@
 
         function closeProfileModal() {
             document.getElementById('profileModal').classList.remove('active');
+            currentProfileId = null;
             checkAndHideOverlay();
         }
 
-        // --- RENDERIZADO GENERAL UI ---
+        // --- FILTROS Y RENDERIZADO UI ---
+        function setFilter(filter) {
+            currentFilter = filter;
+            
+            // Reset botones
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = 'filter-btn px-3 py-1.5 bg-gray-200 text-slate-600 rounded-full text-xs font-semibold shrink-0 transition-colors';
+            });
+            
+            // Activar actual
+            document.getElementById(`filter-${filter}`).className = 'filter-btn px-3 py-1.5 bg-slate-800 text-white rounded-full text-xs font-semibold shrink-0 transition-colors';
+            
+            renderClients();
+        }
+
         function getStatusColor(status) {
             return {
                 'Cotizando': 'bg-gray-100 text-gray-700 border-gray-200',
@@ -684,7 +762,23 @@
             const empty = document.getElementById('emptyState');
             
             list.innerHTML = '';
-            const filtered = clients.filter(c => c.name.toLowerCase().includes(query) || (c.service && c.service.toLowerCase().includes(query)));
+            
+            // Aplicamos Filtros + Buscador
+            const filtered = clients.filter(c => {
+                const matchSearch = c.name.toLowerCase().includes(query) || (c.service && c.service.toLowerCase().includes(query));
+                let matchFilter = true;
+                
+                if (currentFilter === 'active') {
+                    matchFilter = c.status !== 'Finalizado' && c.status !== 'Pausado';
+                } else if (currentFilter === 'debt') {
+                    const pending = (c.price || 0) - (c.paid || 0);
+                    matchFilter = pending > 0;
+                } else if (currentFilter === 'completed') {
+                    matchFilter = c.status === 'Finalizado';
+                }
+
+                return matchSearch && matchFilter;
+            });
 
             if (filtered.length === 0) {
                 empty.classList.remove('hidden');
