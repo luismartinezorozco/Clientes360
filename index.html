@@ -144,7 +144,7 @@
                 </div>
                 <p id="auth-error" class="text-red-500 text-sm mt-4 hidden fade-in text-center font-medium bg-red-50 px-4 py-2 rounded-lg">Credenciales incorrectas</p>
                 <!-- Indicador de estado de conexión oculto por defecto -->
-                <p id="cloud-status" class="text-gray-400 text-xs mt-6 flex items-center font-medium">
+                <p id="cloud-status" class="text-gray-400 text-xs mt-6 flex items-center font-medium hidden">
                     <span class="w-2 h-2 rounded-full bg-gray-300 mr-2 animate-pulse" id="cloud-dot"></span> 
                     <span id="cloud-text">Sincronizando...</span>
                 </p>
@@ -491,7 +491,7 @@
                         </div>
                         <button type="button" onclick="addAssetField()" class="w-full py-3 bg-[#F0F7FF] text-[#007AFF] rounded-xl text-sm font-bold flex items-center justify-center hover:bg-blue-100 transition-colors">
                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
-                            Añadir enlace (Drive, Figma...)
+                            Añadir enlace (Drive, Box, Figma...)
                         </button>
                     </div>
                 </div>
@@ -704,7 +704,6 @@
         signInAnonymously(auth).then(() => {
             const cloudStatus = document.getElementById('cloud-status');
             if(cloudStatus) {
-                // Ocultar el mensaje por completo cuando la conexión sea exitosa
                 cloudStatus.classList.add('hidden');
             }
 
@@ -715,21 +714,17 @@
                     freshClients.push({ id: doc.id, ...doc.data() });
                 });
                 
-                // Ordenar por más recientes
                 freshClients.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
                 
                 clients = freshClients;
                 dbReady = true;
                 
-                // Guardar respaldo local
                 localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
 
-                // Refrescar interfaz si el panel Admin está visible
                 if (!document.getElementById('main-app').classList.contains('hidden')) {
                     renderClients();
                 }
                 
-                // Refrescar interfaz si un Cliente está viendo su portal en tiempo real
                 if (window.currentClientCode && !document.getElementById('client-portal').classList.contains('hidden')) {
                     const c = clients.find(x => x.clientCode === window.currentClientCode);
                     if (c) renderClientPortal(c);
@@ -812,15 +807,17 @@
             const subtitle = document.getElementById('auth-subtitle');
 
             if (!savedHash) {
-                document.getElementById('auth-title').textContent = "Bienvenido";
-                subtitle.textContent = "Crea una contraseña maestra local";
-                btn.textContent = "Crear y Entrar";
+                document.getElementById('auth-title').textContent = "EQBITO 360";
+                subtitle.innerHTML = "Ingresa tu contraseña de admin <br>o <span class='text-[#007AFF] font-semibold'>PIN de cliente</span>";
+                btn.textContent = "Acceder";
                 btn.dataset.mode = "setup";
+                btn.dataset.confirm = "false";
             } else {
                 document.getElementById('auth-title').textContent = "EQBITO 360";
                 subtitle.innerHTML = "Ingresa tu contraseña o <span class='text-[#007AFF] font-semibold'>PIN de cliente</span>";
                 btn.textContent = "Acceder";
                 btn.dataset.mode = "login";
+                btn.dataset.confirm = "false";
             }
         }
 
@@ -831,21 +828,15 @@
             const pwd = input.value.trim();
             if (!pwd) return;
 
-            if (btn.dataset.mode === "setup") {
-                const hashedInput = await hashPassword(pwd);
-                localStorage.setItem('eqbito360_auth', hashedInput);
-                unlockApp('admin');
-                input.value = '';
-                return;
-            } 
-
-            const hashedInput = await hashPassword(pwd);
-            if (hashedInput === localStorage.getItem('eqbito360_auth')) {
-                unlockApp('admin');
-                input.value = '';
+            // 1. Asegurar que la BD cargó para no ignorar el PIN de un cliente válido por cargar muy rápido
+            if (!dbReady && navigator.onLine) {
+                errorMsg.textContent = "Sincronizando con el servidor...";
+                errorMsg.className = "text-sm mt-4 text-center font-medium bg-blue-50 text-blue-500 px-4 py-2 rounded-lg fade-in block";
+                setTimeout(handleAuth, 1000); // Reintentar en 1 seg automáticamente
                 return;
             }
 
+            // 2. PRIORIDAD 1: Verificar si es el PIN de un cliente
             const clientMatch = clients.find(c => c.clientCode === pwd);
             if (clientMatch) {
                 unlockApp('client', clientMatch);
@@ -853,11 +844,47 @@
                 return;
             }
 
-            errorMsg.classList.remove('hidden');
+            // 3. Si no es cliente, y no hay admin guardado localmente (modo setup)
+            if (btn.dataset.mode === "setup") {
+                if (btn.dataset.confirm !== "true") {
+                    // Confirmación de seguridad para evitar que un error de tipeo del cliente cree una cuenta admin
+                    btn.dataset.confirm = "true";
+                    btn.textContent = "Crear Admin";
+                    errorMsg.textContent = "¿Eres el administrador? Presiona de nuevo para guardar esta clave.";
+                    errorMsg.className = "text-sm mt-4 text-center font-medium bg-amber-50 text-amber-600 px-4 py-2 rounded-lg fade-in block";
+                    
+                    setTimeout(() => {
+                        btn.dataset.confirm = "false";
+                        btn.textContent = "Acceder";
+                        errorMsg.className = "text-red-500 text-sm mt-4 hidden fade-in text-center font-medium bg-red-50 px-4 py-2 rounded-lg";
+                    }, 4000);
+                    return;
+                }
+
+                const hashedInput = await hashPassword(pwd);
+                localStorage.setItem('eqbito360_auth', hashedInput);
+                unlockApp('admin');
+                input.value = '';
+                checkAuthState(); // Refrescar UI para el futuro
+                return;
+            } 
+
+            // 4. Verificación de Administrador normal (si ya está configurado)
+            const hashedInput = await hashPassword(pwd);
+            if (hashedInput === localStorage.getItem('eqbito360_auth')) {
+                unlockApp('admin');
+                input.value = '';
+                return;
+            }
+
+            // 5. Si falla todo, mostrar error
+            errorMsg.textContent = "Credenciales incorrectas";
+            errorMsg.className = "text-sm mt-4 text-center font-medium bg-red-50 text-red-500 px-4 py-2 rounded-lg fade-in block";
             input.classList.add('border-red-500', 'ring-red-500/10');
             setTimeout(() => {
                 input.classList.remove('border-red-500', 'ring-red-500/10');
                 errorMsg.classList.add('hidden');
+                errorMsg.className = "text-red-500 text-sm mt-4 hidden fade-in text-center font-medium bg-red-50 px-4 py-2 rounded-lg";
             }, 2500);
             input.value = '';
         }
@@ -930,7 +957,7 @@
                 parsedAssets.forEach(asset => {
                     const safeUrl = encodeURI(asset.url);
                     const safeName = escapeHTML(asset.url);
-                    const isFolder = safeUrl.includes('folders');
+                    const isFolder = safeUrl.includes('folders') || safeUrl.includes('app.box.com');
                     
                     const icon = isFolder 
                         ? `<path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>`
@@ -943,7 +970,7 @@
                             </div>
                             <div class="flex-1 overflow-hidden">
                                 <p class="text-sm font-bold text-slate-800 tracking-tight truncate">${escapeHTML(asset.name)}</p>
-                                <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">${isFolder ? 'Carpeta' : 'Archivo'}</p>
+                                <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">${isFolder ? 'Carpeta / Box' : 'Archivo'}</p>
                             </div>
                         </button>
                     `;
@@ -1006,8 +1033,8 @@
                     <button type="button" onclick="this.parentElement.remove()" class="absolute -top-2 -right-2 w-7 h-7 bg-white text-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 border border-red-100 shadow-sm active:scale-95">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
-                    <input type="text" placeholder="Nombre (ej: Logo, Manual...)" value="${escapeHTML(name)}" class="asset-name w-full px-4 py-2.5 text-sm bg-white rounded-xl border border-gray-100 focus:outline-none focus:border-[#007AFF] focus:ring-2 focus:ring-[#007AFF]/10 text-slate-800 font-semibold shadow-sm transition-all">
-                    <input type="url" placeholder="Link (Drive, Figma...)" value="${escapeHTML(url)}" class="asset-url w-full px-4 py-2.5 text-sm bg-white rounded-xl border border-gray-100 focus:outline-none focus:border-[#007AFF] focus:ring-2 focus:ring-[#007AFF]/10 text-[#007AFF] font-medium shadow-sm transition-all">
+                    <input type="text" placeholder="Nombre (ej: Entregables, Logo...)" value="${escapeHTML(name)}" class="asset-name w-full px-4 py-2.5 text-sm bg-white rounded-xl border border-gray-100 focus:outline-none focus:border-[#007AFF] focus:ring-2 focus:ring-[#007AFF]/10 text-slate-800 font-semibold shadow-sm transition-all">
+                    <input type="url" placeholder="Link (Box, Figma...)" value="${escapeHTML(url)}" class="asset-url w-full px-4 py-2.5 text-sm bg-white rounded-xl border border-gray-100 focus:outline-none focus:border-[#007AFF] focus:ring-2 focus:ring-[#007AFF]/10 text-[#007AFF] font-medium shadow-sm transition-all">
                 </div>
             `;
             container.insertAdjacentHTML('beforeend', fieldHTML);
@@ -1114,7 +1141,6 @@
                     document.getElementById('clientService').value = c.service || '';
                     const activeServices = (c.service || '').split(',').map(s => s.trim());
                     
-                    // Limpiar la selección por defecto y aplicar las del cliente
                     document.querySelectorAll('.srv-btn').forEach(btn => {
                         btn.classList.remove('selected', 'border-blue-200', 'text-[#007AFF]', 'bg-[#F0F7FF]');
                         btn.classList.add('border-gray-200', 'text-gray-500', 'bg-white');
