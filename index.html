@@ -197,7 +197,7 @@
                     </div>
                 </div>
 
-                <!-- Gestor de Archivos Nativo -->
+                <!-- Gestor de Archivos Directos -->
                 <div class="bg-white rounded-[24px] p-5 md:p-6 premium-shadow border border-gray-100 mb-6">
                     <div class="flex items-center mb-5">
                         <div class="w-12 h-12 squarcle bg-indigo-50 text-indigo-500 flex items-center justify-center shrink-0 mr-4 border border-indigo-100/50">
@@ -205,7 +205,7 @@
                         </div>
                         <div>
                             <h4 class="font-bold text-slate-800 text-sm tracking-tight">Archivos y Entregables</h4>
-                            <p class="text-xs text-gray-500 font-medium">Selecciona un archivo para verlo aquí mismo.</p>
+                            <p class="text-xs text-gray-500 font-medium">Toca para abrir en una pestaña externa.</p>
                         </div>
                     </div>
                     
@@ -491,7 +491,7 @@
                         </div>
                         <button type="button" onclick="addAssetField()" class="w-full py-3 bg-[#F0F7FF] text-[#007AFF] rounded-xl text-sm font-bold flex items-center justify-center hover:bg-blue-100 transition-colors">
                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
-                            Añadir enlace (Drive, Box, Figma...)
+                            Añadir enlace (Google Drive, etc.)
                         </button>
                     </div>
                 </div>
@@ -595,37 +595,6 @@
                         Eliminar Proyecto
                     </button>
                 </div>
-            </div>
-        </div>
-
-        <!-- ========================================== -->
-        <!-- MODAL: VISOR DE ARCHIVOS (IFRAME ELEGANTE) -->
-        <!-- ========================================== -->
-        <div id="assetsModal" class="absolute inset-x-0 bottom-0 md:w-full md:max-w-4xl bg-[#F9FAFB] rounded-t-[32px] md:rounded-2xl shadow-2xl z-50 h-[95%] md:h-[85%] slide-up-modal flex flex-col overflow-hidden">
-            <div class="flex justify-between items-center px-5 md:px-6 py-4 border-b border-gray-200/80 bg-white md:rounded-t-2xl shrink-0 shadow-sm z-10">
-                <button onclick="closeAssetsModal()" class="text-[#007AFF] font-medium text-sm hover:opacity-80 px-2 py-1">Cerrar</button>
-                <h3 id="assetsModalTitle" class="font-bold text-sm text-slate-800 tracking-tight truncate px-2">Archivo</h3>
-                <!-- Enlace alternativo con noopener noreferrer por seguridad -->
-                <a href="#" id="assetsExternalLink" target="_blank" rel="noopener noreferrer" class="text-[#007AFF] hover:opacity-80 bg-blue-50 p-2 rounded-full transition-colors" title="Abrir en pestaña externa">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                </a>
-            </div>
-            
-            <!-- Banner Inteligente para carpetas de Drive (solo si es carpeta general) -->
-            <div id="driveWarning" class="bg-[#F0F7FF] px-5 py-3 text-[11px] md:text-xs text-blue-700 border-b border-blue-100 hidden shrink-0 font-medium">
-                <div class="flex items-center justify-center">
-                    <svg class="w-4 h-4 mr-2 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span>Navegación segura de Google activa. Si tienes problemas, usa el botón azul de arriba a la derecha.</span>
-                </div>
-            </div>
-
-            <div class="flex-1 w-full relative bg-gray-100">
-                <!-- Loader premium -->
-                <div id="assetsLoader" class="absolute inset-0 flex flex-col items-center justify-center bg-white z-0 pointer-events-none">
-                    <div class="w-10 h-10 border-4 border-blue-100 border-t-[#007AFF] rounded-full animate-spin mb-4"></div>
-                    <p class="text-sm text-gray-500 font-semibold tracking-tight">Cargando visor seguro...</p>
-                </div>
-                <iframe id="assetsIframe" class="w-full h-full border-0 relative z-10" allowfullscreen onload="document.getElementById('assetsLoader').classList.add('hidden')"></iframe>
             </div>
         </div>
 
@@ -781,25 +750,6 @@
                 '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
             }[tag]));
         };
-
-        function getEmbedUrl(url) {
-            if (!url) return '';
-            try {
-                if (url.includes('drive.google.com/file/d/')) return url.replace(/\/view.*$/, '/preview');
-                const folderMatch = url.match(/drive\.google\.com\/drive\/folders\/([a-zA-Z0-9_-]+)/);
-                if (folderMatch) return `https://drive.google.com/embeddedfolderview?id=${folderMatch[1]}#grid`;
-                if (url.includes('figma.com/file/') || url.includes('figma.com/design/')) {
-                    return `https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(url)}`;
-                }
-                // Transformación automática para Box.com (convierte link normal a explorador nativo)
-                if (url.includes('app.box.com/s/') || url.includes('app.box.com/v/')) {
-                    return url.replace('app.box.com/s/', 'app.box.com/embed/s/').replace('app.box.com/v/', 'app.box.com/embed/v/');
-                }
-                return url; 
-            } catch (e) {
-                return url;
-            }
-        }
         
         async function checkAuthState() {
             const btn = document.getElementById('auth-btn');
@@ -932,22 +882,25 @@
                         : `<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>`;
                     
                     const btnHtml = `
-                        <button onclick="openAssetsModal('${safeUrl}', '${escapeHTML(asset.name)}')" class="flex items-center text-left bg-white border border-gray-100 p-3.5 rounded-[16px] hover:bg-blue-50 hover:border-blue-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all group active:scale-[0.98]">
+                        <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center text-left bg-white border border-gray-100 p-3.5 rounded-[16px] hover:bg-blue-50 hover:border-blue-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all group active:scale-[0.98] w-full">
                             <div class="w-10 h-10 squarcle-sm bg-gray-50 text-gray-400 group-hover:bg-[#007AFF] group-hover:text-white flex items-center justify-center shrink-0 mr-3 transition-colors border border-gray-100 group-hover:border-transparent">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">${icon}</svg>
                             </div>
                             <div class="flex-1 overflow-hidden">
                                 <p class="text-sm font-bold text-slate-800 tracking-tight truncate">${escapeHTML(asset.name)}</p>
-                                <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">${isFolder ? 'Carpeta / Box' : 'Archivo'}</p>
+                                <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Abrir enlace externo</p>
                             </div>
-                        </button>
+                            <div class="text-gray-300 group-hover:text-[#007AFF] transition-colors ml-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            </div>
+                        </a>
                     `;
                     assetsListEl.insertAdjacentHTML('beforeend', btnHtml);
                 });
             } else {
                 assetsListEl.innerHTML = `
                     <div class="col-span-full p-6 border border-dashed border-gray-200 rounded-[20px] text-center bg-gray-50/50">
-                        <p class="text-sm text-gray-500 font-medium">Aún no hay archivos compartidos.</p>
+                        <p class="text-sm text-gray-500 font-medium">Aún no hay enlaces compartidos.</p>
                     </div>`;
             }
 
@@ -960,40 +913,6 @@
             document.getElementById('cp-debt').textContent = formatMoney(Math.max(pending, 0));
         }
 
-        function openAssetsModal(url, title = 'Archivo') {
-            if (!url) return;
-            const safeUrl = encodeURI(url);
-
-            const iframe = document.getElementById('assetsIframe');
-            const externalLink = document.getElementById('assetsExternalLink');
-            const loader = document.getElementById('assetsLoader');
-            const driveWarning = document.getElementById('driveWarning');
-            
-            document.getElementById('assetsModalTitle').textContent = title;
-            externalLink.href = safeUrl;
-            
-            if (safeUrl.includes('drive.google.com/drive/folders')) {
-                driveWarning.classList.remove('hidden');
-            } else {
-                driveWarning.classList.add('hidden');
-            }
-
-            loader.classList.remove('hidden');
-            iframe.src = getEmbedUrl(safeUrl);
-
-            document.getElementById('modal-overlay').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('modal-overlay').classList.remove('opacity-0');
-                document.getElementById('assetsModal').classList.add('active');
-            }, 10);
-        }
-
-        function closeAssetsModal() {
-            document.getElementById('assetsModal').classList.remove('active');
-            setTimeout(() => { document.getElementById('assetsIframe').src = ''; }, 300);
-            checkAndHideOverlay();
-        }
-
         function addAssetField(name = '', url = '') {
             const container = document.getElementById('assets-fields-container');
             const fieldHTML = `
@@ -1002,7 +921,7 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                     <input type="text" placeholder="Nombre (ej: Entregables, Logo...)" value="${escapeHTML(name)}" class="asset-name w-full px-4 py-2.5 text-sm bg-white rounded-xl border border-gray-100 focus:outline-none focus:border-[#007AFF] focus:ring-2 focus:ring-[#007AFF]/10 text-slate-800 font-semibold shadow-sm transition-all">
-                    <input type="url" placeholder="Link (Box, Figma...)" value="${escapeHTML(url)}" class="asset-url w-full px-4 py-2.5 text-sm bg-white rounded-xl border border-gray-100 focus:outline-none focus:border-[#007AFF] focus:ring-2 focus:ring-[#007AFF]/10 text-[#007AFF] font-medium shadow-sm transition-all">
+                    <input type="url" placeholder="Link (Drive, Box...)" value="${escapeHTML(url)}" class="asset-url w-full px-4 py-2.5 text-sm bg-white rounded-xl border border-gray-100 focus:outline-none focus:border-[#007AFF] focus:ring-2 focus:ring-[#007AFF]/10 text-[#007AFF] font-medium shadow-sm transition-all">
                 </div>
             `;
             container.insertAdjacentHTML('beforeend', fieldHTML);
@@ -1071,7 +990,6 @@
         function closeModals() {
             closeClientModal();
             closeProfileModal();
-            closeAssetsModal();
         }
 
         function openClientModal(id = null) {
@@ -1160,8 +1078,7 @@
 
         function checkAndHideOverlay() {
             if(!document.getElementById('clientModal').classList.contains('active') && 
-               !document.getElementById('profileModal').classList.contains('active') &&
-               !document.getElementById('assetsModal').classList.contains('active')) {
+               !document.getElementById('profileModal').classList.contains('active')) {
                 document.getElementById('modal-overlay').classList.add('opacity-0');
                 setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 300);
             }
@@ -1548,8 +1465,7 @@
             handleAuth, lockApp, switchTab, openClientModal, closeClientModal,
             saveClient, deleteCurrentClient, exportData, generateClientPIN,
             openProfileModal, closeProfileModal, setFilter, renderClients,
-            changePassword, openAssetsModal, closeAssetsModal, addAssetField,
-            toggleService
+            changePassword, addAssetField, toggleService
         });
 
         window.addEventListener('DOMContentLoaded', () => {
