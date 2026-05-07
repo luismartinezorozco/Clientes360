@@ -143,6 +143,11 @@
                     <button onclick="handleAuth()" id="auth-btn" class="w-full bg-[#007AFF] text-white font-semibold rounded-2xl py-3.5 md:py-4 shadow-lg shadow-blue-500/25 hover:bg-blue-600 transition-colors active:scale-[0.98] text-lg">Acceder</button>
                 </div>
                 <p id="auth-error" class="text-red-500 text-sm mt-4 hidden fade-in text-center font-medium bg-red-50 px-4 py-2 rounded-lg">Credenciales incorrectas</p>
+                <!-- Indicador de estado de conexión -->
+                <p id="cloud-status" class="text-gray-400 text-xs mt-6 flex items-center font-medium">
+                    <span class="w-2 h-2 rounded-full bg-gray-300 mr-2 animate-pulse" id="cloud-dot"></span> 
+                    <span id="cloud-text">Conectando a la nube...</span>
+                </p>
             </div>
         </div>
 
@@ -163,7 +168,7 @@
 
             <div class="p-6 md:p-10 max-w-2xl mx-auto w-full pb-24">
                 <h1 class="text-2xl md:text-3xl font-bold text-slate-900 mb-1 tracking-tight">Hola, <span id="cp-name" class="text-[#007AFF]">Cliente</span></h1>
-                <p class="text-gray-500 text-sm mb-8">Aquí puedes monitorear el progreso de tu proyecto.</p>
+                <p class="text-gray-500 text-sm mb-8">Aquí puedes monitorear el progreso de tu proyecto en tiempo real.</p>
 
                 <!-- Status Card -->
                 <div class="bg-white rounded-[24px] p-5 md:p-6 premium-shadow border border-gray-100 mb-6">
@@ -608,10 +613,144 @@
             </div>
         </div>
 
+        <!-- MODAL DE ERROR DE FIREBASE -->
+        <div id="firebase-rules-modal" class="absolute inset-0 bg-slate-900/60 z-[9999] hidden items-center justify-center backdrop-blur-sm p-4 transition-opacity">
+            <div class="bg-white rounded-[32px] p-6 md:p-8 max-w-lg w-full shadow-2xl relative">
+                <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-6 mx-auto border border-red-100">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                </div>
+                <h3 id="fb-err-title" class="text-xl md:text-2xl font-bold text-center text-slate-800 mb-2 tracking-tight">Permisos Denegados</h3>
+                <p id="fb-err-msg" class="text-slate-500 text-center mb-6 text-sm font-medium">Tu base de datos está bloqueando la conexión. Debes actualizar las reglas.</p>
+                
+                <div id="fb-err-code-container" class="bg-gray-50 rounded-2xl p-4 mb-6 border border-gray-100 hidden">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Copia y pega esto en Firestore -> Reglas:</p>
+                    <pre id="fb-err-code" class="text-xs text-slate-700 overflow-x-auto whitespace-pre-wrap select-all font-mono"></pre>
+                </div>
+                
+                <button onclick="document.getElementById('firebase-rules-modal').classList.add('hidden'); document.getElementById('firebase-rules-modal').classList.remove('flex');" class="w-full bg-slate-900 text-white font-bold py-3.5 rounded-xl hover:bg-slate-800 transition-colors shadow-lg shadow-slate-900/20">
+                    Entendido, ya lo arreglé
+                </button>
+            </div>
+        </div>
+
     </div>
 
-    <!-- SCRIPT DE LÓGICA -->
-    <script>
+    <!-- SCRIPT DE LÓGICA Y FIREBASE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKgsYL6tYqaIu4hBVd8a2gu799ErpIV5U",
+            authDomain: "eqbito-7cb18.firebaseapp.com",
+            projectId: "eqbito-7cb18",
+            storageBucket: "eqbito-7cb18.firebasestorage.app",
+            messagingSenderId: "407226968957",
+            appId: "1:407226968957:web:4fd83df0ba48c875e33a14"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Variables Globales
+        let clients = JSON.parse(localStorage.getItem('eqbito360_clients')) || [];
+        let currentFilter = 'all';
+        let currentProfileId = null;
+        window.currentClientCode = null;
+        let dbReady = false;
+
+        const showFirebaseError = (title, message, codeSnippet) => {
+            const fbTitle = document.getElementById('fb-err-title');
+            const fbMsg = document.getElementById('fb-err-msg');
+            const fbCodeCont = document.getElementById('fb-err-code-container');
+            const fbCode = document.getElementById('fb-err-code');
+            const modal = document.getElementById('firebase-rules-modal');
+            
+            if(fbTitle) fbTitle.textContent = title;
+            if(fbMsg) fbMsg.textContent = message;
+            
+            if(codeSnippet && fbCodeCont && fbCode) {
+                fbCodeCont.classList.remove('hidden');
+                fbCode.textContent = codeSnippet;
+            } else if (fbCodeCont) {
+                fbCodeCont.classList.add('hidden');
+            }
+            
+            if(modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        };
+
+        // Inicializar Firebase Auth y conectar a Firestore
+        signInAnonymously(auth).then(() => {
+            const cloudText = document.getElementById('cloud-text');
+            const cloudDot = document.getElementById('cloud-dot');
+            if(cloudText) {
+                cloudText.textContent = "Conectado a la nube de EQBITO";
+                cloudDot.classList.replace('bg-gray-300', 'bg-emerald-500');
+                cloudDot.classList.remove('animate-pulse');
+            }
+
+            // Escuchar cambios en tiempo real desde la colección "proyectos_eqbito"
+            onSnapshot(collection(db, "proyectos_eqbito"), (snapshot) => {
+                const freshClients = [];
+                snapshot.forEach((doc) => {
+                    freshClients.push({ id: doc.id, ...doc.data() });
+                });
+                
+                // Ordenar por más recientes
+                freshClients.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+                
+                clients = freshClients;
+                dbReady = true;
+                
+                // Guardar respaldo local
+                localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
+
+                // Refrescar interfaz si el panel Admin está visible
+                if (!document.getElementById('main-app').classList.contains('hidden')) {
+                    renderClients();
+                }
+                
+                // Refrescar interfaz si un Cliente está viendo su portal en tiempo real
+                if (window.currentClientCode && !document.getElementById('client-portal').classList.contains('hidden')) {
+                    const c = clients.find(x => x.clientCode === window.currentClientCode);
+                    if (c) renderClientPortal(c);
+                }
+            }, (error) => {
+                console.error("Error al leer de Firebase:", error);
+                const cloudText = document.getElementById('cloud-text');
+                const cloudDot = document.getElementById('cloud-dot');
+                if(cloudText) cloudText.textContent = "Error de permisos en Nube";
+                if(cloudDot) cloudDot.classList.replace('bg-emerald-500', 'bg-red-500');
+                
+                if (error.code === 'permission-denied' || (error.message && error.message.includes('Missing or insufficient permissions'))) {
+                    showFirebaseError(
+                        "Faltan permisos en Firestore", 
+                        "Tu base de datos rechaza la conexión. Ve a Firebase Console -> Firestore Database -> Reglas y pega exactamente esto:", 
+                        "rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /{document=**} {\n      allow read, write: if true;\n    }\n  }\n}"
+                    );
+                }
+            });
+        }).catch(err => {
+            console.error("Fallo de Autenticación Firebase:", err);
+            const cloudText = document.getElementById('cloud-text');
+            const cloudDot = document.getElementById('cloud-dot');
+            if(cloudText) cloudText.textContent = "Error de Autenticación";
+            if(cloudDot) cloudDot.classList.replace('bg-gray-300', 'bg-red-500');
+
+            if (err.code === 'auth/admin-restricted-operation' || err.code === 'auth/operation-not-allowed') {
+                showFirebaseError(
+                    "Falta habilitar Autenticación",
+                    "Para que la base de datos funcione, ve a Firebase Console -> Authentication -> Sign-in method -> Y habilita el proveedor 'Anónimo'.",
+                    null
+                );
+            }
+        });
+
         const formatMoney = (amount) => {
             if (!amount || isNaN(amount)) return '$0';
             return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(amount);
@@ -648,10 +787,6 @@
                 return url;
             }
         }
-
-        let clients = JSON.parse(localStorage.getItem('eqbito360_clients')) || [];
-        let currentFilter = 'all';
-        let currentProfileId = null; 
         
         async function checkAuthState() {
             const savedHash = localStorage.getItem('eqbito360_auth');
@@ -716,12 +851,14 @@
                 document.getElementById('auth-screen').classList.add('hidden');
                 
                 if (mode === 'admin') {
+                    window.currentClientCode = null;
                     document.getElementById('main-app').classList.remove('hidden');
                     document.getElementById('main-nav').classList.remove('hidden');
                     document.getElementById('client-portal').classList.add('hidden');
                     setDate();
                     renderClients();
                 } else if (mode === 'client' && clientData) {
+                    window.currentClientCode = clientData.clientCode;
                     document.getElementById('main-app').classList.add('hidden');
                     document.getElementById('main-nav').classList.add('hidden');
                     document.getElementById('client-portal').classList.remove('hidden');
@@ -732,6 +869,7 @@
 
         function lockApp() {
             document.getElementById('auth-screen').classList.remove('hidden');
+            window.currentClientCode = null;
             setTimeout(() => {
                 document.getElementById('main-app').classList.add('hidden');
                 document.getElementById('main-nav').classList.add('hidden');
@@ -772,7 +910,6 @@
 
             if (parsedAssets.length > 0) {
                 parsedAssets.forEach(asset => {
-                    // Evitar inyección XSS en enlaces manuales
                     const safeUrl = encodeURI(asset.url);
                     const safeName = escapeHTML(asset.url);
                     const isFolder = safeUrl.includes('folders');
@@ -920,7 +1057,6 @@
         }
 
         function openClientModal(id = null) {
-            // Asegurarse de cerrar el perfil del proyecto si está abierto para evitar sobreposición
             document.getElementById('profileModal').classList.remove('active');
             
             ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientPrice', 'clientPaid', 'clientNotes'].forEach(id => document.getElementById(id).value = '');
@@ -984,7 +1120,7 @@
             }
         }
 
-        function saveClient() {
+        async function saveClient() {
             const name = document.getElementById('clientName').value.trim();
             if (!name) { alert('El nombre del cliente es obligatorio'); return; }
 
@@ -1004,9 +1140,11 @@
                 price: parseFloat(document.getElementById('clientPrice').value) || 0,
                 paid: parseFloat(document.getElementById('clientPaid').value) || 0,
                 notes: document.getElementById('clientNotes').value,
-                clientCode: existingClient ? existingClient.clientCode : null
+                clientCode: existingClient ? existingClient.clientCode : null,
+                createdAt: existingClient ? existingClient.createdAt : new Date().toISOString()
             };
 
+            // Actualizar interfaz instantáneamente
             if (id) {
                 const idx = clients.findIndex(c => c.id === id);
                 if (idx > -1) clients[idx] = newClient;
@@ -1014,22 +1152,54 @@
                 clients.unshift(newClient);
             }
 
-            localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
-            closeClientModal();
             renderClients();
-            
-            if(currentProfileId === id) {
-                openProfileModal(id);
+            closeClientModal();
+            if(currentProfileId === newClient.id) {
+                openProfileModal(newClient.id);
+            }
+
+            // Guardar en la Nube (Firebase)
+            try {
+                await setDoc(doc(db, "proyectos_eqbito", newClient.id), newClient);
+                localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
+            } catch (e) {
+                console.error("Error conectando con la nube:", e);
+                localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
+                if (e.code === 'permission-denied') {
+                    showFirebaseError(
+                        "Faltan permisos en Firestore", 
+                        "El proyecto se guardó LOCALMENTE, pero no en la nube. Ve a Firebase Console -> Firestore Database -> Reglas y pega esto:", 
+                        "rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /{document=**} {\n      allow read, write: if true;\n    }\n  }\n}"
+                    );
+                }
             }
         }
 
-        function deleteCurrentClient() {
+        async function deleteCurrentClient() {
             if (!currentProfileId) return;
             if (confirm('¿Estás seguro de eliminar este proyecto permanentemente? Esta acción no se puede deshacer.')) {
-                clients = clients.filter(c => c.id !== currentProfileId);
-                localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
-                closeProfileModal();
+                const idToDelete = currentProfileId;
+                
+                // Actualizar local instantáneamente
+                clients = clients.filter(c => c.id !== idToDelete);
                 renderClients();
+                closeProfileModal();
+
+                // Eliminar en la Nube (Firebase)
+                try {
+                    await deleteDoc(doc(db, "proyectos_eqbito", idToDelete));
+                    localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
+                } catch(e) {
+                    console.error("Error eliminando en la nube:", e);
+                    localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
+                    if (e.code === 'permission-denied') {
+                        showFirebaseError(
+                            "Faltan permisos en Firestore", 
+                            "Se eliminó LOCALMENTE, pero sigue en la nube. Ve a Firebase Console -> Firestore Database -> Reglas y pega esto:", 
+                            "rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /{document=**} {\n      allow read, write: if true;\n    }\n  }\n}"
+                        );
+                    }
+                }
             }
         }
 
@@ -1044,26 +1214,40 @@
             downloadAnchorNode.remove();
         }
 
-        // Lógica de seguridad para evitar colisiones de PIN
-        function generateClientPIN() {
+        async function generateClientPIN() {
             if(!currentProfileId) return;
             const c = clients.find(x => x.id === currentProfileId);
             if(c) {
                 let newPin;
                 let isUnique = false;
-                // Garantiza que el PIN no exista ya en otro cliente
                 while (!isUnique) {
                     newPin = Math.floor(100000 + Math.random() * 900000).toString();
                     isUnique = !clients.some(client => client.clientCode === newPin);
                 }
 
                 c.clientCode = newPin;
-                localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
                 
+                // Actualizar UI
                 const display = document.getElementById('profilePINDisplay');
                 display.textContent = `PIN: ${c.clientCode}`;
                 display.classList.add('text-xl', 'tracking-widest', 'text-[#007AFF]');
                 document.getElementById('btnGeneratePIN').textContent = "Regenerar";
+
+                // Guardar PIN en la Nube
+                try {
+                    await setDoc(doc(db, "proyectos_eqbito", c.id), c);
+                    localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
+                } catch(e) {
+                    console.error("Error guardando PIN en la nube:", e);
+                    localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
+                    if (e.code === 'permission-denied') {
+                        showFirebaseError(
+                            "Faltan permisos en Firestore", 
+                            "El PIN se generó LOCALMENTE, pero no en la nube. Ve a Firebase Console -> Firestore Database -> Reglas y pega esto:", 
+                            "rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /{document=**} {\n      allow read, write: if true;\n    }\n  }\n}"
+                        );
+                    }
+                }
             }
         }
 
@@ -1120,7 +1304,6 @@
             }
 
             let actionsHTML = '';
-            // Sanitización estricta para inyección en HTML
             if (c.phone) {
                 const cleanPhone = encodeURI(c.phone.replace(/\D/g,''));
                 actionsHTML += `
@@ -1292,12 +1475,23 @@
             }
         }
 
-        window.onload = () => {
+        // Exportar funciones globales para los onclicks de HTML
+        Object.assign(window, {
+            handleAuth, lockApp, switchTab, openClientModal, closeClientModal,
+            saveClient, deleteCurrentClient, exportData, generateClientPIN,
+            openProfileModal, closeProfileModal, setFilter, renderClients,
+            changePassword, openAssetsModal, closeAssetsModal, addAssetField
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
             checkAuthState();
-            document.getElementById('auth-password').addEventListener('keypress', e => {
-                if (e.key === 'Enter') handleAuth();
-            });
-        };
+            const pwdInput = document.getElementById('auth-password');
+            if(pwdInput) {
+                pwdInput.addEventListener('keypress', e => {
+                    if (e.key === 'Enter') handleAuth();
+                });
+            }
+        });
     </script>
 </body>
 </html>
