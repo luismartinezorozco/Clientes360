@@ -125,6 +125,10 @@
         .premium-hover-shadow:hover {
             box-shadow: 0 12px 30px -6px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
         }
+        
+        .bg-insta-gradient {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
     </style>
 </head>
 <body class="text-slate-900 bg-black md:bg-gray-100 h-screen w-screen overflow-hidden flex justify-center items-center font-sans">
@@ -168,7 +172,25 @@
 
             <div class="p-6 md:p-10 max-w-2xl mx-auto w-full pb-24">
                 <h1 class="text-2xl md:text-3xl font-bold text-slate-900 mb-1 tracking-tight">Hola, <span id="cp-name" class="text-[#007AFF]">Cliente</span></h1>
-                <p class="text-gray-500 text-sm mb-8">Aquí puedes monitorear el progreso de tu proyecto en tiempo real.</p>
+                <p class="text-gray-500 text-sm mb-6">Aquí puedes monitorear el progreso de tu proyecto en tiempo real.</p>
+
+                <!-- Redes Sociales de la Agencia (Botón Mejorado) -->
+                <a href="https://instagram.com/eqbstudio" target="_blank" rel="noopener noreferrer" class="bg-insta-gradient rounded-[26px] p-1 shadow-lg shadow-pink-500/30 mb-8 flex group active:scale-[0.98] transition-all">
+                    <div class="bg-white/95 backdrop-blur-md rounded-[22px] px-5 py-4 flex items-center justify-between w-full h-full border border-white/20">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-full bg-insta-gradient text-white flex items-center justify-center shrink-0 mr-4 shadow-inner">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-[#bc1888] font-bold uppercase tracking-wider mb-0.5">Visita nuestro perfil</p>
+                                <h4 class="font-bold text-slate-800 text-sm md:text-base tracking-tight">Síguenos en Instagram</h4>
+                            </div>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-slate-400 group-hover:bg-pink-50 group-hover:text-pink-500 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path></svg>
+                        </div>
+                    </div>
+                </a>
 
                 <!-- Status Card -->
                 <div class="bg-white rounded-[24px] p-5 md:p-6 premium-shadow border border-gray-100 mb-6">
@@ -195,6 +217,15 @@
                             Estimado: <span id="cp-deadline" class="font-semibold text-gray-700 ml-1">--</span>
                         </p>
                     </div>
+                </div>
+
+                <!-- NUEVO: Notas Externas del Equipo -->
+                <div id="cp-external-notes-container" class="bg-[#F0F7FF] rounded-[24px] p-5 md:p-6 premium-shadow border border-blue-100/50 mb-6 hidden">
+                    <div class="flex items-center mb-3">
+                        <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                        <h4 class="font-bold text-blue-900 text-sm tracking-tight">Mensaje del equipo</h4>
+                    </div>
+                    <p class="text-sm text-blue-800 whitespace-pre-wrap leading-relaxed font-medium" id="cp-external-notes"></p>
                 </div>
 
                 <!-- Gestor de Archivos Directos -->
@@ -237,22 +268,6 @@
                         <span class="text-xl font-bold text-red-500 tracking-tight" id="cp-debt">$0</span>
                     </div>
                 </div>
-
-                <!-- Redes Sociales de la Agencia -->
-                <a href="https://instagram.com/eqbstudio" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-[24px] p-5 premium-shadow border border-pink-100/50 mt-6 flex items-center justify-between group active:scale-[0.98] transition-all">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white flex items-center justify-center shrink-0 mr-4 shadow-md shadow-pink-500/20">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 7.5h.01M12 16.5a4.5 4.5 0 100-9 4.5 4.5 0 000 9zm-7.5-6v4.5A4.5 4.5 0 009 19.5h6a4.5 4.5 0 004.5-4.5V10.5A4.5 4.5 0 0015 6H9a4.5 4.5 0 00-4.5 4.5z"></path></svg>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-[#bc1888] font-bold uppercase tracking-wider mb-0.5">Síguenos en Instagram</p>
-                            <h4 class="font-bold text-slate-800 text-sm tracking-tight">@eqbstudio</h4>
-                        </div>
-                    </div>
-                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-pink-500 group-hover:bg-pink-50 transition-colors shadow-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path></svg>
-                    </div>
-                </a>
                 
                 <div class="mt-12 mb-4 flex justify-center items-center opacity-50">
                     <img src="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778118273/nachito_show_wcs5j9.png" class="w-4 h-4 mr-2 grayscale mix-blend-multiply select-none pointer-events-none" alt="Icon">
@@ -279,6 +294,10 @@
             <button onclick="switchTab('settings')" class="flex flex-col md:flex-row items-center md:px-4 md:py-3.5 w-auto md:w-full rounded-[16px] text-gray-400 hover:bg-gray-50 hover:text-gray-600 transition-all duration-200 nav-btn" data-tab="settings">
                 <svg class="w-6 h-6 mb-1 md:mb-0 md:mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 <span class="text-[10px] md:text-sm font-medium truncate">Ajustes</span>
+            </button>
+            <button onclick="lockApp()" class="flex flex-col md:flex-row items-center md:px-4 md:py-3.5 w-auto md:w-full rounded-[16px] text-red-400 hover:bg-red-50 hover:text-red-500 transition-all duration-200 mt-auto md:mb-6">
+                <svg class="w-6 h-6 mb-1 md:mb-0 md:mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                <span class="text-[10px] md:text-sm font-bold truncate">Salir</span>
             </button>
         </nav>
 
@@ -405,11 +424,7 @@
                     </div>
                     
                     <div class="mt-12 text-center pb-12">
-                        <button onclick="lockApp()" class="text-red-500 font-semibold text-sm md:text-base active:opacity-50 transition-colors bg-red-50 px-6 py-3.5 rounded-xl hover:bg-red-100 flex items-center justify-center mx-auto">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                            Bloquear Sesión
-                        </button>
-                        <p class="text-xs text-gray-400 mt-8 font-medium tracking-wide">EQBITO 360 - Edición Diseñadores</p>
+                        <p class="text-xs text-gray-400 font-medium tracking-wide">EQBITO 360 - Edición Diseñadores</p>
                     </div>
                 </div>
 
@@ -509,13 +524,32 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 4: NOTAS -->
+                <!-- SECCIÓN 4: NOTAS DIVIDIDAS (INTERNAS Y EXTERNAS) -->
                 <div class="w-full">
-                    <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider ml-3 mb-2">Notas y Requerimientos</p>
-                    <div class="bg-white rounded-2xl px-5 py-4 border border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)] w-full overflow-hidden">
-                        <textarea id="clientNotes" rows="4" placeholder="Brief del cliente, colores, referencias..." class="w-full text-sm font-medium focus:outline-none resize-none bg-transparent text-slate-800 placeholder-gray-400"></textarea>
+                    <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider ml-3 mb-2">Notas del Proyecto</p>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)] w-full overflow-hidden divide-y divide-gray-100">
+                        
+                        <!-- Notas Internas -->
+                        <div class="p-5 bg-amber-50/20">
+                            <div class="flex items-center mb-2">
+                                <svg class="w-4 h-4 text-amber-500 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                <label class="text-[10px] font-bold text-amber-600 uppercase tracking-wider block">Notas Internas (Solo tú las ves)</label>
+                            </div>
+                            <textarea id="clientNotes" rows="2" placeholder="Presupuesto extra, ideas, recordatorios privados..." class="w-full text-sm font-medium focus:outline-none resize-none bg-transparent text-slate-800 placeholder-gray-400"></textarea>
+                        </div>
+
+                        <!-- Notas Externas (Cliente) -->
+                        <div class="p-5 bg-[#F0F7FF]/50">
+                            <div class="flex items-center mb-2">
+                                <svg class="w-4 h-4 text-[#007AFF] mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                <label class="text-[10px] font-bold text-[#007AFF] uppercase tracking-wider block">Mensaje para el Cliente (Visible en su portal)</label>
+                            </div>
+                            <textarea id="clientExternalNotes" rows="2" placeholder="Hola, te enviamos los primeros avances. Por favor revisa el enlace de Figma adjunto..." class="w-full text-sm font-medium focus:outline-none resize-none bg-transparent text-slate-800 placeholder-gray-400"></textarea>
+                        </div>
+
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -552,7 +586,7 @@
                             <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
                         </div>
                         <div class="flex justify-between items-end w-full">
-                            <p class="text-sm font-semibold text-slate-800" id="profilePINDisplay">Sin acceso generado</p>
+                            <p class="text-sm font-semibold text-slate-800 transition-all duration-300" id="profilePINDisplay">Sin acceso generado</p>
                             <button onclick="generateClientPIN()" class="bg-white text-[#007AFF] text-xs font-bold px-3.5 py-1.5 rounded-lg shadow-sm border border-gray-100 hover:shadow active:scale-95 transition-all" id="btnGeneratePIN">Generar</button>
                         </div>
                     </div>
@@ -582,12 +616,21 @@
                         <p class="text-xs text-emerald-600 text-right mt-1.5 font-bold tracking-tight" id="profilePaidText"></p>
                     </div>
 
-                    <div id="profileNotesContainer" class="bg-[#FFFBEB] p-5 rounded-2xl border border-amber-100/50 w-full">
+                    <!-- Notas Visibles solo para Admin en el perfil -->
+                    <div id="profileInternalNotesContainer" class="bg-[#FFFBEB] p-5 rounded-2xl border border-amber-100/50 w-full hidden">
                         <div class="flex items-center mb-2">
-                            <svg class="w-4 h-4 text-amber-500 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                            <p class="text-[10px] text-amber-600 font-bold uppercase tracking-wider">Notas / Brief</p>
+                            <svg class="w-4 h-4 text-amber-500 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                            <p class="text-[10px] text-amber-600 font-bold uppercase tracking-wider">Notas Internas</p>
                         </div>
-                        <p class="text-sm text-gray-700 whitespace-pre-wrap break-words leading-relaxed font-medium" id="profileNotes"></p>
+                        <p class="text-sm text-gray-700 whitespace-pre-wrap break-words leading-relaxed font-medium" id="profileInternalNotes"></p>
+                    </div>
+
+                    <div id="profileExternalNotesContainer" class="bg-[#F0F7FF] p-5 rounded-2xl border border-blue-100/50 w-full hidden">
+                        <div class="flex items-center mb-2">
+                            <svg class="w-4 h-4 text-blue-500 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                            <p class="text-[10px] text-blue-600 font-bold uppercase tracking-wider">Mensaje Enviado al Cliente</p>
+                        </div>
+                        <p class="text-sm text-gray-700 whitespace-pre-wrap break-words leading-relaxed font-medium" id="profileExternalNotes"></p>
                     </div>
 
                     <button onclick="deleteCurrentClient()" class="w-full mt-8 py-3.5 bg-red-50/50 text-red-500 text-sm font-bold rounded-xl hover:bg-red-100 transition-colors flex items-center justify-center border border-red-100">
@@ -860,6 +903,16 @@
                 dateText = d.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
             }
             document.getElementById('cp-deadline').textContent = dateText;
+            
+            // Mostrar u ocultar las notas externas (mensaje del equipo)
+            const extNotesEl = document.getElementById('cp-external-notes');
+            const extNotesContainer = document.getElementById('cp-external-notes-container');
+            if (c.externalNotes && c.externalNotes.trim() !== '') {
+                extNotesEl.textContent = c.externalNotes;
+                extNotesContainer.classList.remove('hidden');
+            } else {
+                extNotesContainer.classList.add('hidden');
+            }
 
             const assetsListEl = document.getElementById('cp-assets-list');
             assetsListEl.innerHTML = '';
@@ -995,7 +1048,7 @@
         function openClientModal(id = null) {
             document.getElementById('profileModal').classList.remove('active');
             
-            ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientPrice', 'clientPaid', 'clientNotes'].forEach(id => document.getElementById(id).value = '');
+            ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientPrice', 'clientPaid', 'clientNotes', 'clientExternalNotes'].forEach(id => document.getElementById(id).value = '');
             
             // Reiniciar botones de servicios múltiples y establecer el valor por defecto
             document.querySelectorAll('.srv-btn').forEach(btn => {
@@ -1049,6 +1102,7 @@
                     document.getElementById('clientPrice').value = c.price || '';
                     document.getElementById('clientPaid').value = c.paid || '';
                     document.getElementById('clientNotes').value = c.notes || '';
+                    document.getElementById('clientExternalNotes').value = c.externalNotes || '';
                     document.getElementById('clientProgress').value = c.progress || 0;
                     document.getElementById('progressVal').textContent = (c.progress || 0) + '%';
                     
@@ -1104,6 +1158,7 @@
                 price: parseFloat(document.getElementById('clientPrice').value) || 0,
                 paid: parseFloat(document.getElementById('clientPaid').value) || 0,
                 notes: document.getElementById('clientNotes').value,
+                externalNotes: document.getElementById('clientExternalNotes').value,
                 clientCode: existingClient ? existingClient.clientCode : null,
                 createdAt: existingClient ? existingClient.createdAt : new Date().toISOString()
             };
@@ -1195,7 +1250,18 @@
                 const display = document.getElementById('profilePINDisplay');
                 display.textContent = `PIN: ${c.clientCode}`;
                 display.classList.add('text-xl', 'tracking-widest', 'text-[#007AFF]');
-                document.getElementById('btnGeneratePIN').textContent = "Regenerar";
+                
+                // Indicador visual de que se actualizó el PIN
+                const btnGenerate = document.getElementById('btnGeneratePIN');
+                btnGenerate.textContent = "¡Actualizado!";
+                btnGenerate.classList.add('bg-emerald-500', 'text-white', 'border-emerald-500');
+                btnGenerate.classList.remove('bg-white', 'text-[#007AFF]', 'border-gray-100', 'hover:shadow');
+                
+                setTimeout(() => {
+                    btnGenerate.textContent = "Regenerar";
+                    btnGenerate.classList.remove('bg-emerald-500', 'text-white', 'border-emerald-500');
+                    btnGenerate.classList.add('bg-white', 'text-[#007AFF]', 'border-gray-100', 'hover:shadow');
+                }, 2000);
 
                 // Guardar PIN en la Nube
                 try {
@@ -1259,12 +1325,22 @@
             document.getElementById('profileProgress').style.width = `${percent}%`;
             document.getElementById('profilePaidText').textContent = `${Math.round(percent)}% Pagado`;
 
-            const notesEl = document.getElementById('profileNotes');
+            // Notas Internas (Solo Administrador)
+            const internalNotesEl = document.getElementById('profileInternalNotes');
             if (c.notes && c.notes.trim() !== '') {
-                notesEl.textContent = c.notes;
-                document.getElementById('profileNotesContainer').classList.remove('hidden');
+                internalNotesEl.textContent = c.notes;
+                document.getElementById('profileInternalNotesContainer').classList.remove('hidden');
             } else {
-                document.getElementById('profileNotesContainer').classList.add('hidden');
+                document.getElementById('profileInternalNotesContainer').classList.add('hidden');
+            }
+
+            // Notas Externas (Visualización en Perfil Admin)
+            const externalNotesEl = document.getElementById('profileExternalNotes');
+            if (c.externalNotes && c.externalNotes.trim() !== '') {
+                externalNotesEl.textContent = c.externalNotes;
+                document.getElementById('profileExternalNotesContainer').classList.remove('hidden');
+            } else {
+                document.getElementById('profileExternalNotesContainer').classList.add('hidden');
             }
 
             let actionsHTML = '';
@@ -1284,8 +1360,12 @@
             }
             if (c.email) {
                 const cleanEmail = encodeURI(c.email);
+                const mailSubject = encodeURIComponent("Actualización de tu proyecto - EQB STUDIO");
+                const pinAccess = c.clientCode || '(Tu PIN de acceso)';
+                const mailBody = encodeURIComponent(`¡Hola ${c.name}!\n\nTe escribimos para actualizarte sobre el estado de tu proyecto.\n\nPuedes revisar los últimos avances directamente en tu portal ingresando con tu PIN: ${pinAccess}\n\nIngresa aquí: http://eqbito.vercel.app\n\nQuedamos atentos a tus comentarios.\n\nSaludos,\nEquipo EQB STUDIO`);
+
                 actionsHTML += `
-                <a href="mailto:${cleanEmail}" class="flex flex-col items-center group shrink-0 w-[72px]">
+                <a href="mailto:${cleanEmail}?subject=${mailSubject}&body=${mailBody}" class="flex flex-col items-center group shrink-0 w-[72px]">
                     <div class="w-[52px] h-[52px] squarcle bg-[#EBF5FF] flex items-center justify-center text-[#007AFF] group-hover:bg-[#d6eaff] group-active:scale-95 transition-all shadow-[0_2px_8px_rgba(0,122,255,0.15)] mb-2 border border-[#007AFF]/10">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"></path></svg>
                     </div>
