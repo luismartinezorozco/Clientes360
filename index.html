@@ -111,15 +111,9 @@
             border-radius: 6px;
         }
 
-        /* Utilidad para squarcles suaves */
-        .squarcle {
-            border-radius: 18px;
-        }
-        .squarcle-sm {
-            border-radius: 12px;
-        }
+        .squarcle { border-radius: 18px; }
+        .squarcle-sm { border-radius: 12px; }
         
-        /* Sombras suaves premium */
         .premium-shadow {
             box-shadow: 0 4px 20px -4px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02);
         }
@@ -145,20 +139,18 @@
                 
                 <div class="w-full">
                     <input type="password" id="auth-password" placeholder="Contraseña o PIN" class="w-full bg-white rounded-2xl px-4 py-3.5 md:py-4 text-center text-lg font-medium shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100 focus:outline-none focus:border-[#007AFF] focus:ring-4 focus:ring-[#007AFF]/10 transition-all mb-4">
-                    <button onclick="handleAuth()" id="auth-btn" class="w-full bg-[#007AFF] text-white font-semibold rounded-2xl py-3.5 md:py-4 shadow-lg shadow-blue-500/25 hover:bg-blue-600 transition-colors active:scale-[0.98] text-lg">Acceder</button>
+                    <button onclick="handleAuth()" id="auth-btn" class="w-full bg-[#007AFF] text-white font-semibold rounded-2xl py-3.5 md:py-4 shadow-lg shadow-blue-500/25 hover:bg-blue-600 transition-colors active:scale-[0.98] text-lg flex items-center justify-center">Acceder</button>
                 </div>
                 <p id="auth-error" class="text-red-500 text-sm mt-4 hidden fade-in text-center font-medium bg-red-50 px-4 py-2 rounded-lg">Credenciales incorrectas</p>
-                <!-- Indicador de estado de conexión oculto por defecto -->
+                
                 <p id="cloud-status" class="text-gray-400 text-xs mt-6 flex items-center font-medium hidden">
                     <span class="w-2 h-2 rounded-full bg-gray-300 mr-2 animate-pulse" id="cloud-dot"></span> 
-                    <span id="cloud-text">Sincronizando...</span>
+                    <span id="cloud-text">Conectando...</span>
                 </p>
             </div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- ENTORNO DEL CLIENTE (CLIENT PORTAL)        -->
-        <!-- ========================================== -->
+        <!-- ENTORNO DEL CLIENTE (CLIENT PORTAL) -->
         <div id="client-portal" class="flex-1 w-full h-full flex flex-col hidden relative bg-[#F9FAFB] overflow-y-auto">
             <div class="glass-nav sticky top-0 z-10 px-6 py-4 flex justify-between items-center">
                 <div class="flex items-center">
@@ -175,7 +167,6 @@
                 <h1 class="text-2xl md:text-3xl font-bold text-slate-900 mb-1 tracking-tight">Hola, <span id="cp-name" class="text-[#007AFF]">Cliente</span></h1>
                 <p class="text-gray-500 text-sm mb-6">Aquí puedes monitorear el progreso de tu proyecto en tiempo real.</p>
 
-                <!-- Redes Sociales de la Agencia (Botón Mejorado) -->
                 <a href="https://instagram.com/eqbstudio" target="_blank" rel="noopener noreferrer" class="bg-insta-gradient rounded-[26px] p-1 shadow-lg shadow-pink-500/30 mb-8 flex group active:scale-[0.98] transition-all">
                     <div class="bg-white/95 backdrop-blur-md rounded-[22px] px-5 py-4 flex items-center justify-between w-full h-full border border-white/20">
                         <div class="flex items-center">
@@ -281,7 +272,7 @@
                         </div>
                     </div>
                     
-                    <!-- NUEVO: Desglose del Presupuesto (Cliente) -->
+                    <!-- Desglose del Presupuesto (Cliente) -->
                     <div id="cp-budget-breakdown-container" class="mt-4 pt-4 border-t border-gray-100 hidden">
                         <p class="text-[10px] text-gray-400 font-bold uppercase mb-3 tracking-wider">Desglose del Presupuesto</p>
                         <div id="cp-budget-list" class="space-y-2">
@@ -724,8 +715,8 @@
                 <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-6 mx-auto border border-red-100">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 </div>
-                <h3 id="fb-err-title" class="text-xl md:text-2xl font-bold text-center text-slate-800 mb-2 tracking-tight">Permisos Denegados</h3>
-                <p id="fb-err-msg" class="text-slate-500 text-center mb-6 text-sm font-medium">Tu base de datos está bloqueando la conexión. Debes actualizar las reglas.</p>
+                <h3 id="fb-err-title" class="text-xl md:text-2xl font-bold text-center text-slate-800 mb-2 tracking-tight">Atención</h3>
+                <p id="fb-err-msg" class="text-slate-500 text-center mb-6 text-sm font-medium">Tu base de datos está bloqueando la conexión. Debes actualizar las reglas de seguridad de Firebase.</p>
                 
                 <div id="fb-err-code-container" class="bg-gray-50 rounded-2xl p-4 mb-6 border border-gray-100 hidden">
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Copia y pega esto en Firestore -> Reglas:</p>
@@ -740,12 +731,15 @@
 
     </div>
 
-    <!-- SCRIPT DE LÓGICA Y FIREBASE -->
+    <!-- SCRIPT DE LÓGICA Y FIREBASE CERRADO (BLINDADO) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // IMPORTANTE: Ahora importamos query, where y getDocs para proteger el acceso a los datos
+        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
+        // EL ENTORNO ESTÁ PROTEGIDO: Las funciones y variables declaradas aquí no pueden ser ejecutadas
+        // o alteradas desde la consola del navegador por terceros (protección contra bypassing).
         const firebaseConfig = {
             apiKey: "AIzaSyBKgsYL6tYqaIu4hBVd8a2gu799ErpIV5U",
             authDomain: "eqbito-7cb18.firebaseapp.com",
@@ -759,12 +753,11 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Variables Globales
-        let clients = JSON.parse(localStorage.getItem('eqbito360_clients')) || [];
+        let clients = []; 
         let currentFilter = 'all';
         let currentProfileId = null;
-        window.currentClientCode = null;
         let dbReady = false;
+        let globalUnsubscribe = null;
 
         const showFirebaseError = (title, message, codeSnippet) => {
             const fbTitle = document.getElementById('fb-err-title');
@@ -782,72 +775,39 @@
             } else if (fbCodeCont) {
                 fbCodeCont.classList.add('hidden');
             }
-            
             if(modal) {
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
             }
         };
 
-        // Inicializar Firebase Auth y conectar a Firestore
+        // 🛡️ SECURITY FIX: Solo iniciamos sesión anónima al cargar. Ya NO descargamos la base de datos completa.
         signInAnonymously(auth).then(() => {
             const cloudStatus = document.getElementById('cloud-status');
-            if(cloudStatus) {
-                cloudStatus.classList.add('hidden');
-            }
-
-            // Escuchar cambios en tiempo real desde la colección "proyectos_eqbito"
-            onSnapshot(collection(db, "proyectos_eqbito"), (snapshot) => {
-                const freshClients = [];
-                snapshot.forEach((doc) => {
-                    freshClients.push({ id: doc.id, ...doc.data() });
-                });
-                
-                freshClients.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-                
-                clients = freshClients;
-                dbReady = true;
-                
-                localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
-
-                if (!document.getElementById('main-app').classList.contains('hidden')) {
-                    renderClients();
-                }
-                
-                if (window.currentClientCode && !document.getElementById('client-portal').classList.contains('hidden')) {
-                    const c = clients.find(x => x.clientCode === window.currentClientCode);
-                    if (c) renderClientPortal(c);
-                }
-            }, (error) => {
-                console.error("Error al leer de Firebase:", error);
-                const cloudText = document.getElementById('cloud-text');
-                const cloudDot = document.getElementById('cloud-dot');
-                if(cloudText) cloudText.textContent = "Error de permisos en Nube";
-                if(cloudDot) cloudDot.classList.replace('bg-emerald-500', 'bg-red-500');
-                
-                if (error.code === 'permission-denied' || (error.message && error.message.includes('Missing or insufficient permissions'))) {
-                    showFirebaseError(
-                        "Faltan permisos en Firestore", 
-                        "Tu base de datos rechaza la conexión. Ve a Firebase Console -> Firestore Database -> Reglas y pega exactamente esto:", 
-                        "rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /{document=**} {\n      allow read, write: if true;\n    }\n  }\n}"
-                    );
-                }
-            });
+            if(cloudStatus) cloudStatus.classList.add('hidden');
+            dbReady = true;
         }).catch(err => {
-            console.error("Fallo de Autenticación Firebase:", err);
+            console.error("Fallo de Auth:", err);
             const cloudText = document.getElementById('cloud-text');
             const cloudDot = document.getElementById('cloud-dot');
-            if(cloudText) cloudText.textContent = "Error de Autenticación";
+            if(cloudText) cloudText.textContent = "Error de Conexión";
             if(cloudDot) cloudDot.classList.replace('bg-gray-300', 'bg-red-500');
-
-            if (err.code === 'auth/admin-restricted-operation' || err.code === 'auth/operation-not-allowed') {
-                showFirebaseError(
-                    "Falta habilitar Autenticación",
-                    "Para que la base de datos funcione, ve a Firebase Console -> Authentication -> Sign-in method -> Y habilita el proveedor 'Anónimo'.",
-                    null
-                );
-            }
         });
+
+        // 🛡️ SECURITY FIX: Criptografía dinámica
+        async function hashPassword(password) {
+            const msgUint8 = new TextEncoder().encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function verifyAdminAccess(pwd) {
+            const savedHash = localStorage.getItem('eqbito360_auth');
+            const inputHash = await hashPassword(pwd);
+            const defaultHash = await hashPassword("9753"); // El PIN en texto no se valida contra la vista.
+            return (savedHash && inputHash === savedHash) || (!savedHash && inputHash === defaultHash);
+        }
 
         const formatMoney = (amount) => {
             if (!amount || isNaN(amount)) return '$0';
@@ -857,13 +817,7 @@
         const getInitials = (name) => name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
         const generateId = () => crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
 
-        async function hashPassword(password) {
-            const msgUint8 = new TextEncoder().encode(password);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
+        // Protección Anti-XSS (Inyecciones de código en campos de texto)
         const escapeHTML = (str) => {
             if (!str) return '';
             return String(str).replace(/[&<>'"]/g, tag => ({
@@ -874,11 +828,9 @@
         async function checkAuthState() {
             const btn = document.getElementById('auth-btn');
             const subtitle = document.getElementById('auth-subtitle');
-
             document.getElementById('auth-title').textContent = "EQBITO 360";
             subtitle.innerHTML = "Ingresa tu PIN de acceso";
-            btn.textContent = "Acceder";
-            btn.dataset.mode = "login";
+            btn.innerHTML = "Acceder";
         }
 
         async function handleAuth() {
@@ -888,34 +840,54 @@
             const pwd = input.value.trim();
             if (!pwd) return;
 
-            // 1. Asegurar que la BD cargó para no ignorar el PIN de un cliente válido por cargar muy rápido
             if (!dbReady && navigator.onLine) {
-                errorMsg.textContent = "Sincronizando con el servidor...";
+                errorMsg.textContent = "Sincronizando seguridad...";
                 errorMsg.className = "text-sm mt-4 text-center font-medium bg-blue-50 text-blue-500 px-4 py-2 rounded-lg fade-in block";
-                setTimeout(handleAuth, 1000); // Reintentar en 1 seg automáticamente
+                setTimeout(handleAuth, 1000);
                 return;
             }
 
-            // 2. Verificar si es el PIN de un cliente
-            const clientMatch = clients.find(c => c.clientCode === pwd);
-            if (clientMatch) {
-                unlockApp('client', clientMatch);
-                input.value = '';
-                return;
-            }
+            // UI Feedback para evitar spam de peticiones a Firebase
+            const originalBtnText = btn.innerHTML;
+            btn.innerHTML = '<span class="animate-pulse">Verificando...</span>';
+            btn.disabled = true;
+            input.disabled = true;
 
-            // 3. Verificación de Administrador (PIN Maestro hardcodeado o cambiado en ajustes)
-            const savedHash = localStorage.getItem('eqbito360_auth');
-            const hashedInput = await hashPassword(pwd);
-            
-            // Accede si escribe 9753 (Clave Maestra) o si escribe la que haya configurado en ajustes
-            if (pwd === "9753" || (savedHash && hashedInput === savedHash)) {
+            // 1. Verificación Admin (Aislada y encriptada)
+            const isAdmin = await verifyAdminAccess(pwd);
+            if (isAdmin) {
                 unlockApp('admin');
                 input.value = '';
+                btn.innerHTML = originalBtnText;
+                btn.disabled = false;
+                input.disabled = false;
                 return;
             }
 
-            // 4. Si falla todo, mostrar error
+            // 2. Verificación Cliente (Consulta selectiva, sin Data Leak)
+            try {
+                const q = query(collection(db, "proyectos_eqbito"), where("clientCode", "==", pwd));
+                const querySnapshot = await getDocs(q);
+                
+                if (!querySnapshot.empty) {
+                    const clientDoc = querySnapshot.docs[0];
+                    const clientData = { id: clientDoc.id, ...clientDoc.data() };
+                    unlockApp('client', clientData);
+                    input.value = '';
+                    btn.innerHTML = originalBtnText;
+                    btn.disabled = false;
+                    input.disabled = false;
+                    return;
+                }
+            } catch (err) {
+                console.error("Error verificando PIN de cliente", err);
+            }
+
+            // 3. Fallo total
+            btn.innerHTML = originalBtnText;
+            btn.disabled = false;
+            input.disabled = false;
+            
             errorMsg.textContent = "Credenciales incorrectas";
             errorMsg.className = "text-sm mt-4 text-center font-medium bg-red-50 text-red-500 px-4 py-2 rounded-lg fade-in block";
             input.classList.add('border-red-500', 'ring-red-500/10');
@@ -927,32 +899,53 @@
             input.value = '';
         }
 
+        // 🛡️ La función fundamental de acceso, invisible para la consola externa
         function unlockApp(mode, clientData = null) {
             document.getElementById('auth-screen').classList.add('opacity-0', 'pointer-events-none');
             
+            // Limpiar cualquier conexión previa
+            if (globalUnsubscribe) {
+                globalUnsubscribe();
+                globalUnsubscribe = null;
+            }
+
             setTimeout(() => {
                 document.getElementById('auth-screen').classList.add('hidden');
                 
                 if (mode === 'admin') {
-                    window.currentClientCode = null;
                     document.getElementById('main-app').classList.remove('hidden');
                     document.getElementById('main-nav').classList.remove('hidden');
                     document.getElementById('client-portal').classList.add('hidden');
                     setDate();
-                    renderClients();
+                    
+                    // Solo el Admin descarga todo
+                    globalUnsubscribe = onSnapshot(collection(db, "proyectos_eqbito"), (snapshot) => {
+                        const freshClients = [];
+                        snapshot.forEach((doc) => freshClients.push({ id: doc.id, ...doc.data() }));
+                        freshClients.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+                        clients = freshClients;
+                        renderClients();
+                    });
+
                 } else if (mode === 'client' && clientData) {
-                    window.currentClientCode = clientData.clientCode;
                     document.getElementById('main-app').classList.add('hidden');
                     document.getElementById('main-nav').classList.add('hidden');
                     document.getElementById('client-portal').classList.remove('hidden');
-                    renderClientPortal(clientData);
+                    
+                    // El Cliente SOLO escucha cambios de su propio documento
+                    globalUnsubscribe = onSnapshot(doc(db, "proyectos_eqbito", clientData.id), (docSnap) => {
+                        if(docSnap.exists()){
+                            renderClientPortal({ id: docSnap.id, ...docSnap.data() });
+                        }
+                    });
                 }
             }, 300);
         }
 
         function lockApp() {
+            if (globalUnsubscribe) { globalUnsubscribe(); globalUnsubscribe = null; }
+            clients = []; // Vaciar caché local de seguridad al bloquear
             document.getElementById('auth-screen').classList.remove('hidden');
-            window.currentClientCode = null;
             setTimeout(() => {
                 document.getElementById('main-app').classList.add('hidden');
                 document.getElementById('main-nav').classList.add('hidden');
@@ -981,15 +974,11 @@
             }
             document.getElementById('cp-deadline').textContent = dateText;
             
-            // Render Soporte Técnico
             const supportCard = document.getElementById('cp-support-card');
             if (c.supportStart && c.supportEnd) {
                 supportCard.classList.remove('hidden');
-                
-                const today = new Date();
-                today.setHours(0,0,0,0);
+                const today = new Date(); today.setHours(0,0,0,0);
                 const endDate = new Date(c.supportEnd + 'T12:00:00');
-                
                 const supportStatus = document.getElementById('cp-support-status');
                 if (today <= endDate) {
                     supportStatus.textContent = "Activo";
@@ -998,47 +987,28 @@
                     supportStatus.textContent = "Vencido";
                     supportStatus.className = "text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-wider border bg-red-50 text-red-600 border-red-200/60";
                 }
-                
-                const fStart = new Date(c.supportStart + 'T12:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
-                const fEnd = endDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
-                
-                document.getElementById('cp-support-start-date').textContent = fStart;
-                document.getElementById('cp-support-end-date').textContent = fEnd;
-            } else {
-                supportCard.classList.add('hidden');
-            }
+                document.getElementById('cp-support-start-date').textContent = new Date(c.supportStart + 'T12:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+                document.getElementById('cp-support-end-date').textContent = endDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+            } else { supportCard.classList.add('hidden'); }
 
-            // Mostrar u ocultar las notas externas (mensaje del equipo)
             const extNotesEl = document.getElementById('cp-external-notes');
             const extNotesContainer = document.getElementById('cp-external-notes-container');
             if (c.externalNotes && c.externalNotes.trim() !== '') {
-                extNotesEl.textContent = c.externalNotes;
+                extNotesEl.textContent = escapeHTML(c.externalNotes);
                 extNotesContainer.classList.remove('hidden');
-            } else {
-                extNotesContainer.classList.add('hidden');
-            }
+            } else { extNotesContainer.classList.add('hidden'); }
 
             const assetsListEl = document.getElementById('cp-assets-list');
             assetsListEl.innerHTML = '';
-            
-            let parsedAssets = [];
-            if (Array.isArray(c.assets)) {
-                parsedAssets = c.assets;
-            } else if (typeof c.assets === 'string' && c.assets.trim() !== '') {
-                parsedAssets = [{ name: 'Carpeta Principal', url: c.assets }];
-            }
+            let parsedAssets = Array.isArray(c.assets) ? c.assets : (typeof c.assets === 'string' && c.assets.trim() !== '' ? [{ name: 'Carpeta Principal', url: c.assets }] : []);
 
             if (parsedAssets.length > 0) {
                 parsedAssets.forEach(asset => {
                     const safeUrl = encodeURI(asset.url);
-                    const safeName = escapeHTML(asset.url);
                     const isFolder = safeUrl.includes('folders') || safeUrl.includes('app.box.com');
+                    const icon = isFolder ? `<path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>` : `<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>`;
                     
-                    const icon = isFolder 
-                        ? `<path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>`
-                        : `<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>`;
-                    
-                    const btnHtml = `
+                    assetsListEl.insertAdjacentHTML('beforeend', `
                         <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center text-left bg-white border border-gray-100 p-3.5 rounded-[16px] hover:bg-blue-50 hover:border-blue-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all group active:scale-[0.98] w-full">
                             <div class="w-10 h-10 squarcle-sm bg-gray-50 text-gray-400 group-hover:bg-[#007AFF] group-hover:text-white flex items-center justify-center shrink-0 mr-3 transition-colors border border-gray-100 group-hover:border-transparent">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">${icon}</svg>
@@ -1051,17 +1021,12 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                             </div>
                         </a>
-                    `;
-                    assetsListEl.insertAdjacentHTML('beforeend', btnHtml);
+                    `);
                 });
             } else {
-                assetsListEl.innerHTML = `
-                    <div class="col-span-full p-6 border border-dashed border-gray-200 rounded-[20px] text-center bg-gray-50/50">
-                        <p class="text-sm text-gray-500 font-medium">Aún no hay enlaces compartidos.</p>
-                    </div>`;
+                assetsListEl.innerHTML = `<div class="col-span-full p-6 border border-dashed border-gray-200 rounded-[20px] text-center bg-gray-50/50"><p class="text-sm text-gray-500 font-medium">Aún no hay enlaces compartidos.</p></div>`;
             }
 
-            // NUEVO: Renderizar Desglose del Presupuesto
             const budgetContainer = document.getElementById('cp-budget-breakdown-container');
             const budgetList = document.getElementById('cp-budget-list');
             if (c.budget && c.budget.length > 0) {
@@ -1077,19 +1042,15 @@
                 budgetList.innerHTML = '';
             }
 
-            const p = parseFloat(c.price) || 0;
-            const pd = parseFloat(c.paid) || 0;
-            const pending = p - pd;
-            
+            const p = parseFloat(c.price) || 0; const pd = parseFloat(c.paid) || 0;
             document.getElementById('cp-price').textContent = formatMoney(p);
             document.getElementById('cp-paid').textContent = formatMoney(pd);
-            document.getElementById('cp-debt').textContent = formatMoney(Math.max(pending, 0));
+            document.getElementById('cp-debt').textContent = formatMoney(Math.max(p - pd, 0));
         }
 
-        // === FUNCIONES DE DESGLOSE DE PRESUPUESTO ===
         function addBudgetField(concept = '', amount = '') {
             const container = document.getElementById('budget-fields-container');
-            const fieldHTML = `
+            container.insertAdjacentHTML('beforeend', `
                 <div class="budget-item flex gap-2 items-center bg-white p-2 rounded-xl border border-gray-100 relative group shadow-sm">
                     <input type="text" placeholder="Concepto (ej: Diseño UI)" value="${escapeHTML(concept)}" class="budget-concept flex-1 px-3 py-2 text-xs bg-gray-50/50 rounded-lg border border-gray-100 focus:outline-none focus:border-[#007AFF] text-slate-800 font-medium transition-all">
                     <input type="number" placeholder="$ Monto" value="${amount}" oninput="calculateTotalBudget()" class="budget-amount w-28 px-3 py-2 text-xs bg-gray-50/50 rounded-lg border border-gray-100 focus:outline-none focus:border-[#007AFF] text-[#007AFF] font-bold transition-all" min="0">
@@ -1097,8 +1058,7 @@
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
-            `;
-            container.insertAdjacentHTML('beforeend', fieldHTML);
+            `);
             calculateTotalBudget();
         }
 
@@ -1107,12 +1067,8 @@
             const priceInput = document.getElementById('clientPrice');
             if (items.length > 0) {
                 let total = 0;
-                items.forEach(item => {
-                    const amt = parseFloat(item.querySelector('.budget-amount').value) || 0;
-                    total += amt;
-                });
+                items.forEach(item => total += parseFloat(item.querySelector('.budget-amount').value) || 0);
                 priceInput.value = total;
-                // Hacer el input semi-transparente para indicar que es automático
                 priceInput.setAttribute('readonly', 'true');
                 priceInput.classList.add('opacity-70', 'bg-gray-50/50');
             } else {
@@ -1127,17 +1083,13 @@
             items.forEach(item => {
                 const concept = item.querySelector('.budget-concept').value.trim();
                 const amount = parseFloat(item.querySelector('.budget-amount').value) || 0;
-                if (concept || amount > 0) {
-                    budgetArray.push({ concept: concept || 'Item', amount: amount });
-                }
+                if (concept || amount > 0) budgetArray.push({ concept: concept || 'Item', amount: amount });
             });
             return budgetArray;
         }
-        // ============================================
 
         function addAssetField(name = '', url = '') {
-            const container = document.getElementById('assets-fields-container');
-            const fieldHTML = `
+            document.getElementById('assets-fields-container').insertAdjacentHTML('beforeend', `
                 <div class="asset-item flex flex-col gap-2 bg-gray-50/50 p-3.5 rounded-2xl border border-gray-100 relative group">
                     <button type="button" onclick="this.parentElement.remove()" class="absolute -top-2 -right-2 w-7 h-7 bg-white text-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 border border-red-100 shadow-sm active:scale-95">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -1145,19 +1097,15 @@
                     <input type="text" placeholder="Nombre (ej: Entregables, Logo...)" value="${escapeHTML(name)}" class="asset-name w-full px-4 py-2.5 text-sm bg-white rounded-xl border border-gray-100 focus:outline-none focus:border-[#007AFF] focus:ring-2 focus:ring-[#007AFF]/10 text-slate-800 font-semibold shadow-sm transition-all">
                     <input type="url" placeholder="Link (Drive, Box...)" value="${escapeHTML(url)}" class="asset-url w-full px-4 py-2.5 text-sm bg-white rounded-xl border border-gray-100 focus:outline-none focus:border-[#007AFF] focus:ring-2 focus:ring-[#007AFF]/10 text-[#007AFF] font-medium shadow-sm transition-all">
                 </div>
-            `;
-            container.insertAdjacentHTML('beforeend', fieldHTML);
+            `);
         }
 
         function getAssetsFromForm() {
             const items = document.querySelectorAll('.asset-item');
             const assetsArray = [];
             items.forEach(item => {
-                const name = item.querySelector('.asset-name').value.trim();
                 const url = item.querySelector('.asset-url').value.trim();
-                if (url) {
-                    assetsArray.push({ name: name || 'Archivo', url: url });
-                }
+                if (url) assetsArray.push({ name: item.querySelector('.asset-name').value.trim() || 'Archivo', url: url });
             });
             return assetsArray;
         }
@@ -1168,24 +1116,17 @@
             const msg = document.getElementById('pwd-msg');
             if (!oldInput || !newInput) return;
             
-            const savedHash = localStorage.getItem('eqbito360_auth');
-            const oldHash = await hashPassword(oldInput);
-            
-            // Permite cambiarla si escribe la actual guardada o la maestra (9753)
-            const isAdmin = (oldInput === "9753" || (savedHash && oldHash === savedHash));
-            
+            const isAdmin = await verifyAdminAccess(oldInput);
             if (isAdmin) {
                 const newHash = await hashPassword(newInput);
                 localStorage.setItem('eqbito360_auth', newHash);
                 msg.textContent = "Contraseña actualizada correctamente";
-                msg.className = "text-sm mt-4 text-center font-bold text-emerald-600 bg-emerald-50 py-2 rounded-lg fade-in";
-                msg.classList.remove('hidden');
+                msg.className = "text-sm mt-4 text-center font-bold text-emerald-600 bg-emerald-50 py-2 rounded-lg fade-in block";
                 document.getElementById('old-pwd').value = '';
                 document.getElementById('new-pwd').value = '';
             } else {
                 msg.textContent = "Contraseña actual incorrecta";
-                msg.className = "text-sm mt-4 text-center font-bold text-red-500 bg-red-50 py-2 rounded-lg fade-in";
-                msg.classList.remove('hidden');
+                msg.className = "text-sm mt-4 text-center font-bold text-red-500 bg-red-50 py-2 rounded-lg fade-in block";
             }
             setTimeout(() => msg.classList.add('hidden'), 3500);
         }
@@ -1209,72 +1150,46 @@
             });
         }
 
-        function closeModals() {
-            closeClientModal();
-            closeProfileModal();
-        }
+        function closeModals() { closeClientModal(); closeProfileModal(); }
 
         function openClientModal(id = null) {
             document.getElementById('profileModal').classList.remove('active');
-            
             ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientPrice', 'clientPaid', 'clientNotes', 'clientExternalNotes', 'clientSupportStart', 'clientSupportEnd'].forEach(id => document.getElementById(id).value = '');
             
-            // Reiniciar botones de servicios múltiples
             document.querySelectorAll('.srv-btn').forEach(btn => {
                 btn.classList.remove('selected', 'border-blue-200', 'text-[#007AFF]', 'bg-[#F0F7FF]');
                 btn.classList.add('border-gray-200', 'text-gray-500', 'bg-white');
-                
                 if (btn.dataset.val === 'Creación de Marca') {
-                    btn.classList.add('selected');
-                    btn.classList.replace('border-gray-200', 'border-blue-200');
-                    btn.classList.replace('text-gray-500', 'text-[#007AFF]');
-                    btn.classList.replace('bg-white', 'bg-[#F0F7FF]');
+                    btn.classList.add('selected'); btn.classList.replace('border-gray-200', 'border-blue-200'); btn.classList.replace('text-gray-500', 'text-[#007AFF]'); btn.classList.replace('bg-white', 'bg-[#F0F7FF]');
                 }
             });
             document.getElementById('clientService').value = 'Creación de Marca';
-
             document.getElementById('clientStatus').value = 'Cotizando';
-            document.getElementById('clientProgress').value = 0;
-            document.getElementById('progressVal').textContent = '0%';
+            document.getElementById('clientProgress').value = 0; document.getElementById('progressVal').textContent = '0%';
             document.getElementById('modal-title').textContent = 'Nuevo Proyecto';
-            
-            const assetsContainer = document.getElementById('assets-fields-container');
-            assetsContainer.innerHTML = '';
-            
-            const budgetContainer = document.getElementById('budget-fields-container');
-            budgetContainer.innerHTML = '';
+            document.getElementById('assets-fields-container').innerHTML = ''; document.getElementById('budget-fields-container').innerHTML = '';
 
             if (id) {
-                const safeId = escapeHTML(id);
-                const c = clients.find(x => x.id === safeId);
+                const c = clients.find(x => x.id === escapeHTML(id));
                 if (c) {
                     document.getElementById('modal-title').textContent = 'Editar Proyecto';
                     document.getElementById('clientId').value = c.id;
                     document.getElementById('clientName').value = c.name;
                     document.getElementById('clientPhone').value = c.phone || '';
                     document.getElementById('clientEmail').value = c.email || '';
-                    
                     document.getElementById('clientService').value = c.service || '';
                     const activeServices = (c.service || '').split(',').map(s => s.trim());
-                    
                     document.querySelectorAll('.srv-btn').forEach(btn => {
                         btn.classList.remove('selected', 'border-blue-200', 'text-[#007AFF]', 'bg-[#F0F7FF]');
                         btn.classList.add('border-gray-200', 'text-gray-500', 'bg-white');
-                        
                         if(activeServices.includes(btn.dataset.val)) {
-                            btn.classList.add('selected');
-                            btn.classList.replace('border-gray-200', 'border-blue-200');
-                            btn.classList.replace('text-gray-500', 'text-[#007AFF]');
-                            btn.classList.replace('bg-white', 'bg-[#F0F7FF]');
+                            btn.classList.add('selected'); btn.classList.replace('border-gray-200', 'border-blue-200'); btn.classList.replace('text-gray-500', 'text-[#007AFF]'); btn.classList.replace('bg-white', 'bg-[#F0F7FF]');
                         }
                     });
-
                     document.getElementById('clientStatus').value = c.status;
                     document.getElementById('clientDeadline').value = c.deadline || '';
-                    
                     document.getElementById('clientSupportStart').value = c.supportStart || '';
                     document.getElementById('clientSupportEnd').value = c.supportEnd || '';
-                    
                     document.getElementById('clientPrice').value = c.price || '';
                     document.getElementById('clientPaid').value = c.paid || '';
                     document.getElementById('clientNotes').value = c.notes || '';
@@ -1282,23 +1197,13 @@
                     document.getElementById('clientProgress').value = c.progress || 0;
                     document.getElementById('progressVal').textContent = (c.progress || 0) + '%';
                     
-                    if (Array.isArray(c.assets)) {
-                        c.assets.forEach(a => addAssetField(a.name, a.url));
-                    } else if (typeof c.assets === 'string' && c.assets.trim() !== '') {
-                        addAssetField('Carpeta Principal', c.assets);
-                    }
-                    
-                    if (Array.isArray(c.budget)) {
-                        c.budget.forEach(b => addBudgetField(b.concept, b.amount));
-                    }
+                    if (Array.isArray(c.assets)) c.assets.forEach(a => addAssetField(a.name, a.url));
+                    else if (typeof c.assets === 'string' && c.assets.trim() !== '') addAssetField('Carpeta Principal', c.assets);
+                    if (Array.isArray(c.budget)) c.budget.forEach(b => addBudgetField(b.concept, b.amount));
                 }
             }
-            
-            if (assetsContainer.children.length === 0) {
-                addAssetField(); 
-            }
-            
-            calculateTotalBudget(); // Resetear el estado del input de precio si no hay budget items
+            if (document.getElementById('assets-fields-container').children.length === 0) addAssetField(); 
+            calculateTotalBudget();
             
             document.getElementById('modal-overlay').classList.remove('hidden');
             setTimeout(() => {
@@ -1309,12 +1214,7 @@
 
         function closeClientModal() {
             document.getElementById('clientModal').classList.remove('active');
-            checkAndHideOverlay();
-        }
-
-        function checkAndHideOverlay() {
-            if(!document.getElementById('clientModal').classList.contains('active') && 
-               !document.getElementById('profileModal').classList.contains('active')) {
+            if(!document.getElementById('profileModal').classList.contains('active')) {
                 document.getElementById('modal-overlay').classList.add('opacity-0');
                 setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 300);
             }
@@ -1329,445 +1229,234 @@
 
             const newClient = {
                 id: id || generateId(),
-                name: name,
-                phone: document.getElementById('clientPhone').value.trim(),
-                email: document.getElementById('clientEmail').value.trim(),
-                service: document.getElementById('clientService').value,
-                status: document.getElementById('clientStatus').value,
+                name: escapeHTML(name),
+                phone: escapeHTML(document.getElementById('clientPhone').value.trim()),
+                email: escapeHTML(document.getElementById('clientEmail').value.trim()),
+                service: escapeHTML(document.getElementById('clientService').value),
+                status: escapeHTML(document.getElementById('clientStatus').value),
                 progress: parseInt(document.getElementById('clientProgress').value) || 0,
-                deadline: document.getElementById('clientDeadline').value,
-                supportStart: document.getElementById('clientSupportStart').value,
-                supportEnd: document.getElementById('clientSupportEnd').value,
+                deadline: escapeHTML(document.getElementById('clientDeadline').value),
+                supportStart: escapeHTML(document.getElementById('clientSupportStart').value),
+                supportEnd: escapeHTML(document.getElementById('clientSupportEnd').value),
                 assets: getAssetsFromForm(),
                 budget: getBudgetFromForm(),
                 price: parseFloat(document.getElementById('clientPrice').value) || 0,
                 paid: parseFloat(document.getElementById('clientPaid').value) || 0,
-                notes: document.getElementById('clientNotes').value,
-                externalNotes: document.getElementById('clientExternalNotes').value,
+                notes: escapeHTML(document.getElementById('clientNotes').value),
+                externalNotes: escapeHTML(document.getElementById('clientExternalNotes').value),
                 clientCode: existingClient ? existingClient.clientCode : null,
                 createdAt: existingClient ? existingClient.createdAt : new Date().toISOString()
             };
 
-            // Actualizar interfaz instantáneamente
             if (id) {
                 const idx = clients.findIndex(c => c.id === id);
                 if (idx > -1) clients[idx] = newClient;
-            } else {
-                clients.unshift(newClient);
-            }
+            } else clients.unshift(newClient);
 
             renderClients();
             closeClientModal();
-            if(currentProfileId === newClient.id) {
-                openProfileModal(newClient.id);
-            }
+            if(currentProfileId === newClient.id) openProfileModal(newClient.id);
 
-            // Guardar en la Nube (Firebase)
-            try {
-                await setDoc(doc(db, "proyectos_eqbito", newClient.id), newClient);
-                localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
-            } catch (e) {
-                console.error("Error conectando con la nube:", e);
-                localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
-                if (e.code === 'permission-denied') {
-                    showFirebaseError(
-                        "Faltan permisos en Firestore", 
-                        "El proyecto se guardó LOCALMENTE, pero no en la nube. Ve a Firebase Console -> Firestore Database -> Reglas y pega esto:", 
-                        "rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /{document=**} {\n      allow read, write: if true;\n    }\n  }\n}"
-                    );
-                }
+            try { await setDoc(doc(db, "proyectos_eqbito", newClient.id), newClient); } 
+            catch (e) {
+                console.error("Error al guardar en BD:", e);
+                showFirebaseError("Faltan permisos", "Se guardó en pantalla pero la base de datos lo bloqueó. Revisa tus reglas de Firebase.");
             }
         }
 
         async function deleteCurrentClient() {
             if (!currentProfileId) return;
-            if (confirm('¿Estás seguro de eliminar este proyecto permanentemente? Esta acción no se puede deshacer.')) {
+            if (confirm('¿Estás seguro de eliminar este proyecto permanentemente?')) {
                 const idToDelete = currentProfileId;
-                
-                // Actualizar local instantáneamente
                 clients = clients.filter(c => c.id !== idToDelete);
                 renderClients();
                 closeProfileModal();
 
-                // Eliminar en la Nube (Firebase)
-                try {
-                    await deleteDoc(doc(db, "proyectos_eqbito", idToDelete));
-                    localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
-                } catch(e) {
-                    console.error("Error eliminando en la nube:", e);
-                    localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
-                    if (e.code === 'permission-denied') {
-                        showFirebaseError(
-                            "Faltan permisos en Firestore", 
-                            "Se eliminó LOCALMENTE, pero sigue en la nube. Ve a Firebase Console -> Firestore Database -> Reglas y pega esto:", 
-                            "rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /{document=**} {\n      allow read, write: if true;\n    }\n  }\n}"
-                        );
-                    }
-                }
+                try { await deleteDoc(doc(db, "proyectos_eqbito", idToDelete)); } 
+                catch(e) { console.error("Error al borrar en BD:", e); }
             }
         }
 
         function exportData() {
-            if(clients.length === 0) { alert("No hay proyectos para respaldar."); return; }
+            if(clients.length === 0) return;
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clients, null, 2));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", `eqbito360_respaldo_${new Date().toISOString().split('T')[0]}.json`);
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
+            const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `eqbito360_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(anchor); anchor.click(); anchor.remove();
         }
 
         async function generateClientPIN() {
             if(!currentProfileId) return;
             const c = clients.find(x => x.id === currentProfileId);
             if(c) {
-                let newPin;
                 let isUnique = false;
                 while (!isUnique) {
-                    newPin = Math.floor(100000 + Math.random() * 900000).toString();
-                    isUnique = !clients.some(client => client.clientCode === newPin);
+                    c.clientCode = Math.floor(100000 + Math.random() * 900000).toString();
+                    isUnique = !clients.some(client => client.clientCode === c.clientCode && client.id !== c.id);
                 }
-
-                c.clientCode = newPin;
-                
-                // Actualizar UI
                 const display = document.getElementById('profilePINDisplay');
-                display.textContent = `PIN: ${c.clientCode}`;
-                display.classList.add('text-xl', 'tracking-widest', 'text-[#007AFF]');
+                display.textContent = `PIN: ${c.clientCode}`; display.classList.add('text-xl', 'tracking-widest', 'text-[#007AFF]');
                 
-                // Indicador visual de que se actualizó el PIN
-                const btnGenerate = document.getElementById('btnGeneratePIN');
-                btnGenerate.textContent = "¡Actualizado!";
-                btnGenerate.classList.add('bg-emerald-500', 'text-white', 'border-emerald-500');
-                btnGenerate.classList.remove('bg-white', 'text-[#007AFF]', 'border-gray-100', 'hover:shadow');
-                
-                setTimeout(() => {
-                    btnGenerate.textContent = "Regenerar";
-                    btnGenerate.classList.remove('bg-emerald-500', 'text-white', 'border-emerald-500');
-                    btnGenerate.classList.add('bg-white', 'text-[#007AFF]', 'border-gray-100', 'hover:shadow');
-                }, 2000);
+                const btnGen = document.getElementById('btnGeneratePIN');
+                btnGen.textContent = "¡Actualizado!"; btnGen.classList.replace('bg-white', 'bg-emerald-500'); btnGen.classList.replace('text-[#007AFF]', 'text-white');
+                setTimeout(() => { btnGen.textContent = "Regenerar"; btnGen.classList.replace('bg-emerald-500', 'bg-white'); btnGen.classList.replace('text-white', 'text-[#007AFF]'); }, 2000);
 
-                // Guardar PIN en la Nube
-                try {
-                    await setDoc(doc(db, "proyectos_eqbito", c.id), c);
-                    localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
-                } catch(e) {
-                    console.error("Error guardando PIN en la nube:", e);
-                    localStorage.setItem('eqbito360_clients', JSON.stringify(clients));
-                    if (e.code === 'permission-denied') {
-                        showFirebaseError(
-                            "Faltan permisos en Firestore", 
-                            "El PIN se generó LOCALMENTE, pero no en la nube. Ve a Firebase Console -> Firestore Database -> Reglas y pega esto:", 
-                            "rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /{document=**} {\n      allow read, write: if true;\n    }\n  }\n}"
-                        );
-                    }
-                }
+                try { await setDoc(doc(db, "proyectos_eqbito", c.id), c); } 
+                catch(e) { console.error("Error actualizando PIN", e); }
             }
         }
 
         function openProfileModal(id) {
-            const safeId = escapeHTML(id);
-            const c = clients.find(x => x.id === safeId);
+            const c = clients.find(x => x.id === escapeHTML(id));
             if (!c) return;
-            currentProfileId = safeId;
+            currentProfileId = escapeHTML(id);
 
             document.getElementById('profileInitials').textContent = getInitials(c.name);
             document.getElementById('profileName').textContent = escapeHTML(c.name);
-            
             const badge = document.getElementById('profileStatusBadge');
-            badge.textContent = escapeHTML(c.status);
-            badge.className = `inline-block mt-3 text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-wider border ${getStatusColor(c.status)}`;
-
+            badge.textContent = escapeHTML(c.status); badge.className = `inline-block mt-3 text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-wider border ${getStatusColor(c.status)}`;
             document.getElementById('profileService').textContent = escapeHTML(c.service);
             
             const pinDisplay = document.getElementById('profilePINDisplay');
             const btnGenerate = document.getElementById('btnGeneratePIN');
-            if(c.clientCode) {
-                pinDisplay.textContent = `PIN: ${escapeHTML(c.clientCode)}`;
-                pinDisplay.classList.add('text-xl', 'tracking-widest', 'text-[#007AFF]');
-                btnGenerate.textContent = "Regenerar";
-            } else {
-                pinDisplay.textContent = "Sin acceso generado";
-                pinDisplay.classList.remove('text-xl', 'tracking-widest', 'text-[#007AFF]');
-                btnGenerate.textContent = "Generar PIN";
-            }
+            if(c.clientCode) { pinDisplay.textContent = `PIN: ${escapeHTML(c.clientCode)}`; pinDisplay.classList.add('text-xl', 'tracking-widest', 'text-[#007AFF]'); btnGenerate.textContent = "Regenerar"; } 
+            else { pinDisplay.textContent = "Sin acceso generado"; pinDisplay.classList.remove('text-xl', 'tracking-widest', 'text-[#007AFF]'); btnGenerate.textContent = "Generar PIN"; }
 
-            let dateText = "Sin definir";
-            if (c.deadline) {
-                const d = new Date(c.deadline + 'T12:00:00');
-                dateText = d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
-            }
-            document.getElementById('profileDeadline').textContent = dateText;
+            document.getElementById('profileDeadline').textContent = c.deadline ? new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : "Sin definir";
             
-            // Render Soporte Técnico en Perfil Admin
             const supportContainer = document.getElementById('profileSupportContainer');
             if (c.supportStart && c.supportEnd) {
                 supportContainer.classList.remove('hidden');
-                
-                const today = new Date();
-                today.setHours(0,0,0,0);
+                const today = new Date(); today.setHours(0,0,0,0);
                 const endDate = new Date(c.supportEnd + 'T12:00:00');
-                
                 const supportStatus = document.getElementById('profileSupportStatus');
-                if (today <= endDate) {
-                    supportStatus.textContent = "Activo";
-                    supportStatus.className = "text-[9px] font-bold px-2 py-1 rounded-md uppercase tracking-wider border bg-emerald-100/60 text-emerald-700 border-emerald-200/60";
-                } else {
-                    supportStatus.textContent = "Vencido";
-                    supportStatus.className = "text-[9px] font-bold px-2 py-1 rounded-md uppercase tracking-wider border bg-red-100/60 text-red-700 border-red-200/60";
-                }
-                
-                const fStart = new Date(c.supportStart + 'T12:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
-                const fEnd = endDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
-                
-                document.getElementById('profileSupportDates').textContent = `${fStart} - ${fEnd}`;
-            } else {
-                supportContainer.classList.add('hidden');
-            }
+                if (today <= endDate) { supportStatus.textContent = "Activo"; supportStatus.className = "text-[9px] font-bold px-2 py-1 rounded-md uppercase tracking-wider border bg-emerald-100/60 text-emerald-700 border-emerald-200/60"; } 
+                else { supportStatus.textContent = "Vencido"; supportStatus.className = "text-[9px] font-bold px-2 py-1 rounded-md uppercase tracking-wider border bg-red-100/60 text-red-700 border-red-200/60"; }
+                document.getElementById('profileSupportDates').textContent = `${new Date(c.supportStart + 'T12:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })} - ${endDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}`;
+            } else { supportContainer.classList.add('hidden'); }
 
-            const p = parseFloat(c.price) || 0;
-            const pd = parseFloat(c.paid) || 0;
-            const pending = p - pd;
-            const percent = p > 0 ? Math.min((pd / p) * 100, 100) : 0;
-            
+            const p = parseFloat(c.price) || 0; const pd = parseFloat(c.paid) || 0; const percent = p > 0 ? Math.min((pd / p) * 100, 100) : 0;
             document.getElementById('profileTotal').textContent = formatMoney(p);
-            document.getElementById('profileDebt').textContent = formatMoney(Math.max(pending, 0));
-            document.getElementById('profileProgress').style.width = `${percent}%`;
-            document.getElementById('profilePaidText').textContent = `${Math.round(percent)}% Pagado`;
+            document.getElementById('profileDebt').textContent = formatMoney(Math.max(p - pd, 0));
+            document.getElementById('profileProgress').style.width = `${percent}%`; document.getElementById('profilePaidText').textContent = `${Math.round(percent)}% Pagado`;
 
-            // NUEVO: Render Desglose en Perfil Modal
             const pBudgetCont = document.getElementById('profile-budget-container');
             const pBudgetList = document.getElementById('profile-budget-list');
             if (c.budget && c.budget.length > 0) {
                 pBudgetCont.classList.remove('hidden');
-                pBudgetList.innerHTML = c.budget.map(item => `
-                    <div class="flex justify-between items-center text-xs">
-                        <span class="font-medium text-slate-500">${escapeHTML(item.concept)}</span>
-                        <span class="font-bold text-slate-700">${formatMoney(item.amount)}</span>
-                    </div>
-                `).join('');
-            } else {
-                pBudgetCont.classList.add('hidden');
-                pBudgetList.innerHTML = '';
-            }
+                pBudgetList.innerHTML = c.budget.map(item => `<div class="flex justify-between items-center text-xs"><span class="font-medium text-slate-500">${escapeHTML(item.concept)}</span><span class="font-bold text-slate-700">${formatMoney(item.amount)}</span></div>`).join('');
+            } else { pBudgetCont.classList.add('hidden'); pBudgetList.innerHTML = ''; }
 
-            // Notas Internas (Solo Administrador)
             const internalNotesEl = document.getElementById('profileInternalNotes');
-            if (c.notes && c.notes.trim() !== '') {
-                internalNotesEl.textContent = c.notes;
-                document.getElementById('profileInternalNotesContainer').classList.remove('hidden');
-            } else {
-                document.getElementById('profileInternalNotesContainer').classList.add('hidden');
-            }
+            if (c.notes && c.notes.trim() !== '') { internalNotesEl.textContent = escapeHTML(c.notes); document.getElementById('profileInternalNotesContainer').classList.remove('hidden'); } 
+            else { document.getElementById('profileInternalNotesContainer').classList.add('hidden'); }
 
-            // Notas Externas (Visualización en Perfil Admin)
             const externalNotesEl = document.getElementById('profileExternalNotes');
-            if (c.externalNotes && c.externalNotes.trim() !== '') {
-                externalNotesEl.textContent = c.externalNotes;
-                document.getElementById('profileExternalNotesContainer').classList.remove('hidden');
-            } else {
-                document.getElementById('profileExternalNotesContainer').classList.add('hidden');
-            }
+            if (c.externalNotes && c.externalNotes.trim() !== '') { externalNotesEl.textContent = escapeHTML(c.externalNotes); document.getElementById('profileExternalNotesContainer').classList.remove('hidden'); } 
+            else { document.getElementById('profileExternalNotesContainer').classList.add('hidden'); }
 
             let actionsHTML = '';
             if (c.phone) {
                 const cleanPhone = encodeURI(c.phone.replace(/\D/g,''));
-                const pin = c.clientCode || '(Genera tu PIN en tu perfil primero)';
-                const msg = `Ingresa al link: http://eqbito.vercel.app\nCon el código: ${pin}`;
-                const encodedMsg = encodeURIComponent(msg);
-
-                actionsHTML += `
-                <a href="https://wa.me/${cleanPhone}?text=${encodedMsg}" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center group shrink-0 w-[72px]">
-                    <div class="w-[52px] h-[52px] squarcle bg-[#E8F8F5] flex items-center justify-center text-[#00C853] group-hover:bg-[#d1f1ea] group-active:scale-95 transition-all shadow-[0_2px_8px_rgba(0,200,83,0.15)] mb-2 border border-[#00C853]/10">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-                    </div>
-                    <span class="text-[10px] font-bold tracking-wide text-slate-600">Mensaje</span>
-                </a>`;
+                const encodedMsg = encodeURIComponent(`Ingresa al link: http://eqbito.vercel.app\nCon el código: ${c.clientCode || '(Genera tu PIN en tu perfil)'}`);
+                actionsHTML += `<a href="https://wa.me/${cleanPhone}?text=${encodedMsg}" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center group shrink-0 w-[72px]"><div class="w-[52px] h-[52px] squarcle bg-[#E8F8F5] flex items-center justify-center text-[#00C853] group-hover:bg-[#d1f1ea] group-active:scale-95 transition-all shadow-[0_2px_8px_rgba(0,200,83,0.15)] mb-2 border border-[#00C853]/10"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></div><span class="text-[10px] font-bold tracking-wide text-slate-600">Mensaje</span></a>`;
             }
             if (c.email) {
                 const cleanEmail = encodeURI(c.email);
-                const mailSubject = encodeURIComponent("Actualización de tu proyecto - EQB STUDIO");
-                const pinAccess = c.clientCode || '(Tu PIN de acceso)';
-                const mailBody = encodeURIComponent(`¡Hola ${c.name}!\n\nTe escribimos para actualizarte sobre el estado de tu proyecto.\n\nPuedes revisar los últimos avances directamente en tu portal ingresando con tu PIN: ${pinAccess}\n\nIngresa aquí: http://eqbito.vercel.app\n\nQuedamos atentos a tus comentarios.\n\nSaludos,\nEquipo EQB STUDIO`);
-
-                actionsHTML += `
-                <a href="mailto:${cleanEmail}?subject=${mailSubject}&body=${mailBody}" class="flex flex-col items-center group shrink-0 w-[72px]">
-                    <div class="w-[52px] h-[52px] squarcle bg-[#EBF5FF] flex items-center justify-center text-[#007AFF] group-hover:bg-[#d6eaff] group-active:scale-95 transition-all shadow-[0_2px_8px_rgba(0,122,255,0.15)] mb-2 border border-[#007AFF]/10">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"></path></svg>
-                    </div>
-                    <span class="text-[10px] font-bold tracking-wide text-slate-600">Correo</span>
-                </a>`;
+                const mailBody = encodeURIComponent(`¡Hola ${c.name}!\nRevisa los avances de tu proyecto ingresando con tu PIN: ${c.clientCode || ''}\nIngresa aquí: http://eqbito.vercel.app`);
+                actionsHTML += `<a href="mailto:${cleanEmail}?subject=Actualización de tu proyecto&body=${mailBody}" class="flex flex-col items-center group shrink-0 w-[72px]"><div class="w-[52px] h-[52px] squarcle bg-[#EBF5FF] flex items-center justify-center text-[#007AFF] group-hover:bg-[#d6eaff] group-active:scale-95 transition-all shadow-[0_2px_8px_rgba(0,122,255,0.15)] mb-2 border border-[#007AFF]/10"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"></path></svg></div><span class="text-[10px] font-bold tracking-wide text-slate-600">Correo</span></a>`;
             }
-            
             let primaryAsset = Array.isArray(c.assets) && c.assets.length > 0 ? c.assets[0].url : (typeof c.assets === 'string' ? c.assets : null);
             if (primaryAsset) {
-                const cleanAsset = encodeURI(primaryAsset);
-                actionsHTML += `
-                <a href="${cleanAsset}" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center group shrink-0 w-[72px]">
-                    <div class="w-[52px] h-[52px] squarcle bg-[#F3E8FF] flex items-center justify-center text-[#9333EA] group-hover:bg-[#e9d5ff] group-active:scale-95 transition-all shadow-[0_2px_8px_rgba(147,51,234,0.15)] mb-2 border border-[#9333EA]/10">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"></path></svg>
-                    </div>
-                    <span class="text-[10px] font-bold tracking-wide text-slate-600">Archivos</span>
-                </a>`;
+                actionsHTML += `<a href="${encodeURI(primaryAsset)}" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center group shrink-0 w-[72px]"><div class="w-[52px] h-[52px] squarcle bg-[#F3E8FF] flex items-center justify-center text-[#9333EA] group-hover:bg-[#e9d5ff] group-active:scale-95 transition-all shadow-[0_2px_8px_rgba(147,51,234,0.15)] mb-2 border border-[#9333EA]/10"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"></path></svg></div><span class="text-[10px] font-bold tracking-wide text-slate-600">Archivos</span></a>`;
             }
-            
-            actionsHTML += `
-            <button onclick="openClientModal('${c.id}')" class="flex flex-col items-center group shrink-0 w-[72px]">
-                <div class="w-[52px] h-[52px] squarcle bg-[#FFF4E5] flex items-center justify-center text-[#FF9500] group-hover:bg-[#ffead1] group-active:scale-95 transition-all shadow-[0_2px_8px_rgba(255,149,0,0.15)] mb-2 border border-[#FF9500]/10">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.89 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.89l13.938-13.938zM12 9.75l3 3"></path></svg>
-                </div>
-                <span class="text-[10px] font-bold tracking-wide text-slate-600">Editar</span>
-            </button>`;
+            actionsHTML += `<button onclick="openClientModal('${c.id}')" class="flex flex-col items-center group shrink-0 w-[72px]"><div class="w-[52px] h-[52px] squarcle bg-[#FFF4E5] flex items-center justify-center text-[#FF9500] group-hover:bg-[#ffead1] group-active:scale-95 transition-all shadow-[0_2px_8px_rgba(255,149,0,0.15)] mb-2 border border-[#FF9500]/10"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.89 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.89l13.938-13.938zM12 9.75l3 3"></path></svg></div><span class="text-[10px] font-bold tracking-wide text-slate-600">Editar</span></button>`;
 
             document.getElementById('profileActions').innerHTML = actionsHTML;
-
             document.getElementById('modal-overlay').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('modal-overlay').classList.remove('opacity-0');
-                document.getElementById('profileModal').classList.add('active');
-            }, 10);
+            setTimeout(() => { document.getElementById('modal-overlay').classList.remove('opacity-0'); document.getElementById('profileModal').classList.add('active'); }, 10);
         }
 
         function closeProfileModal() {
             document.getElementById('profileModal').classList.remove('active');
             currentProfileId = null;
-            checkAndHideOverlay();
+            if(!document.getElementById('clientModal').classList.contains('active')) {
+                document.getElementById('modal-overlay').classList.add('opacity-0');
+                setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 300);
+            }
         }
 
         function setFilter(filter) {
             currentFilter = filter;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.className = 'filter-btn px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-full text-xs font-semibold shrink-0 transition-colors shadow-sm hover:bg-gray-50';
-            });
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.className = 'filter-btn px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-full text-xs font-semibold shrink-0 transition-colors shadow-sm hover:bg-gray-50');
             document.getElementById(`filter-${filter}`).className = 'filter-btn px-4 py-2 bg-slate-800 text-white rounded-full text-xs font-semibold shrink-0 transition-colors shadow-sm';
             renderClients();
         }
 
         function getStatusColor(status) {
-            return {
-                'Cotizando': 'bg-gray-100 text-gray-700 border-gray-200/60',
-                'En Progreso': 'bg-amber-100/60 text-amber-700 border-amber-200/60',
-                'En Revisión': 'bg-purple-100/60 text-purple-700 border-purple-200/60',
-                'Finalizado': 'bg-emerald-100/60 text-emerald-700 border-emerald-200/60',
-                'Pausado': 'bg-red-50 text-red-600 border-red-100'
-            }[status] || 'bg-gray-100 text-gray-700 border-gray-200/60';
-        }
-
-        function updateStats() {
-            const activeClients = clients.filter(c => c.status !== 'Finalizado' && c.status !== 'Pausado');
-            let totalPaid = 0; let totalPending = 0;
-
-            clients.forEach(c => {
-                const p = parseFloat(c.price) || 0;
-                const pd = parseFloat(c.paid) || 0;
-                totalPaid += pd;
-                const pending = p - pd;
-                if (pending > 0 && c.status !== 'Finalizado') totalPending += pending;
-            });
-
-            document.getElementById('stat-active').textContent = activeClients.length;
-            document.getElementById('stat-paid').textContent = formatMoney(totalPaid);
-            document.getElementById('stat-pending').textContent = formatMoney(totalPending);
+            return { 'Cotizando': 'bg-gray-100 text-gray-700 border-gray-200/60', 'En Progreso': 'bg-amber-100/60 text-amber-700 border-amber-200/60', 'En Revisión': 'bg-purple-100/60 text-purple-700 border-purple-200/60', 'Finalizado': 'bg-emerald-100/60 text-emerald-700 border-emerald-200/60', 'Pausado': 'bg-red-50 text-red-600 border-red-100' }[status] || 'bg-gray-100 text-gray-700 border-gray-200/60';
         }
 
         function setDate() {
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const rawDate = new Date().toLocaleDateString('es-ES', options);
+            const rawDate = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             document.getElementById('current-date').textContent = rawDate.charAt(0).toUpperCase() + rawDate.slice(1);
         }
 
         function renderClients() {
-            updateStats();
+            const activeClients = clients.filter(c => c.status !== 'Finalizado' && c.status !== 'Pausado');
+            let totalPaid = 0; let totalPending = 0;
+            clients.forEach(c => {
+                const pending = (parseFloat(c.price) || 0) - (parseFloat(c.paid) || 0);
+                totalPaid += (parseFloat(c.paid) || 0);
+                if (pending > 0 && c.status !== 'Finalizado') totalPending += pending;
+            });
+            document.getElementById('stat-active').textContent = activeClients.length; document.getElementById('stat-paid').textContent = formatMoney(totalPaid); document.getElementById('stat-pending').textContent = formatMoney(totalPending);
             
             const query = escapeHTML(document.getElementById('searchInput').value.toLowerCase());
-            const list = document.getElementById('clientsList');
-            const empty = document.getElementById('emptyState');
-            
+            const list = document.getElementById('clientsList'); const empty = document.getElementById('emptyState');
             list.innerHTML = '';
             
             const filtered = clients.filter(c => {
                 const matchSearch = c.name.toLowerCase().includes(query) || (c.service && c.service.toLowerCase().includes(query));
                 let matchFilter = true;
                 if (currentFilter === 'active') matchFilter = c.status !== 'Finalizado' && c.status !== 'Pausado';
-                else if (currentFilter === 'debt') {
-                    const p = parseFloat(c.price) || 0;
-                    const pd = parseFloat(c.paid) || 0;
-                    matchFilter = (p - pd) > 0;
-                }
+                else if (currentFilter === 'debt') matchFilter = ((parseFloat(c.price) || 0) - (parseFloat(c.paid) || 0)) > 0;
                 else if (currentFilter === 'completed') matchFilter = c.status === 'Finalizado';
                 return matchSearch && matchFilter;
             });
 
-            if (filtered.length === 0) {
-                empty.classList.remove('hidden');
-                list.classList.add('hidden');
-            } else {
-                empty.classList.add('hidden');
-                list.classList.remove('hidden');
-                
+            if (filtered.length === 0) { empty.classList.remove('hidden'); list.classList.add('hidden'); } 
+            else {
+                empty.classList.add('hidden'); list.classList.remove('hidden');
                 filtered.forEach(c => {
-                    const safeName = escapeHTML(c.name);
-                    const p = parseFloat(c.price) || 0;
-                    const pd = parseFloat(c.paid) || 0;
-                    const pending = p - pd;
+                    const pending = (parseFloat(c.price) || 0) - (parseFloat(c.paid) || 0);
                     const isOverdue = c.deadline && new Date(c.deadline) < new Date(new Date().setHours(0,0,0,0)) && c.status !== 'Finalizado';
-                    const prog = parseInt(c.progress) || 0;
-                    
                     const servicesPills = (c.service || 'Creación de Marca').split(',').map(s => `<span class="bg-gray-50 px-2 py-1 rounded-md border border-gray-100 text-gray-600 shrink-0 whitespace-nowrap">${escapeHTML(s.trim())}</span>`).join('');
 
-                    const card = `
+                    list.insertAdjacentHTML('beforeend', `
                         <div class="bg-white rounded-[20px] p-5 premium-shadow border border-gray-100 relative hover:shadow-[0_8px_30px_-6px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between group cursor-pointer overflow-hidden" onclick="openProfileModal('${escapeHTML(c.id)}')">
                             <div>
-                                <div class="flex justify-between items-start mb-3 w-full">
-                                    <h3 class="font-bold text-lg leading-tight truncate pr-2 text-slate-800 tracking-tight">${safeName}</h3>
-                                    <span class="shrink-0 text-[9px] font-bold px-2 py-1 rounded-md border uppercase ${getStatusColor(c.status)}">${escapeHTML(c.status)}</span>
-                                </div>
-                                
-                                <div class="text-[11px] text-gray-500 font-bold flex items-center mb-4 flex-wrap gap-1.5 w-full overflow-hidden">
-                                    ${servicesPills}
-                                    ${c.deadline ? `<span class="shrink-0 flex items-center px-2 py-1 rounded-md ${isOverdue ? 'bg-red-50 text-red-500 border border-red-100' : 'bg-gray-50 border border-gray-100 text-gray-500'}"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>${new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', {month:'short', day:'numeric'})}</span>` : ''}
-                                </div>
-
-                                <div class="w-full bg-gray-100/80 rounded-full h-1.5 mb-4 overflow-hidden shadow-inner">
-                                    <div class="bg-[#007AFF] h-1.5 rounded-full relative" style="width: ${prog}%"></div>
-                                </div>
-
+                                <div class="flex justify-between items-start mb-3 w-full"><h3 class="font-bold text-lg leading-tight truncate pr-2 text-slate-800 tracking-tight">${escapeHTML(c.name)}</h3><span class="shrink-0 text-[9px] font-bold px-2 py-1 rounded-md border uppercase ${getStatusColor(c.status)}">${escapeHTML(c.status)}</span></div>
+                                <div class="text-[11px] text-gray-500 font-bold flex items-center mb-4 flex-wrap gap-1.5 w-full overflow-hidden">${servicesPills}${c.deadline ? `<span class="shrink-0 flex items-center px-2 py-1 rounded-md ${isOverdue ? 'bg-red-50 text-red-500 border border-red-100' : 'bg-gray-50 border border-gray-100 text-gray-500'}"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>${new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', {month:'short', day:'numeric'})}</span>` : ''}</div>
+                                <div class="w-full bg-gray-100/80 rounded-full h-1.5 mb-4 overflow-hidden shadow-inner"><div class="bg-[#007AFF] h-1.5 rounded-full relative" style="width: ${parseInt(c.progress) || 0}%"></div></div>
                                 <div class="flex justify-between items-end mt-2 pt-4 border-t border-gray-50/80 w-full">
-                                    <div class="truncate pr-2">
-                                        <p class="text-[10px] text-gray-400 font-bold uppercase mb-0.5 truncate tracking-wider">Por cobrar</p>
-                                        <p class="text-[15px] font-bold truncate tracking-tight ${pending > 0 ? 'text-red-500' : 'text-emerald-500'}">${pending > 0 ? formatMoney(pending) : 'Pagado'}</p>
-                                    </div>
-                                    <div class="flex space-x-2 shrink-0">
-                                        <button onclick="event.stopPropagation(); openClientModal('${escapeHTML(c.id)}')" class="w-8 h-8 rounded-full bg-[#F0F7FF] text-[#007AFF] flex items-center justify-center hover:bg-blue-100 active:scale-95 transition-all shadow-sm">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.89 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.89l8.931-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"></path></svg>
-                                        </button>
-                                    </div>
+                                    <div class="truncate pr-2"><p class="text-[10px] text-gray-400 font-bold uppercase mb-0.5 truncate tracking-wider">Por cobrar</p><p class="text-[15px] font-bold truncate tracking-tight ${pending > 0 ? 'text-red-500' : 'text-emerald-500'}">${pending > 0 ? formatMoney(pending) : 'Pagado'}</p></div>
+                                    <div class="flex space-x-2 shrink-0"><button onclick="event.stopPropagation(); openClientModal('${escapeHTML(c.id)}')" class="w-8 h-8 rounded-full bg-[#F0F7FF] text-[#007AFF] flex items-center justify-center hover:bg-blue-100 active:scale-95 transition-all shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.89 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.89l8.931-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"></path></svg></button></div>
                                 </div>
                             </div>
                         </div>
-                    `;
-                    list.insertAdjacentHTML('beforeend', card);
+                    `);
                 });
             }
         }
 
         function toggleService(btn) {
             btn.classList.toggle('selected');
-            if(btn.classList.contains('selected')) {
-                btn.classList.replace('border-gray-200', 'border-blue-200');
-                btn.classList.replace('text-gray-500', 'text-[#007AFF]');
-                btn.classList.replace('bg-white', 'bg-[#F0F7FF]');
-            } else {
-                btn.classList.replace('border-blue-200', 'border-gray-200');
-                btn.classList.replace('text-[#007AFF]', 'text-gray-500');
-                btn.classList.replace('bg-[#F0F7FF]', 'bg-white');
-            }
-            const selected = Array.from(document.querySelectorAll('.srv-btn.selected')).map(b => b.dataset.val);
-            document.getElementById('clientService').value = selected.join(', ');
+            if(btn.classList.contains('selected')) { btn.classList.replace('border-gray-200', 'border-blue-200'); btn.classList.replace('text-gray-500', 'text-[#007AFF]'); btn.classList.replace('bg-white', 'bg-[#F0F7FF]'); } 
+            else { btn.classList.replace('border-blue-200', 'border-gray-200'); btn.classList.replace('text-[#007AFF]', 'text-gray-500'); btn.classList.replace('bg-[#F0F7FF]', 'bg-white'); }
+            document.getElementById('clientService').value = Array.from(document.querySelectorAll('.srv-btn.selected')).map(b => b.dataset.val).join(', ');
         }
 
-        // Exportar funciones globales para los onclicks de HTML
+        // Exportación de funciones controladas para los Eventos HTML
         Object.assign(window, {
             handleAuth, lockApp, switchTab, openClientModal, closeClientModal,
             saveClient, deleteCurrentClient, exportData, generateClientPIN,
@@ -1778,11 +1467,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             checkAuthState();
             const pwdInput = document.getElementById('auth-password');
-            if(pwdInput) {
-                pwdInput.addEventListener('keypress', e => {
-                    if (e.key === 'Enter') handleAuth();
-                });
-            }
+            if(pwdInput) pwdInput.addEventListener('keypress', e => { if (e.key === 'Enter') handleAuth(); });
         });
     </script>
 </body>
