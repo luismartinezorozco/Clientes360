@@ -781,38 +781,46 @@
             }
         };
 
-        // 🛡️ SECURITY FIX: Solo iniciamos sesión anónima al cargar. Ya NO descargamos la base de datos completa.
+        // 🛡️ SECURITY FIX: Solo iniciamos sesión anónima al cargar.
         signInAnonymously(auth).then(() => {
             const cloudStatus = document.getElementById('cloud-status');
             if(cloudStatus) cloudStatus.classList.add('hidden');
             dbReady = true;
         }).catch(err => {
-            console.error("Fallo de Auth:", err);
+            console.error("Fallo de Auth (Probablemente bloqueado por Adblock):", err);
             const cloudText = document.getElementById('cloud-text');
             const cloudDot = document.getElementById('cloud-dot');
-            if(cloudText) cloudText.textContent = "Error de Conexión";
+            if(cloudText) cloudText.textContent = "Sin conexión a DB";
             if(cloudDot) cloudDot.classList.replace('bg-gray-300', 'bg-red-500');
         });
 
-        // 🛡️ SECURITY FIX: Criptografía dinámica
+        // 🛡️ SECURITY FIX: Criptografía dinámica a prueba de fallos (Fallback si se bloquea)
         async function hashPassword(password) {
-            const msgUint8 = new TextEncoder().encode(password);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            try {
+                if (window.crypto && window.crypto.subtle) {
+                    const msgUint8 = new TextEncoder().encode(password);
+                    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+                    const hashArray = Array.from(new Uint8Array(hashBuffer));
+                    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                }
+            } catch (e) {
+                console.warn("Crypto API no disponible, usando fallback.");
+            }
+            // Fallback en caso de que el entorno no soporte crypto nativo (red local o http)
+            return 'fallback_' + btoa(encodeURIComponent(password));
         }
 
         async function verifyAdminAccess(pwd) {
             let savedHash = localStorage.getItem('eqbito360_auth');
             
-            // 🛡️ AUTOFILTRADO: Si detecta una contraseña antigua en texto plano, la encripta y actualiza para que puedas entrar
-            if (savedHash && savedHash.length !== 64) {
+            // 🛡️ AUTOFILTRADO
+            if (savedHash && savedHash.length !== 64 && !savedHash.startsWith('fallback_')) {
                 savedHash = await hashPassword(savedHash);
                 localStorage.setItem('eqbito360_auth', savedHash);
             }
 
             const inputHash = await hashPassword(pwd);
-            const defaultHash = await hashPassword("9753"); // PIN por defecto si nunca se guardó uno
+            const defaultHash = await hashPassword("9753"); 
             return (savedHash && inputHash === savedHash) || (!savedHash && inputHash === defaultHash);
         }
 
@@ -824,7 +832,7 @@
         const getInitials = (name) => name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
         const generateId = () => crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
 
-        // Protección Anti-XSS (Inyecciones de código en campos de texto)
+        // Protección Anti-XSS
         const escapeHTML = (str) => {
             if (!str) return '';
             return String(str).replace(/[&<>'"]/g, tag => ({
@@ -847,31 +855,37 @@
             const pwd = input.value.trim();
             if (!pwd) return;
 
-            if (!dbReady && navigator.onLine) {
-                errorMsg.textContent = "Sincronizando seguridad...";
-                errorMsg.className = "text-sm mt-4 text-center font-medium bg-blue-50 text-blue-500 px-4 py-2 rounded-lg fade-in block";
-                setTimeout(handleAuth, 1000);
-                return;
-            }
-
-            // UI Feedback para evitar spam de peticiones a Firebase
+            // UI Feedback
             const originalBtnText = btn.innerHTML;
             btn.innerHTML = '<span class="animate-pulse">Verificando...</span>';
             btn.disabled = true;
             input.disabled = true;
 
-            // 1. Verificación Admin (Aislada y encriptada)
-            const isAdmin = await verifyAdminAccess(pwd);
-            if (isAdmin) {
-                unlockApp('admin');
-                input.value = '';
+            try {
+                // 1. Verificación Admin (Prioridad 1, funciona INCLUSO sin internet)
+                const isAdmin = await verifyAdminAccess(pwd);
+                if (isAdmin) {
+                    unlockApp('admin');
+                    input.value = '';
+                    btn.innerHTML = originalBtnText;
+                    btn.disabled = false;
+                    input.disabled = false;
+                    return;
+                }
+            } catch (err) {
+                console.error("Error criptográfico", err);
+            }
+
+            // 2. Si no es admin, intentamos verificarlo como Cliente (Esto SÍ requiere base de datos activa)
+            if (!dbReady) {
+                errorMsg.textContent = navigator.onLine ? "Conexión bloqueada (Revisa tu AdBlock o Antivirus)" : "Sin conexión a internet";
+                errorMsg.className = "text-sm mt-4 text-center font-medium bg-amber-50 text-amber-600 px-4 py-2 rounded-lg fade-in block";
                 btn.innerHTML = originalBtnText;
                 btn.disabled = false;
                 input.disabled = false;
                 return;
             }
 
-            // 2. Verificación Cliente (Consulta selectiva, sin Data Leak)
             try {
                 const q = query(collection(db, "proyectos_eqbito"), where("clientCode", "==", pwd));
                 const querySnapshot = await getDocs(q);
@@ -906,11 +920,10 @@
             input.value = '';
         }
 
-        // 🛡️ La función fundamental de acceso, invisible para la consola externa
+        // 🛡️ Función fundamental de acceso
         function unlockApp(mode, clientData = null) {
             document.getElementById('auth-screen').classList.add('opacity-0', 'pointer-events-none');
             
-            // Limpiar cualquier conexión previa
             if (globalUnsubscribe) {
                 globalUnsubscribe();
                 globalUnsubscribe = null;
@@ -925,21 +938,24 @@
                     document.getElementById('client-portal').classList.add('hidden');
                     setDate();
                     
-                    // Solo el Admin descarga todo
-                    globalUnsubscribe = onSnapshot(collection(db, "proyectos_eqbito"), (snapshot) => {
-                        const freshClients = [];
-                        snapshot.forEach((doc) => freshClients.push({ id: doc.id, ...doc.data() }));
-                        freshClients.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-                        clients = freshClients;
-                        renderClients();
-                    });
+                    if (dbReady) {
+                        globalUnsubscribe = onSnapshot(collection(db, "proyectos_eqbito"), (snapshot) => {
+                            const freshClients = [];
+                            snapshot.forEach((doc) => freshClients.push({ id: doc.id, ...doc.data() }));
+                            freshClients.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+                            clients = freshClients;
+                            renderClients();
+                        });
+                    } else {
+                        // Si entró como admin pero Firebase está bloqueado por AdBlock
+                        showFirebaseError("Conexión Restringida", "Pudiste entrar al panel, pero la conexión a la base de datos está siendo bloqueada (probablemente por tu AdBlocker o el antivirus). Desactívalo para poder ver los proyectos.");
+                    }
 
                 } else if (mode === 'client' && clientData) {
                     document.getElementById('main-app').classList.add('hidden');
                     document.getElementById('main-nav').classList.add('hidden');
                     document.getElementById('client-portal').classList.remove('hidden');
                     
-                    // El Cliente SOLO escucha cambios de su propio documento
                     globalUnsubscribe = onSnapshot(doc(db, "proyectos_eqbito", clientData.id), (docSnap) => {
                         if(docSnap.exists()){
                             renderClientPortal({ id: docSnap.id, ...docSnap.data() });
