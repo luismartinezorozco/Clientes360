@@ -82,6 +82,7 @@
             transform: translateY(-50%);
             color: #9CA3AF;
             font-weight: 500;
+            z-index: 10;
         }
         .currency-input input { padding-left: 2.2rem; }
 
@@ -219,7 +220,7 @@
                     </div>
                 </div>
 
-                <!-- NUEVO: Tarjeta de Soporte Técnico -->
+                <!-- Tarjeta de Soporte Técnico -->
                 <div id="cp-support-card" class="bg-white rounded-[24px] p-5 md:p-6 premium-shadow border border-gray-100 mb-6 hidden">
                     <div class="flex justify-between items-start mb-2">
                         <div class="flex items-center">
@@ -235,7 +236,7 @@
                     </div>
                 </div>
 
-                <!-- NUEVO: Notas Externas del Equipo -->
+                <!-- Notas Externas del Equipo -->
                 <div id="cp-external-notes-container" class="bg-[#F0F7FF] rounded-[24px] p-5 md:p-6 premium-shadow border border-blue-100/50 mb-6 hidden">
                     <div class="flex items-center mb-3">
                         <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
@@ -279,6 +280,15 @@
                             <p class="font-bold text-emerald-600 text-lg tracking-tight" id="cp-paid">$0</p>
                         </div>
                     </div>
+                    
+                    <!-- NUEVO: Desglose del Presupuesto (Cliente) -->
+                    <div id="cp-budget-breakdown-container" class="mt-4 pt-4 border-t border-gray-100 hidden">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase mb-3 tracking-wider">Desglose del Presupuesto</p>
+                        <div id="cp-budget-list" class="space-y-2">
+                            <!-- Inyectado por JS -->
+                        </div>
+                    </div>
+
                     <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center px-1">
                         <span class="text-sm font-semibold text-slate-600">Saldo Pendiente</span>
                         <span class="text-xl font-bold text-red-500 tracking-tight" id="cp-debt">$0</span>
@@ -543,12 +553,27 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 3: FINANZAS -->
+                <!-- SECCIÓN 3: FINANZAS MEJORADA (DESGLOSE) -->
                 <div class="w-full">
                     <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider ml-3 mb-2">Finanzas</p>
                     <div class="bg-white rounded-2xl border border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)] divide-y divide-gray-100 w-full overflow-hidden">
-                        <div class="currency-input w-full">
-                            <input type="number" id="clientPrice" placeholder="Precio Total del Proyecto" class="w-full px-5 py-3.5 text-sm font-semibold focus:outline-none bg-transparent text-slate-900" min="0">
+                        
+                        <!-- NUEVO: Desglose de Presupuesto -->
+                        <div class="p-5 bg-gray-50/30">
+                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-3 tracking-wider">Desglose de Presupuesto (Opcional)</p>
+                            <div id="budget-fields-container" class="space-y-2.5 mb-3">
+                                <!-- Campos inyectados -->
+                            </div>
+                            <button type="button" onclick="addBudgetField()" class="w-full py-2 bg-white text-slate-600 rounded-xl text-xs font-bold border border-gray-200 border-dashed hover:bg-gray-50 hover:text-[#007AFF] hover:border-[#007AFF]/30 transition-all flex items-center justify-center">
+                                <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
+                                Añadir Concepto
+                            </button>
+                            <p class="text-[10px] text-gray-400 mt-2 font-medium text-center">Si añades conceptos, el precio total se sumará automáticamente.</p>
+                        </div>
+
+                        <!-- Precio y Abonos -->
+                        <div class="currency-input w-full relative">
+                            <input type="number" id="clientPrice" placeholder="Precio Total del Proyecto" class="w-full px-5 py-3.5 text-sm font-semibold focus:outline-none bg-transparent text-slate-900 transition-all" min="0">
                         </div>
                         <div class="currency-input w-full">
                             <input type="number" id="clientPaid" placeholder="Abono / Dinero Pagado" class="w-full px-5 py-3.5 text-sm font-bold focus:outline-none bg-transparent text-emerald-600" min="0">
@@ -657,7 +682,15 @@
                                  <div class="absolute inset-0 bg-white/20 w-full h-full" style="background-image: linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent); background-size: 1rem 1rem;"></div>
                             </div>
                         </div>
-                        <p class="text-xs text-emerald-600 text-right mt-1.5 font-bold tracking-tight" id="profilePaidText"></p>
+                        <p class="text-xs text-emerald-600 text-right mt-1.5 font-bold tracking-tight mb-2" id="profilePaidText"></p>
+                        
+                        <!-- NUEVO: Desglose Admin -->
+                        <div id="profile-budget-container" class="mt-4 pt-4 border-t border-gray-200/60 hidden w-full">
+                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-2 tracking-wider">Desglose del Presupuesto</p>
+                            <div id="profile-budget-list" class="space-y-1.5 w-full">
+                                <!-- Inyectado por JS -->
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Notas Visibles solo para Admin en el perfil -->
@@ -1028,6 +1061,22 @@
                     </div>`;
             }
 
+            // NUEVO: Renderizar Desglose del Presupuesto
+            const budgetContainer = document.getElementById('cp-budget-breakdown-container');
+            const budgetList = document.getElementById('cp-budget-list');
+            if (c.budget && c.budget.length > 0) {
+                budgetContainer.classList.remove('hidden');
+                budgetList.innerHTML = c.budget.map(item => `
+                    <div class="flex justify-between items-center bg-gray-50/80 px-3 py-2 rounded-lg border border-gray-100/50">
+                        <span class="text-xs font-medium text-slate-600">${escapeHTML(item.concept)}</span>
+                        <span class="text-xs font-bold text-slate-800">${formatMoney(item.amount)}</span>
+                    </div>
+                `).join('');
+            } else {
+                budgetContainer.classList.add('hidden');
+                budgetList.innerHTML = '';
+            }
+
             const p = parseFloat(c.price) || 0;
             const pd = parseFloat(c.paid) || 0;
             const pending = p - pd;
@@ -1036,6 +1085,55 @@
             document.getElementById('cp-paid').textContent = formatMoney(pd);
             document.getElementById('cp-debt').textContent = formatMoney(Math.max(pending, 0));
         }
+
+        // === FUNCIONES DE DESGLOSE DE PRESUPUESTO ===
+        function addBudgetField(concept = '', amount = '') {
+            const container = document.getElementById('budget-fields-container');
+            const fieldHTML = `
+                <div class="budget-item flex gap-2 items-center bg-white p-2 rounded-xl border border-gray-100 relative group shadow-sm">
+                    <input type="text" placeholder="Concepto (ej: Diseño UI)" value="${escapeHTML(concept)}" class="budget-concept flex-1 px-3 py-2 text-xs bg-gray-50/50 rounded-lg border border-gray-100 focus:outline-none focus:border-[#007AFF] text-slate-800 font-medium transition-all">
+                    <input type="number" placeholder="$ Monto" value="${amount}" oninput="calculateTotalBudget()" class="budget-amount w-28 px-3 py-2 text-xs bg-gray-50/50 rounded-lg border border-gray-100 focus:outline-none focus:border-[#007AFF] text-[#007AFF] font-bold transition-all" min="0">
+                    <button type="button" onclick="this.parentElement.remove(); calculateTotalBudget();" class="w-7 h-7 bg-white text-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 border border-red-100 shadow-sm shrink-0 active:scale-95">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', fieldHTML);
+            calculateTotalBudget();
+        }
+
+        function calculateTotalBudget() {
+            const items = document.querySelectorAll('.budget-item');
+            const priceInput = document.getElementById('clientPrice');
+            if (items.length > 0) {
+                let total = 0;
+                items.forEach(item => {
+                    const amt = parseFloat(item.querySelector('.budget-amount').value) || 0;
+                    total += amt;
+                });
+                priceInput.value = total;
+                // Hacer el input semi-transparente para indicar que es automático
+                priceInput.setAttribute('readonly', 'true');
+                priceInput.classList.add('opacity-70', 'bg-gray-50/50');
+            } else {
+                priceInput.removeAttribute('readonly');
+                priceInput.classList.remove('opacity-70', 'bg-gray-50/50');
+            }
+        }
+
+        function getBudgetFromForm() {
+            const items = document.querySelectorAll('.budget-item');
+            const budgetArray = [];
+            items.forEach(item => {
+                const concept = item.querySelector('.budget-concept').value.trim();
+                const amount = parseFloat(item.querySelector('.budget-amount').value) || 0;
+                if (concept || amount > 0) {
+                    budgetArray.push({ concept: concept || 'Item', amount: amount });
+                }
+            });
+            return budgetArray;
+        }
+        // ============================================
 
         function addAssetField(name = '', url = '') {
             const container = document.getElementById('assets-fields-container');
@@ -1121,7 +1219,7 @@
             
             ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientPrice', 'clientPaid', 'clientNotes', 'clientExternalNotes', 'clientSupportStart', 'clientSupportEnd'].forEach(id => document.getElementById(id).value = '');
             
-            // Reiniciar botones de servicios múltiples y establecer el valor por defecto
+            // Reiniciar botones de servicios múltiples
             document.querySelectorAll('.srv-btn').forEach(btn => {
                 btn.classList.remove('selected', 'border-blue-200', 'text-[#007AFF]', 'bg-[#F0F7FF]');
                 btn.classList.add('border-gray-200', 'text-gray-500', 'bg-white');
@@ -1142,6 +1240,9 @@
             
             const assetsContainer = document.getElementById('assets-fields-container');
             assetsContainer.innerHTML = '';
+            
+            const budgetContainer = document.getElementById('budget-fields-container');
+            budgetContainer.innerHTML = '';
 
             if (id) {
                 const safeId = escapeHTML(id);
@@ -1186,12 +1287,18 @@
                     } else if (typeof c.assets === 'string' && c.assets.trim() !== '') {
                         addAssetField('Carpeta Principal', c.assets);
                     }
+                    
+                    if (Array.isArray(c.budget)) {
+                        c.budget.forEach(b => addBudgetField(b.concept, b.amount));
+                    }
                 }
             }
             
             if (assetsContainer.children.length === 0) {
                 addAssetField(); 
             }
+            
+            calculateTotalBudget(); // Resetear el estado del input de precio si no hay budget items
             
             document.getElementById('modal-overlay').classList.remove('hidden');
             setTimeout(() => {
@@ -1232,6 +1339,7 @@
                 supportStart: document.getElementById('clientSupportStart').value,
                 supportEnd: document.getElementById('clientSupportEnd').value,
                 assets: getAssetsFromForm(),
+                budget: getBudgetFromForm(),
                 price: parseFloat(document.getElementById('clientPrice').value) || 0,
                 paid: parseFloat(document.getElementById('clientPaid').value) || 0,
                 notes: document.getElementById('clientNotes').value,
@@ -1427,6 +1535,22 @@
             document.getElementById('profileDebt').textContent = formatMoney(Math.max(pending, 0));
             document.getElementById('profileProgress').style.width = `${percent}%`;
             document.getElementById('profilePaidText').textContent = `${Math.round(percent)}% Pagado`;
+
+            // NUEVO: Render Desglose en Perfil Modal
+            const pBudgetCont = document.getElementById('profile-budget-container');
+            const pBudgetList = document.getElementById('profile-budget-list');
+            if (c.budget && c.budget.length > 0) {
+                pBudgetCont.classList.remove('hidden');
+                pBudgetList.innerHTML = c.budget.map(item => `
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="font-medium text-slate-500">${escapeHTML(item.concept)}</span>
+                        <span class="font-bold text-slate-700">${formatMoney(item.amount)}</span>
+                    </div>
+                `).join('');
+            } else {
+                pBudgetCont.classList.add('hidden');
+                pBudgetList.innerHTML = '';
+            }
 
             // Notas Internas (Solo Administrador)
             const internalNotesEl = document.getElementById('profileInternalNotes');
@@ -1648,7 +1772,7 @@
             handleAuth, lockApp, switchTab, openClientModal, closeClientModal,
             saveClient, deleteCurrentClient, exportData, generateClientPIN,
             openProfileModal, closeProfileModal, setFilter, renderClients,
-            changePassword, addAssetField, toggleService
+            changePassword, addAssetField, addBudgetField, calculateTotalBudget, toggleService
         });
 
         window.addEventListener('DOMContentLoaded', () => {
