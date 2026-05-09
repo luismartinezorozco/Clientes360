@@ -803,9 +803,16 @@
         }
 
         async function verifyAdminAccess(pwd) {
-            const savedHash = localStorage.getItem('eqbito360_auth');
+            let savedHash = localStorage.getItem('eqbito360_auth');
+            
+            // 🛡️ AUTOFILTRADO: Si detecta una contraseña antigua en texto plano, la encripta y actualiza para que puedas entrar
+            if (savedHash && savedHash.length !== 64) {
+                savedHash = await hashPassword(savedHash);
+                localStorage.setItem('eqbito360_auth', savedHash);
+            }
+
             const inputHash = await hashPassword(pwd);
-            const defaultHash = await hashPassword("9753"); // El PIN en texto no se valida contra la vista.
+            const defaultHash = await hashPassword("9753"); // PIN por defecto si nunca se guardó uno
             return (savedHash && inputHash === savedHash) || (!savedHash && inputHash === defaultHash);
         }
 
