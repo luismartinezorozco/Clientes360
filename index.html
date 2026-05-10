@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EQBITO 360</title>
+    <title>EQBITO 360 - Bóveda Digital</title>
     
-    <!-- Favicon estándar para el navegador -->
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778118273/nachito_show_wcs5j9.png">
-    <!-- Icono pantalla de inicio iOS -->
     <link rel="apple-touch-icon" href="https://res.cloudinary.com/dkufuo5wc/image/upload/v1778117779/nachito_show_yi5p4d.jpg">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,7 +23,6 @@
         }
 
         .ios-bg { background-color: #F2F2F7; }
-        .ios-card { background-color: #FFFFFF; }
         .glass-nav { 
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(16px);
@@ -72,9 +69,12 @@
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: #E5E7EB; border-radius: 6px; }
 
         .squarcle { border-radius: 18px; }
-        .squarcle-sm { border-radius: 12px; }
-        
         .premium-shadow { box-shadow: 0 4px 20px -4px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02); }
+        
+        /* Animación para el banner de la Bóveda */
+        .vault-glow {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.15), inset 0 0 10px rgba(255,255,255,0.5);
+        }
     </style>
 </head>
 <body class="text-slate-900 bg-black md:bg-gray-100 h-screen w-screen overflow-hidden flex justify-center items-center font-sans">
@@ -96,7 +96,7 @@
             </div>
         </div>
 
-        <!-- ENTORNO DEL CLIENTE (CLIENT PORTAL) -->
+        <!-- ENTORNO DEL CLIENTE (CLIENT PORTAL - BÓVEDA) -->
         <div id="client-portal" class="flex-1 w-full h-full flex flex-col hidden relative bg-[#F9FAFB] overflow-y-auto">
             <div class="glass-nav sticky top-0 z-10 px-6 py-4 flex justify-between items-center">
                 <div class="flex items-center">
@@ -109,80 +109,78 @@
                 </button>
             </div>
 
-            <div class="p-6 md:p-10 max-w-2xl mx-auto w-full pb-24">
+            <div class="p-6 md:p-10 max-w-2xl mx-auto w-full pb-32 relative">
                 <h1 class="text-2xl md:text-3xl font-bold text-slate-900 mb-1 tracking-tight">Hola, <span id="cp-name" class="text-[#007AFF]">Cliente</span></h1>
-                <p class="text-gray-500 text-sm mb-8">Aquí puedes monitorear el progreso de tu proyecto en tiempo real.</p>
+                <p class="text-gray-500 text-sm mb-8" id="cp-greeting-desc">Aquí puedes monitorear el progreso de tu proyecto en tiempo real.</p>
 
-                <!-- Status Card -->
-                <div class="bg-white rounded-[24px] p-5 md:p-6 premium-shadow border border-gray-100 mb-6">
+                <!-- Status Card / Bóveda Banner -->
+                <div class="bg-white rounded-[24px] p-5 md:p-6 premium-shadow border border-gray-100 mb-6 transition-all duration-500" id="cp-main-card">
                     <div class="flex justify-between items-start mb-6">
                         <div>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-1 tracking-wider">Proyecto Activo</p>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-1 tracking-wider">Servicio Activo</p>
                             <h3 class="font-bold text-lg text-slate-800 tracking-tight" id="cp-service">Servicio</h3>
                         </div>
                         <span id="cp-status" class="text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-wider border">Estado</span>
                     </div>
 
-                    <div>
-                        <div class="flex justify-between text-sm mb-2.5 font-semibold">
-                            <span class="text-slate-700">Progreso del trabajo</span>
-                            <span class="text-[#007AFF]" id="cp-progress-text">0%</span>
+                    <!-- ESTADO 1: EN PROGRESO -->
+                    <div id="cp-progress-container" class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Fecha estimada de entrega</p>
+                        <p class="text-sm font-bold text-slate-800" id="cp-deadline">--</p>
+                    </div>
+
+                    <!-- ESTADO 2: FINALIZADO (Bóveda Activa) -->
+                    <div id="cp-completed-container" class="hidden bg-emerald-50 border border-emerald-200/60 rounded-2xl p-5 flex items-center vault-glow">
+                        <div class="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 mr-4 shadow-lg shadow-emerald-500/30">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                         </div>
-                        <div class="w-full bg-gray-100 rounded-full h-3 mb-1 overflow-hidden shadow-inner">
-                            <div id="cp-progress-bar" class="bg-[#007AFF] h-3 rounded-full transition-all duration-1000 ease-out relative" style="width: 0%"></div>
+                        <div>
+                            <p class="text-sm md:text-base font-bold text-emerald-900 tracking-tight">Proyecto Finalizado</p>
+                            <p class="text-xs text-emerald-700 font-medium mt-0.5">Tus archivos están disponibles a continuación.</p>
                         </div>
-                        <p class="text-xs text-gray-400 mt-3 text-right font-medium">Estimado: <span id="cp-deadline" class="font-semibold text-gray-700 ml-1">--</span></p>
                     </div>
                 </div>
 
-                <!-- Notas Externas del Equipo -->
-                <div id="cp-external-notes-container" class="bg-[#F0F7FF] rounded-[24px] p-5 md:p-6 premium-shadow border border-blue-100/50 mb-6 hidden">
-                    <h4 class="font-bold text-blue-900 text-sm tracking-tight mb-2">Mensaje del equipo</h4>
-                    <p class="text-sm text-blue-800 whitespace-pre-wrap leading-relaxed font-medium" id="cp-external-notes"></p>
+                <!-- Garantía / Vigencia -->
+                <div id="cp-warranty-container" class="bg-blue-50/50 rounded-[20px] p-4 md:p-5 border border-blue-100 mb-6 hidden flex items-start">
+                    <svg class="w-5 h-5 text-[#007AFF] shrink-0 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    <div>
+                        <p class="text-[10px] text-blue-500 font-bold uppercase tracking-wider mb-0.5">Garantía / Vigencia</p>
+                        <p class="text-sm font-semibold text-slate-800" id="cp-warranty-text">--</p>
+                    </div>
                 </div>
 
-                <!-- Gestor de Archivos Directos -->
+                <!-- Gestor de Archivos (Bóveda) -->
                 <div class="bg-white rounded-[24px] p-5 md:p-6 premium-shadow border border-gray-100 mb-6">
-                    <h4 class="font-bold text-slate-800 text-sm tracking-tight mb-4">Archivos y Entregables</h4>
+                    <div class="flex items-center mb-4">
+                        <svg class="w-5 h-5 text-indigo-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                        <h4 class="font-bold text-slate-800 text-sm tracking-tight" id="cp-assets-title">Archivos y Entregables</h4>
+                    </div>
                     <div id="cp-assets-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <!-- Botones de archivos -->
                     </div>
                 </div>
 
-                <!-- Finanzas Card -->
-                <div class="bg-white rounded-[24px] p-5 md:p-6 premium-shadow border border-gray-100">
-                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-4">Resumen Financiero</p>
-                    
-                    <div class="grid grid-cols-2 gap-4 divide-x divide-gray-100 bg-gray-50/50 p-4 rounded-2xl">
-                        <div>
-                            <p class="text-[11px] text-gray-500 font-medium mb-1">Total Acordado</p>
-                            <p class="font-bold text-slate-800 text-lg tracking-tight" id="cp-price">$0</p>
-                        </div>
-                        <div class="pl-4">
-                            <p class="text-[11px] text-gray-500 font-medium mb-1">Abonado</p>
-                            <p class="font-bold text-emerald-600 text-lg tracking-tight" id="cp-paid">$0</p>
-                        </div>
-                    </div>
-                    
-                    <div id="cp-budget-breakdown-container" class="mt-4 pt-4 border-t border-gray-100 hidden">
-                        <p class="text-[10px] text-gray-400 font-bold uppercase mb-3 tracking-wider">Desglose</p>
-                        <div id="cp-budget-list" class="space-y-2"></div>
-                    </div>
-
-                    <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center px-1">
-                        <span class="text-sm font-semibold text-slate-600">Saldo Pendiente</span>
-                        <span class="text-xl font-bold text-red-500 tracking-tight" id="cp-debt">$0</span>
-                    </div>
+                <!-- Notas Externas del Equipo -->
+                <div id="cp-external-notes-container" class="bg-amber-50/50 rounded-[24px] p-5 md:p-6 border border-amber-100 mb-6 hidden">
+                    <h4 class="font-bold text-amber-900 text-sm tracking-tight mb-2">Mensaje del equipo</h4>
+                    <p class="text-sm text-amber-800 whitespace-pre-wrap leading-relaxed font-medium" id="cp-external-notes"></p>
                 </div>
                 
-                <!-- Footer Elegante para el Cliente -->
+                <!-- Footer Elegante -->
                 <div class="mt-12 mb-4 flex flex-col items-center opacity-60">
-                    <p class="text-center text-xs text-gray-500 font-medium tracking-wide mb-2">Desarrollado con EQBITO 360</p>
+                    <p class="text-center text-xs text-gray-500 font-medium tracking-wide mb-2">Desarrollado por EQBITO 360</p>
                     <a href="https://instagram.com/eqbstudio" target="_blank" class="text-xs font-bold text-[#bc1888] hover:opacity-80 transition-opacity">
                         @eqbstudio en Instagram
                     </a>
                 </div>
             </div>
+
+            <!-- BOTÓN DE PÁNICO FLOTANTE (WHATSAPP CANALIZADO) -->
+            <a id="cp-whatsapp-float" href="https://wa.me/573021192800?text=Hola%20EQB%20Studio,%20tengo%20una%20duda%20sobre%20mi%20proyecto." target="_blank" rel="noopener noreferrer" class="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-[#25D366] text-white p-3.5 md:p-4 rounded-full shadow-[0_8px_20px_rgba(37,211,102,0.3)] hover:scale-105 active:scale-95 transition-all z-20 group flex items-center justify-center">
+                <svg class="w-6 h-6 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                <div class="absolute right-full mr-3 bg-slate-900 text-white text-[10px] px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-medium pointer-events-none">¿Dudas? Hablemos</div>
+            </a>
         </div>
 
         <!-- ========================================== -->
@@ -196,7 +194,6 @@
                 <h2 class="font-bold text-lg tracking-tight text-slate-800">EQBITO 360</h2>
             </div>
 
-            <!-- Botones con Iconos Restablecidos -->
             <button onclick="switchTab('home')" class="flex flex-col md:flex-row items-center md:px-4 md:py-3.5 w-auto md:w-full rounded-[16px] text-[#007AFF] md:bg-[#F0F7FF] nav-btn transition-all duration-200 group" data-tab="home">
                 <svg class="w-6 h-6 mb-1 md:mb-0 md:mr-3 shrink-0 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                 <span class="text-[10px] md:text-sm font-semibold truncate">Proyectos</span>
@@ -316,36 +313,24 @@
                 <div class="w-full">
                     <p class="text-[11px] font-bold text-gray-500 uppercase ml-3 mb-2">Detalles del Proyecto</p>
                     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm divide-y divide-gray-100 overflow-hidden">
-                        <div class="px-5 py-4 bg-gray-50/30">
-                            <span class="text-sm font-semibold text-slate-800 mb-2 block">Servicio(s)</span>
-                            <div class="flex flex-wrap gap-2" id="serviceTags">
-                                <button type="button" onclick="toggleService(this)" class="srv-btn selected px-3 py-1.5 rounded-lg border border-blue-200 text-[#007AFF] bg-[#F0F7FF] text-xs font-semibold" data-val="Creación de Marca">Creación de Marca</button>
-                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold" data-val="Catálogos Digitales">Catálogos Digitales</button>
-                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold" data-val="vCard Digital">vCard Digital</button>
-                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold" data-val="Tarjetas NFC">Tarjetas NFC</button>
-                                <button type="button" onclick="toggleService(this)" class="srv-btn px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 bg-white text-xs font-semibold" data-val="Páginas Web">Páginas Web</button>
-                            </div>
-                            <input type="hidden" id="clientService" value="Creación de Marca">
-                        </div>
                         <div class="px-5 py-3.5 flex justify-between items-center">
                             <span class="text-sm font-semibold text-slate-800">Estado</span>
                             <select id="clientStatus" class="text-sm text-gray-500 font-medium bg-transparent focus:outline-none text-right">
                                 <option value="Cotizando">Cotizando</option>
                                 <option value="En Progreso">En Progreso</option>
                                 <option value="En Revisión">En Revisión</option>
-                                <option value="Finalizado">Finalizado</option>
+                                <option value="Finalizado - En garantía">Finalizado - En garantía</option>
+                                <option value="Finalizado - Tiempo de garantía vencido">Finalizado - Tiempo de garantía vencido</option>
                             </select>
-                        </div>
-                        <div class="px-5 py-4">
-                            <div class="flex justify-between items-center mb-3">
-                                <span class="text-sm font-semibold text-slate-800">Progreso (%)</span>
-                                <span class="text-sm font-bold text-[#007AFF]" id="progressVal">0%</span>
-                            </div>
-                            <input type="range" id="clientProgress" min="0" max="100" value="0" oninput="document.getElementById('progressVal').textContent = this.value + '%'">
                         </div>
                         <div class="px-5 py-3.5 flex justify-between items-center">
                             <span class="text-sm font-semibold text-slate-800">Fecha de Entrega</span>
                             <input type="date" id="clientDeadline" class="text-sm text-[#007AFF] font-medium bg-transparent focus:outline-none">
+                        </div>
+                        <!-- NUEVO: Campo de Garantía / Vigencia (Calendario) -->
+                        <div class="px-5 py-3.5 flex justify-between items-center bg-blue-50/30 border-t border-blue-100/50">
+                            <span class="text-sm font-semibold text-blue-900">Garantía / Vigencia</span>
+                            <input type="date" id="clientWarranty" class="text-sm text-[#007AFF] font-medium bg-transparent focus:outline-none text-right">
                         </div>
                     </div>
                 </div>
@@ -432,6 +417,11 @@
                             <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Entrega</p>
                             <p class="text-sm font-bold text-slate-800 truncate" id="profileDeadline"></p>
                         </div>
+                    </div>
+                    
+                    <div id="profileWarrantyContainer" class="bg-blue-50/50 p-4 rounded-2xl border border-blue-100/50 w-full hidden">
+                        <p class="text-[10px] text-blue-500 font-bold uppercase mb-1">Garantía / Vigencia</p>
+                        <p class="text-sm text-slate-700 font-bold" id="profileWarrantyText"></p>
                     </div>
 
                     <div class="bg-gray-50/50 p-5 rounded-2xl border border-gray-100 w-full">
@@ -630,14 +620,49 @@
             
             const statusBadge = document.getElementById('cp-status');
             statusBadge.textContent = escapeHTML(c.status);
-            statusBadge.className = `text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase border ${getStatusColor(c.status)}`;
+            statusBadge.className = `text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-wider border ${getStatusColor(c.status)}`;
 
-            const progress = parseInt(c.progress) || 0;
-            document.getElementById('cp-progress-text').textContent = progress + '%';
-            setTimeout(() => { document.getElementById('cp-progress-bar').style.width = progress + '%'; }, 100);
+            // LÓGICA DE BÓVEDA
+            const progressContainer = document.getElementById('cp-progress-container');
+            const completedContainer = document.getElementById('cp-completed-container');
+            const greetingDesc = document.getElementById('cp-greeting-desc');
+            const mainCard = document.getElementById('cp-main-card');
+            const assetsTitle = document.getElementById('cp-assets-title');
 
-            document.getElementById('cp-deadline').textContent = c.deadline ? new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' }) : "Por definir";
+            if (c.status && c.status.includes('Finalizado')) {
+                progressContainer.classList.add('hidden');
+                completedContainer.classList.remove('hidden');
+                greetingDesc.textContent = "Tu proyecto ha finalizado. Aquí tienes acceso a tus archivos.";
+                mainCard.classList.replace('border-gray-100', 'border-emerald-200');
+                assetsTitle.textContent = "Tus Archivos (Bóveda)";
+            } else {
+                progressContainer.classList.remove('hidden');
+                completedContainer.classList.add('hidden');
+                greetingDesc.textContent = "Aquí puedes monitorear el progreso de tu proyecto en tiempo real.";
+                mainCard.classList.replace('border-emerald-200', 'border-gray-100');
+                assetsTitle.textContent = "Archivos y Entregables";
+
+                document.getElementById('cp-deadline').textContent = c.deadline ? new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }) : "Por definir";
+            }
             
+            // Garantía UI
+            const warrantyContainer = document.getElementById('cp-warranty-container');
+            if (c.warranty && c.warranty.trim() !== '') {
+                // Formatear si viene del input date (YYYY-MM-DD)
+                let warrantyText = c.warranty;
+                if (/^\d{4}-\d{2}-\d{2}$/.test(c.warranty)) {
+                    warrantyText = "Válido hasta: " + new Date(c.warranty + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+                }
+                document.getElementById('cp-warranty-text').textContent = escapeHTML(warrantyText);
+                warrantyContainer.classList.remove('hidden');
+            } else {
+                warrantyContainer.classList.add('hidden');
+            }
+
+            // WhatsApp Link Dinámico (Botón Flotante)
+            const waMsg = encodeURIComponent(`Hola EQB Studio, soy ${c.name}. Tengo una consulta sobre mi proyecto.`);
+            document.getElementById('cp-whatsapp-float').href = `https://wa.me/573021192800?text=${waMsg}`;
+
             const extNotesEl = document.getElementById('cp-external-notes');
             const extNotesContainer = document.getElementById('cp-external-notes-container');
             if (c.externalNotes && c.externalNotes.trim() !== '') {
@@ -651,31 +676,17 @@
             if (parsedAssets.length > 0) {
                 parsedAssets.forEach(asset => {
                     assetsListEl.insertAdjacentHTML('beforeend', `
-                        <a href="${encodeURI(asset.url)}" target="_blank" class="block bg-gray-50 border border-gray-100 p-3 rounded-xl hover:bg-blue-50 transition-colors">
-                            <p class="text-sm font-bold text-[#007AFF] truncate">${escapeHTML(asset.name)}</p>
+                        <a href="${encodeURI(asset.url)}" target="_blank" class="flex items-center bg-gray-50/80 border border-gray-100 p-3.5 rounded-xl hover:bg-blue-50 hover:border-blue-100 transition-colors group">
+                            <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center mr-3 text-gray-400 group-hover:text-[#007AFF]">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                            </div>
+                            <p class="text-sm font-bold text-slate-700 group-hover:text-[#007AFF] truncate flex-1">${escapeHTML(asset.name)}</p>
                         </a>
                     `);
                 });
             } else {
-                assetsListEl.innerHTML = `<p class="text-xs text-gray-500 font-medium">Aún no hay enlaces compartidos.</p>`;
+                assetsListEl.innerHTML = `<p class="text-xs text-gray-500 font-medium">Aún no hay archivos en tu bóveda.</p>`;
             }
-
-            const budgetContainer = document.getElementById('cp-budget-breakdown-container');
-            const budgetList = document.getElementById('cp-budget-list');
-            if (c.budget && c.budget.length > 0) {
-                budgetContainer.classList.remove('hidden');
-                budgetList.innerHTML = c.budget.map(item => `
-                    <div class="flex justify-between items-center bg-white px-3 py-2 rounded-lg border border-gray-100 text-xs">
-                        <span class="font-medium text-slate-600">${escapeHTML(item.concept)}</span>
-                        <span class="font-bold text-slate-800">${formatMoney(item.amount)}</span>
-                    </div>
-                `).join('');
-            } else { budgetContainer.classList.add('hidden'); }
-
-            const p = parseFloat(c.price) || 0; const pd = parseFloat(c.paid) || 0;
-            document.getElementById('cp-price').textContent = formatMoney(p);
-            document.getElementById('cp-paid').textContent = formatMoney(pd);
-            document.getElementById('cp-debt').textContent = formatMoney(Math.max(p - pd, 0));
         }
 
         function addBudgetField(concept = '', amount = '') {
@@ -753,15 +764,9 @@
 
         function openClientModal(id = null) {
             document.getElementById('profileModal').classList.remove('active');
-            ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientPrice', 'clientPaid', 'clientNotes', 'clientExternalNotes'].forEach(id => document.getElementById(id).value = '');
+            ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientWarranty', 'clientPrice', 'clientPaid', 'clientNotes', 'clientExternalNotes'].forEach(id => document.getElementById(id).value = '');
             
-            document.querySelectorAll('.srv-btn').forEach(btn => {
-                btn.classList.remove('selected', 'border-blue-200', 'text-[#007AFF]', 'bg-[#F0F7FF]');
-                btn.classList.add('border-gray-200', 'text-gray-500', 'bg-white');
-                if (btn.dataset.val === 'Creación de Marca') btn.classList.add('selected', 'border-blue-200', 'text-[#007AFF]', 'bg-[#F0F7FF]');
-            });
-            document.getElementById('clientService').value = 'Creación de Marca'; document.getElementById('clientStatus').value = 'Cotizando';
-            document.getElementById('clientProgress').value = 0; document.getElementById('progressVal').textContent = '0%';
+            document.getElementById('clientStatus').value = 'Cotizando';
             document.getElementById('modal-title').textContent = 'Nuevo Proyecto';
             document.getElementById('assets-fields-container').innerHTML = ''; document.getElementById('budget-fields-container').innerHTML = '';
 
@@ -771,18 +776,18 @@
                     document.getElementById('modal-title').textContent = 'Editar Proyecto';
                     document.getElementById('clientId').value = c.id; document.getElementById('clientName').value = c.name;
                     document.getElementById('clientPhone').value = c.phone || ''; document.getElementById('clientEmail').value = c.email || '';
-                    document.getElementById('clientService').value = c.service || '';
-                    
-                    const activeServices = (c.service || '').split(',').map(s => s.trim());
-                    document.querySelectorAll('.srv-btn').forEach(btn => {
-                        btn.classList.remove('selected', 'border-blue-200', 'text-[#007AFF]', 'bg-[#F0F7FF]');
-                        if(activeServices.includes(btn.dataset.val)) btn.classList.add('selected', 'border-blue-200', 'text-[#007AFF]', 'bg-[#F0F7FF]');
-                    });
                     
                     document.getElementById('clientStatus').value = c.status; document.getElementById('clientDeadline').value = c.deadline || '';
+                    
+                    // Asegurarnos de que el campo date tome el valor correcto si es una fecha
+                    if (c.warranty && /^\d{4}-\d{2}-\d{2}$/.test(c.warranty)) {
+                        document.getElementById('clientWarranty').value = c.warranty;
+                    } else {
+                        document.getElementById('clientWarranty').value = '';
+                    }
+
                     document.getElementById('clientPrice').value = c.price || ''; document.getElementById('clientPaid').value = c.paid || '';
                     document.getElementById('clientNotes').value = c.notes || ''; document.getElementById('clientExternalNotes').value = c.externalNotes || '';
-                    document.getElementById('clientProgress').value = c.progress || 0; document.getElementById('progressVal').textContent = (c.progress || 0) + '%';
                     
                     if (Array.isArray(c.assets)) c.assets.forEach(a => addAssetField(a.name, a.url));
                     if (Array.isArray(c.budget)) c.budget.forEach(b => addBudgetField(b.concept, b.amount));
@@ -810,12 +815,16 @@
             const id = document.getElementById('clientId').value;
             const existingClient = clients.find(c => c.id === id);
 
+            const budgetData = getBudgetFromForm();
+            const autoService = budgetData.length > 0 ? budgetData.map(b => b.concept).join(' + ') : 'Proyecto General';
+
             const newClient = {
                 id: id || generateId(),
                 name: escapeHTML(name), phone: escapeHTML(document.getElementById('clientPhone').value.trim()), email: escapeHTML(document.getElementById('clientEmail').value.trim()),
-                service: escapeHTML(document.getElementById('clientService').value), status: escapeHTML(document.getElementById('clientStatus').value),
-                progress: parseInt(document.getElementById('clientProgress').value) || 0, deadline: escapeHTML(document.getElementById('clientDeadline').value),
-                assets: getAssetsFromForm(), budget: getBudgetFromForm(),
+                service: autoService, status: escapeHTML(document.getElementById('clientStatus').value),
+                deadline: escapeHTML(document.getElementById('clientDeadline').value),
+                warranty: escapeHTML(document.getElementById('clientWarranty').value.trim()),
+                assets: getAssetsFromForm(), budget: budgetData,
                 price: parseFloat(document.getElementById('clientPrice').value) || 0, paid: parseFloat(document.getElementById('clientPaid').value) || 0,
                 notes: escapeHTML(document.getElementById('clientNotes').value), externalNotes: escapeHTML(document.getElementById('clientExternalNotes').value),
                 clientCode: existingClient ? existingClient.clientCode : null, createdAt: existingClient ? existingClient.createdAt : new Date().toISOString()
@@ -864,6 +873,18 @@
             document.getElementById('profilePINDisplay').textContent = c.clientCode || "Sin acceso";
             document.getElementById('profileDeadline').textContent = c.deadline ? new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }) : "Sin definir";
             
+            if (c.warranty && c.warranty.trim() !== '') {
+                // Formatear si viene del input date
+                let warrantyText = c.warranty;
+                if (/^\d{4}-\d{2}-\d{2}$/.test(c.warranty)) {
+                    warrantyText = "Hasta: " + new Date(c.warranty + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
+                }
+                document.getElementById('profileWarrantyText').textContent = escapeHTML(warrantyText);
+                document.getElementById('profileWarrantyContainer').classList.remove('hidden');
+            } else {
+                document.getElementById('profileWarrantyContainer').classList.add('hidden');
+            }
+
             const p = parseFloat(c.price) || 0; const pd = parseFloat(c.paid) || 0; const percent = p > 0 ? Math.min((pd / p) * 100, 100) : 0;
             document.getElementById('profileTotal').textContent = formatMoney(p); document.getElementById('profileDebt').textContent = formatMoney(Math.max(p - pd, 0));
             document.getElementById('profileProgress').style.width = `${percent}%`; document.getElementById('profilePaidText').textContent = `${Math.round(percent)}% Pagado`;
@@ -904,6 +925,9 @@
         }
 
         function getStatusColor(status) {
+            if (!status) return 'bg-gray-100 text-gray-700';
+            if (status.includes('Finalizado - En garantía')) return 'bg-emerald-100/80 text-emerald-800 border-emerald-200';
+            if (status.includes('vencido')) return 'bg-slate-200/80 text-slate-600 border-slate-300';
             return { 'Cotizando': 'bg-gray-100 text-gray-700 border-gray-200/60', 'En Progreso': 'bg-amber-100/60 text-amber-700', 'En Revisión': 'bg-purple-100/60 text-purple-700', 'Finalizado': 'bg-emerald-100/60 text-emerald-700' }[status] || 'bg-gray-100 text-gray-700';
         }
 
@@ -913,11 +937,11 @@
         }
 
         function renderClients() {
-            const activeClients = clients.filter(c => c.status !== 'Finalizado' && c.status !== 'Pausado');
+            const activeClients = clients.filter(c => c.status && !c.status.includes('Finalizado') && c.status !== 'Pausado');
             let totalPaid = 0; let totalPending = 0;
             clients.forEach(c => {
                 const pending = (parseFloat(c.price) || 0) - (parseFloat(c.paid) || 0); totalPaid += (parseFloat(c.paid) || 0);
-                if (pending > 0 && c.status !== 'Finalizado') totalPending += pending;
+                if (pending > 0 && c.status && !c.status.includes('Finalizado')) totalPending += pending;
             });
             document.getElementById('stat-active').textContent = activeClients.length; document.getElementById('stat-paid').textContent = formatMoney(totalPaid); document.getElementById('stat-pending').textContent = formatMoney(totalPending);
             
@@ -928,9 +952,9 @@
             const filtered = clients.filter(c => {
                 const matchSearch = c.name.toLowerCase().includes(query) || (c.service && c.service.toLowerCase().includes(query));
                 let matchFilter = true;
-                if (currentFilter === 'active') matchFilter = c.status !== 'Finalizado';
+                if (currentFilter === 'active') matchFilter = c.status && !c.status.includes('Finalizado');
                 else if (currentFilter === 'debt') matchFilter = ((parseFloat(c.price) || 0) - (parseFloat(c.paid) || 0)) > 0;
-                else if (currentFilter === 'completed') matchFilter = c.status === 'Finalizado';
+                else if (currentFilter === 'completed') matchFilter = c.status && c.status.includes('Finalizado');
                 return matchSearch && matchFilter;
             });
 
@@ -946,7 +970,6 @@
                                 <span class="text-[9px] font-bold px-2 py-1 rounded-md uppercase ${getStatusColor(c.status)}">${escapeHTML(c.status)}</span>
                             </div>
                             <p class="text-xs text-gray-500 font-semibold mb-3 truncate">${escapeHTML(c.service || 'Sin servicio')}</p>
-                            <div class="w-full bg-gray-100 rounded-full h-1.5 mb-3"><div class="bg-[#007AFF] h-1.5 rounded-full" style="width: ${parseInt(c.progress) || 0}%"></div></div>
                             <div class="flex justify-between items-end pt-3 border-t border-gray-50">
                                 <div><p class="text-[10px] text-gray-400 font-bold uppercase">Deuda</p><p class="text-sm font-bold ${pending > 0 ? 'text-red-500' : 'text-emerald-500'}">${pending > 0 ? formatMoney(pending) : 'Pagado'}</p></div>
                             </div>
@@ -956,14 +979,7 @@
             }
         }
 
-        function toggleService(btn) {
-            btn.classList.toggle('selected');
-            if(btn.classList.contains('selected')) { btn.classList.add('border-blue-200', 'text-[#007AFF]', 'bg-[#F0F7FF]'); btn.classList.remove('border-gray-200', 'text-gray-500', 'bg-white'); } 
-            else { btn.classList.remove('border-blue-200', 'text-[#007AFF]', 'bg-[#F0F7FF]'); btn.classList.add('border-gray-200', 'text-gray-500', 'bg-white'); }
-            document.getElementById('clientService').value = Array.from(document.querySelectorAll('.srv-btn.selected')).map(b => b.dataset.val).join(', ');
-        }
-
-        Object.assign(window, { handleAuth, lockApp, switchTab, openClientModal, closeClientModal, saveClient, deleteCurrentClient, exportData, generateClientPIN, openProfileModal, closeProfileModal, setFilter, renderClients, changePassword, addAssetField, addBudgetField, calculateTotalBudget, toggleService });
+        Object.assign(window, { handleAuth, lockApp, switchTab, openClientModal, closeClientModal, saveClient, deleteCurrentClient, exportData, generateClientPIN, openProfileModal, closeProfileModal, setFilter, renderClients, changePassword, addAssetField, addBudgetField, calculateTotalBudget });
     </script>
 </body>
 </html>
