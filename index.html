@@ -93,6 +93,15 @@
                     <button onclick="handleAuth()" id="auth-btn" class="w-full bg-[#007AFF] text-white font-semibold rounded-2xl py-3.5 shadow-lg shadow-blue-500/25 hover:bg-blue-600 transition-colors active:scale-[0.98] text-lg flex items-center justify-center">Acceder</button>
                 </div>
                 <p id="auth-error" class="text-red-500 text-sm mt-4 hidden fade-in text-center font-medium bg-red-50 px-4 py-2 rounded-lg">Credenciales incorrectas</p>
+
+                <!-- NUEVO: Módulo sutil de Reseñas Google -->
+                <div class="w-full mt-10 flex flex-col items-center opacity-80 hover:opacity-100 transition-opacity">
+                    <p class="text-[10px] text-gray-400 font-bold mb-2 uppercase tracking-widest">¿Te gusta nuestro trabajo?</p>
+                    <a href="https://share.google/xT3RTseFhR6H5Lfua" target="_blank" rel="noopener noreferrer" class="flex items-center bg-white px-5 py-2.5 rounded-xl border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-md transition-all group active:scale-95">
+                        <svg class="w-4 h-4 text-yellow-400 mr-2 group-hover:scale-110 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <span class="text-xs font-bold text-slate-700">Califícanos en Google</span>
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -327,7 +336,6 @@
                             <span class="text-sm font-semibold text-slate-800">Fecha de Entrega</span>
                             <input type="date" id="clientDeadline" class="text-sm text-[#007AFF] font-medium bg-transparent focus:outline-none">
                         </div>
-                        <!-- NUEVO: Campo de Garantía / Vigencia (Calendario) -->
                         <div class="px-5 py-3.5 flex justify-between items-center bg-blue-50/30 border-t border-blue-100/50">
                             <span class="text-sm font-semibold text-blue-900">Garantía / Vigencia</span>
                             <input type="date" id="clientWarranty" class="text-sm text-[#007AFF] font-medium bg-transparent focus:outline-none text-right">
@@ -648,7 +656,7 @@
             // Garantía UI
             const warrantyContainer = document.getElementById('cp-warranty-container');
             if (c.warranty && c.warranty.trim() !== '') {
-                // Formatear si viene del input date (YYYY-MM-DD)
+                // Formatear si viene del input date
                 let warrantyText = c.warranty;
                 if (/^\d{4}-\d{2}-\d{2}$/.test(c.warranty)) {
                     warrantyText = "Válido hasta: " + new Date(c.warranty + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -779,7 +787,6 @@
                     
                     document.getElementById('clientStatus').value = c.status; document.getElementById('clientDeadline').value = c.deadline || '';
                     
-                    // Asegurarnos de que el campo date tome el valor correcto si es una fecha
                     if (c.warranty && /^\d{4}-\d{2}-\d{2}$/.test(c.warranty)) {
                         document.getElementById('clientWarranty').value = c.warranty;
                     } else {
@@ -874,7 +881,6 @@
             document.getElementById('profileDeadline').textContent = c.deadline ? new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }) : "Sin definir";
             
             if (c.warranty && c.warranty.trim() !== '') {
-                // Formatear si viene del input date
                 let warrantyText = c.warranty;
                 if (/^\d{4}-\d{2}-\d{2}$/.test(c.warranty)) {
                     warrantyText = "Hasta: " + new Date(c.warranty + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
