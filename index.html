@@ -3,488 +3,477 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>EQB STUDIO - Bóveda Digital</title>
+    <title>EQB STUDIO - App</title>
     
     <link rel="icon" type="image/svg+xml" href="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg">
     <link rel="apple-touch-icon" href="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg">
     
-    <!-- Meta tags para PWA (App Feel) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="EQB STUDIO">
-    <meta name="theme-color" content="#F2F2F7">
+    <meta name="theme-color" content="#5C33A2">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Nunito', sans-serif;
+            background-color: #E5E7EB; /* Fondo oscuro en PC */
             -webkit-tap-highlight-color: transparent;
-            background-color: #000;
-            overscroll-behavior-y: none; /* Evita el rebote del navegador en móviles */
+            overscroll-behavior-y: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
 
-        /* Bloquea la selección de texto para que parezca una app nativa */
-        .app-container {
+        /* Contenedor simulando pantalla de celular en PC */
+        .app-frame {
+            width: 100%;
+            height: 100%;
+            background-color: #F8F9FA;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
             -webkit-user-select: none;
             user-select: none;
         }
 
-        /* Permite seleccionar texto solo donde se debe escribir */
-        input, textarea, [contenteditable="true"] {
+        @media (min-width: 600px) {
+            .app-frame {
+                width: 400px;
+                height: 850px;
+                max-height: 95vh;
+                border-radius: 40px;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 12px #1E293B;
+            }
+        }
+
+        input, textarea, select {
             -webkit-user-select: auto;
             user-select: auto;
         }
 
-        .ios-bg { background-color: #F2F2F7; }
-        
-        .glass-nav { 
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            padding-top: env(safe-area-inset-top); /* Respeta el notch del iPhone */
-        }
-        
-        .glass-bottom-nav {
-            background: rgba(255, 255, 255, 0.90);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(0,0,0,0.05);
-            padding-bottom: env(safe-area-inset-bottom); /* Respeta la barra home de iOS */
-        }
-
-        .slide-up-modal {
-            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease;
-            pointer-events: none;
-        }
-        .slide-up-modal.active { pointer-events: auto; }
-
-        @media (max-width: 767px) {
-            .slide-up-modal { transform: translateY(100%); }
-            .slide-up-modal.active { transform: translateY(0); }
-        }
-
-        @media (min-width: 768px) {
-            .slide-up-modal {
-                transform: translate(-50%, -45%) scale(0.95);
-                opacity: 0; left: 50% !important; top: 50% !important; bottom: auto !important; right: auto !important; max-height: 96%; width: 90%;
-            }
-            .slide-up-modal.active { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-        }
-        
-        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Colores del Tema "SpaceApp" Reference */
+        .bg-brand-purple { background-color: #5C33A2; }
+        .text-brand-purple { color: #5C33A2; }
+        .bg-brand-orange { background-color: #FF8A4C; }
+        .bg-brand-blue { background-color: #00BFFF; }
+        .bg-brand-pink { background-color: #F0147B; }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .currency-input { position: relative; }
-        .currency-input::before {
-            content: '$'; position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #9CA3AF; font-weight: 500; z-index: 10;
+        /* Botón de Nav Central Flotante */
+        .floating-fab {
+            box-shadow: 0 8px 20px rgba(240, 20, 123, 0.4);
         }
-        .currency-input input { padding-left: 2.2rem; }
 
-        .squarcle { border-radius: 18px; }
-        .premium-shadow { box-shadow: 0 4px 20px -4px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02); }
-        
-        .vault-glow {
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.15), inset 0 0 10px rgba(255,255,255,0.5);
+        /* Modales tipo Bottom Sheet */
+        .bottom-sheet {
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+            transform: translateY(100%);
         }
+        .bottom-sheet.active {
+            transform: translateY(0);
+        }
+
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
-<body class="text-slate-900 bg-black md:bg-gray-100 h-screen w-screen overflow-hidden flex justify-center items-center font-sans app-container">
+<body>
 
-    <div id="app-container" class="w-full h-full md:max-w-[1200px] ios-bg relative overflow-hidden md:shadow-2xl md:rounded-[32px] md:h-[95vh] lg:h-[92vh] md:border md:border-gray-200/60 flex flex-col md:flex-row">
+    <div class="app-frame" id="app-container">
         
-        <!-- PANTALLA DE AUTENTICACIÓN -->
-        <div id="auth-screen" class="absolute inset-0 ios-bg z-50 flex flex-col items-center justify-center px-6 transition-opacity duration-300">
-            <div class="w-full max-w-sm mx-auto flex flex-col items-center">
-                <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="EQB STUDIO Logo" class="h-20 md:h-28 w-auto mb-6 object-contain pointer-events-none drop-shadow-sm">
-                <h1 id="auth-title" class="text-2xl md:text-3xl font-bold mb-1 text-center tracking-tight text-slate-900">EQB STUDIO</h1>
-                <p id="auth-subtitle" class="text-slate-500 mb-6 text-center text-sm md:text-base font-medium">Ingresa tu contraseña o PIN de cliente</p>
+        <!-- ========================================== -->
+        <!-- PANTALLA DE LOGIN                          -->
+        <!-- ========================================== -->
+        <div id="auth-screen" class="absolute inset-0 bg-[#F8F9FA] z-50 flex flex-col transition-opacity duration-300">
+            <!-- Curva Superior Morada -->
+            <div class="bg-brand-purple h-[35%] rounded-b-[40px] flex items-center justify-center relative shadow-md">
+                <!-- Decoración -->
+                <div class="absolute -left-10 top-10 w-32 h-32 bg-white/10 rounded-full"></div>
+                <div class="absolute -right-10 bottom-10 w-24 h-24 bg-white/10 rounded-full"></div>
                 
-                <div class="w-full">
-                    <input type="password" id="auth-password" placeholder="Contraseña o PIN" class="w-full bg-white rounded-2xl px-4 py-3.5 text-center text-lg font-medium shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100 focus:outline-none focus:border-[#007AFF] focus:ring-4 focus:ring-[#007AFF]/10 transition-all mb-4">
-                    <button onclick="handleAuth()" id="auth-btn" class="w-full bg-[#007AFF] text-white font-semibold rounded-2xl py-3.5 shadow-lg shadow-blue-500/25 hover:bg-blue-600 transition-colors active:scale-[0.98] text-lg flex items-center justify-center">Acceder</button>
+                <div class="flex flex-col items-center z-10">
+                    <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-16 w-auto invert brightness-0 mb-3">
+                    <h1 class="text-white text-xl font-black tracking-widest">EQB STUDIO</h1>
                 </div>
-                <p id="auth-error" class="text-red-500 text-sm mt-3 hidden fade-in text-center font-medium bg-red-50 px-4 py-2 rounded-lg">Credenciales incorrectas</p>
+            </div>
 
-                <!-- Enlace a Instagram -->
-                <a href="https://instagram.com/eqbstudio" target="_blank" rel="noopener noreferrer" class="mt-8 flex items-center text-gray-400 hover:text-[#E1306C] transition-colors group">
-                    <svg class="w-5 h-5 mr-1.5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                    </svg>
-                    <span class="text-sm font-semibold">@eqbstudio</span>
+            <!-- Formulario -->
+            <div class="flex-1 px-8 pt-10 flex flex-col relative">
+                <h2 class="text-2xl font-black text-slate-800 mb-2">LOGIN</h2>
+                <p class="text-slate-500 font-semibold text-sm mb-8">Ingresa tus datos para acceder a la cuenta.</p>
+                
+                <div class="relative mb-6">
+                    <p class="text-xs font-bold text-slate-400 mb-2 uppercase pl-2">Contraseña o PIN</p>
+                    <input type="password" id="auth-password" class="w-full bg-white rounded-2xl px-5 py-4 text-base font-bold text-slate-800 shadow-[0_4px_15px_rgba(0,0,0,0.03)] border border-slate-100 focus:outline-none focus:border-purple-400 transition-all">
+                </div>
+                
+                <button onclick="handleAuth()" id="auth-btn" class="w-full bg-brand-purple text-white font-bold rounded-2xl py-4 shadow-[0_8px_20px_rgba(92,51,162,0.3)] active:scale-[0.98] transition-transform text-lg mt-4">Sign In</button>
+                
+                <p id="auth-error" class="text-red-500 text-sm mt-4 hidden text-center font-bold">Credenciales incorrectas</p>
+
+                <div class="mt-auto pb-8 text-center">
+                    <p class="text-xs text-slate-400 font-semibold">¿Necesitas ayuda? <a href="https://instagram.com/eqbstudio" target="_blank" class="text-brand-purple font-bold">Contáctanos</a></p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ========================================== -->
+        <!-- CONTENIDO PRINCIPAL (ADMIN)                -->
+        <!-- ========================================== -->
+        <div id="main-app" class="flex-1 flex flex-col hidden h-full relative">
+            
+            <div class="flex-1 overflow-y-auto no-scrollbar pb-32 pt-10 px-6" id="scroll-container">
+                
+                <!-- PESTAÑA: HOME -->
+                <div id="tab-home" class="tab-content h-full flex flex-col">
+                    <!-- Header App -->
+                    <div class="flex justify-between items-center mb-6">
+                        <svg class="w-7 h-7 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+                        <div class="w-10 h-10 rounded-full bg-brand-orange flex items-center justify-center text-white font-black shadow-md border-2 border-white">EQ</div>
+                    </div>
+
+                    <h1 class="text-3xl font-black text-slate-800 leading-tight">Hello!</h1>
+                    <h2 class="text-3xl font-black text-slate-800 leading-tight mb-1">Admin Panel</h2>
+                    <p class="text-slate-500 text-sm font-semibold mb-6" id="current-date">Manage your cloud storage.</p>
+
+                    <!-- Barra de Búsqueda -->
+                    <div class="relative mb-8">
+                        <input type="text" id="searchInput" onkeyup="renderClients()" placeholder="Search clients..." class="w-full bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-slate-100 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold focus:outline-none text-slate-800">
+                        <div class="absolute left-4 top-1/2 -translate-y-1/2 bg-brand-purple p-1.5 rounded-lg text-white">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Grid (4 Colores) -->
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <!-- Card 1: Purple (Activos) -->
+                        <div class="bg-brand-purple rounded-3xl p-5 text-white shadow-lg shadow-purple-500/20 relative overflow-hidden" onclick="setFilter('active')">
+                            <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full"></div>
+                            <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path></svg>
+                            </div>
+                            <p class="font-black tracking-wide text-lg">Activos</p>
+                            <p class="text-sm font-semibold opacity-80 mt-0.5"><span id="stat-active">0</span> Clientes</p>
+                        </div>
+
+                        <!-- Card 2: Orange (Cobrado) -->
+                        <div class="bg-brand-orange rounded-3xl p-5 text-white shadow-lg shadow-orange-500/20 relative overflow-hidden" onclick="setFilter('completed')">
+                            <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full"></div>
+                            <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <p class="font-black tracking-wide text-lg">Pagados</p>
+                            <p class="text-sm font-semibold opacity-80 mt-0.5 truncate" id="stat-paid">$0</p>
+                        </div>
+
+                        <!-- Card 3: Blue (Por Cobrar) -->
+                        <div class="bg-brand-blue rounded-3xl p-5 text-white shadow-lg shadow-blue-500/20 relative overflow-hidden" onclick="setFilter('debt')">
+                            <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full"></div>
+                            <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <p class="font-black tracking-wide text-lg">Deudas</p>
+                            <p class="text-sm font-semibold opacity-80 mt-0.5 truncate" id="stat-pending">$0</p>
+                        </div>
+
+                        <!-- Card 4: Pink (Todos) -->
+                        <div class="bg-brand-pink rounded-3xl p-5 text-white shadow-lg shadow-pink-500/20 relative overflow-hidden" onclick="setFilter('all')">
+                            <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full"></div>
+                            <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                            </div>
+                            <p class="font-black tracking-wide text-lg">Todos</p>
+                            <p class="text-sm font-semibold opacity-80 mt-0.5">Historial</p>
+                        </div>
+                    </div>
+
+                    <h3 class="font-black text-slate-800 text-lg mb-4">Recent Uploads</h3>
+                    
+                    <!-- Lista de Clientes -->
+                    <div id="clientsList" class="flex flex-col space-y-3 pb-8"></div>
+                    <div id="emptyState" class="hidden text-center py-10 text-slate-400 text-sm font-bold">No data found.</div>
+                </div>
+
+                <!-- PESTAÑA: AJUSTES -->
+                <div id="tab-settings" class="tab-content hidden h-full flex flex-col">
+                    <div class="flex items-center mb-8">
+                        <h1 class="text-3xl font-black text-slate-800">Setting</h1>
+                    </div>
+                    
+                    <div class="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] mb-6">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Seguridad</p>
+                        <input type="password" id="old-pwd" placeholder="Contraseña Actual" class="w-full bg-slate-50 rounded-xl px-5 py-4 text-sm font-bold mb-3 border border-slate-100 focus:outline-none focus:border-brand-purple">
+                        <input type="password" id="new-pwd" placeholder="Nueva Contraseña" class="w-full bg-slate-50 rounded-xl px-5 py-4 text-sm font-bold mb-4 border border-slate-100 focus:outline-none focus:border-brand-purple">
+                        <button onclick="changePassword()" class="w-full bg-slate-800 text-white text-sm font-bold rounded-xl py-4 active:scale-95 transition-transform">Update Password</button>
+                        <p id="pwd-msg" class="text-sm mt-3 text-center hidden"></p>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Datos</p>
+                        <button onclick="exportData()" class="flex items-center justify-between w-full p-4 bg-slate-50 rounded-xl font-bold text-slate-700 active:scale-95 transition-transform">
+                            <span>Export Data Backup</span>
+                            <svg class="w-5 h-5 text-brand-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ========================================== -->
+            <!-- NAVEGACIÓN INFERIOR (TIPO APP NATIVA)      -->
+            <!-- ========================================== -->
+            <nav class="absolute bottom-0 w-full bg-white rounded-t-[35px] shadow-[0_-10px_30px_rgba(0,0,0,0.06)] px-6 py-3 flex justify-between items-center z-40 pb-safe">
+                
+                <button onclick="switchTab('home')" class="flex flex-col items-center justify-center w-16 nav-btn" data-tab="home">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container bg-brand-purple text-white transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    </div>
+                    <span class="text-[10px] mt-1 font-bold nav-text text-brand-purple">Home</span>
+                </button>
+                
+                <button onclick="alert('Historial en construcción')" class="flex flex-col items-center justify-center w-16 text-slate-400 hover:text-slate-600">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                    </div>
+                    <span class="text-[10px] mt-1 font-bold">My Files</span>
+                </button>
+
+                <!-- FAB CENTRAL (Upload) -->
+                <div class="relative -top-6">
+                    <button onclick="openClientModal()" class="w-14 h-14 bg-brand-pink rounded-full flex items-center justify-center text-white floating-fab active:scale-95 transition-transform border-4 border-[#F8F9FA]">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
+                    </button>
+                    <span class="text-[10px] font-bold text-slate-800 absolute -bottom-5 w-full text-center">Upload</span>
+                </div>
+
+                <button onclick="switchTab('settings')" class="flex flex-col items-center justify-center w-16 nav-btn" data-tab="settings">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container text-slate-400 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <span class="text-[10px] mt-1 font-bold nav-text text-slate-400">Setting</span>
+                </button>
+
+                <button onclick="lockApp()" class="flex flex-col items-center justify-center w-16 text-slate-400 hover:text-red-500 transition-colors active:scale-95">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    </div>
+                    <span class="text-[10px] mt-1 font-bold">Log Out</span>
+                </button>
+
+            </nav>
+        </div>
+
+
+        <!-- ========================================== -->
+        <!-- ENTORNO DEL CLIENTE (BÓVEDA DIGITAL)       -->
+        <!-- ========================================== -->
+        <div id="client-portal" class="flex-1 w-full h-full flex flex-col hidden relative">
+            <div class="flex justify-between items-center px-6 pt-10 pb-4 bg-[#F8F9FA]">
+                <div class="flex items-center">
+                    <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-8 w-auto mr-3">
+                </div>
+                <div class="w-10 h-10 rounded-full bg-brand-orange flex items-center justify-center text-white font-black shadow-md border-2 border-white" onclick="lockApp()">X</div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto px-6 pb-20 bg-[#F8F9FA]">
+                
+                <h1 class="text-3xl font-black text-slate-800 leading-tight">Hello!</h1>
+                <h2 class="text-3xl font-black text-slate-800 leading-tight mb-1 truncate" id="cp-name">Client Name</h2>
+                <p class="text-slate-500 text-sm font-semibold mb-8">Let's manage your brand files.</p>
+
+                <!-- Grid de Info (App Style) -->
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="bg-brand-purple rounded-3xl p-5 text-white shadow-lg shadow-purple-500/20">
+                        <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <p class="font-black tracking-wide text-lg truncate" id="cp-service">Service</p>
+                        <p class="text-sm font-semibold opacity-80 mt-0.5">Active Service</p>
+                    </div>
+
+                    <div class="bg-brand-orange rounded-3xl p-5 text-white shadow-lg shadow-orange-500/20">
+                        <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <p class="font-black tracking-wide text-lg truncate" id="cp-status">Status</p>
+                        <p class="text-sm font-semibold opacity-80 mt-0.5" id="cp-deadline-label">Progress</p>
+                    </div>
+                </div>
+
+                <!-- Garantía (Si existe) -->
+                <div id="cp-warranty-container" class="bg-brand-blue rounded-3xl p-5 text-white shadow-lg shadow-blue-500/20 mb-8 hidden">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="font-black tracking-wide text-lg" id="cp-warranty-text">--</p>
+                            <p class="text-sm font-semibold opacity-80 mt-0.5">Garantía / Vigencia</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="font-black text-slate-800 text-lg mb-4">My Files</h3>
+                
+                <!-- Archivos Bóveda -->
+                <div id="cp-assets-list" class="flex flex-col space-y-3 mb-8"></div>
+
+                <!-- Mensaje Externo -->
+                <div id="cp-external-notes-container" class="bg-white rounded-3xl p-5 border border-slate-100 shadow-[0_4px_15px_rgba(0,0,0,0.03)] hidden mb-8">
+                    <h4 class="font-black text-slate-800 text-sm tracking-wider uppercase mb-2">Note from Studio</h4>
+                    <p class="text-sm text-slate-500 font-semibold select-text" id="cp-external-notes"></p>
+                </div>
+
+                <!-- Botón Contacto App Style -->
+                <a id="cp-whatsapp-float" href="#" target="_blank" class="bg-brand-purple w-full rounded-2xl py-4 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-purple-500/30 active:scale-95 transition-transform mb-6">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                    Contact Support
                 </a>
             </div>
         </div>
 
-        <!-- ENTORNO DEL CLIENTE (CLIENT PORTAL - BÓVEDA) -->
-        <div id="client-portal" class="flex-1 w-full h-full flex flex-col hidden relative bg-[#F9FAFB] overflow-y-auto overscroll-none">
-            <div class="glass-nav sticky top-0 z-10 px-6 py-4 flex justify-between items-center shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
-                <div class="flex items-center">
-                    <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-8 md:h-10 w-auto mr-3 object-contain pointer-events-none">
-                    <h2 class="font-bold text-slate-800 text-sm tracking-tight">Portal de Cliente</h2>
-                </div>
-                <button onclick="lockApp()" class="text-red-500 text-[11px] font-bold hover:bg-red-100 transition-colors px-3 py-2 bg-red-50 rounded-xl flex items-center active:scale-95">
-                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                    Salir
-                </button>
-            </div>
-
-            <div class="p-6 md:p-10 max-w-2xl mx-auto w-full pb-32 relative">
-                <h1 class="text-2xl md:text-3xl font-bold text-slate-900 mb-1 tracking-tight">Hola, <span id="cp-name" class="text-[#007AFF]">Cliente</span></h1>
-                <p class="text-gray-500 text-sm mb-8" id="cp-greeting-desc">Aquí puedes monitorear el progreso de tu proyecto en tiempo real.</p>
-
-                <!-- Status Card / Bóveda Banner -->
-                <div class="bg-white rounded-[24px] p-5 md:p-6 premium-shadow border border-gray-100 mb-6 transition-all duration-500" id="cp-main-card">
-                    <div class="flex justify-between items-start mb-6">
-                        <div>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-1 tracking-wider">Servicio Activo</p>
-                            <h3 class="font-bold text-lg text-slate-800 tracking-tight" id="cp-service">Servicio</h3>
-                        </div>
-                        <span id="cp-status" class="text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-wider border">Estado</span>
-                    </div>
-
-                    <!-- ESTADO 1: EN PROGRESO -->
-                    <div id="cp-progress-container" class="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Fecha estimada de entrega</p>
-                        <p class="text-sm font-bold text-slate-800" id="cp-deadline">--</p>
-                    </div>
-
-                    <!-- ESTADO 2: FINALIZADO (Bóveda Activa) -->
-                    <div id="cp-completed-container" class="hidden bg-emerald-50 border border-emerald-200/60 rounded-2xl p-5 flex items-center vault-glow">
-                        <div class="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 mr-4 shadow-lg shadow-emerald-500/30">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                        </div>
-                        <div>
-                            <p class="text-sm md:text-base font-bold text-emerald-900 tracking-tight">Proyecto Finalizado</p>
-                            <p class="text-xs text-emerald-700 font-medium mt-0.5">Tus archivos están disponibles a continuación.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Garantía / Vigencia -->
-                <div id="cp-warranty-container" class="bg-blue-50/50 rounded-[20px] p-4 md:p-5 border border-blue-100 mb-6 hidden flex items-start">
-                    <svg class="w-5 h-5 text-[#007AFF] shrink-0 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                    <div>
-                        <p class="text-[10px] text-blue-500 font-bold uppercase tracking-wider mb-0.5">Garantía / Vigencia</p>
-                        <p class="text-sm font-semibold text-slate-800" id="cp-warranty-text">--</p>
-                    </div>
-                </div>
-
-                <!-- Gestor de Archivos (Bóveda) -->
-                <div class="bg-white rounded-[24px] p-5 md:p-6 premium-shadow border border-gray-100 mb-6">
-                    <div class="flex items-center mb-4">
-                        <svg class="w-5 h-5 text-indigo-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
-                        <h4 class="font-bold text-slate-800 text-sm tracking-tight" id="cp-assets-title">Archivos y Entregables</h4>
-                    </div>
-                    <div id="cp-assets-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <!-- Botones de archivos -->
-                    </div>
-                </div>
-
-                <!-- Notas Externas del Equipo -->
-                <div id="cp-external-notes-container" class="bg-amber-50/50 rounded-[24px] p-5 md:p-6 border border-amber-100 mb-6 hidden">
-                    <h4 class="font-bold text-amber-900 text-sm tracking-tight mb-2">Mensaje del equipo</h4>
-                    <p class="text-sm text-amber-800 whitespace-pre-wrap leading-relaxed font-medium" id="cp-external-notes"></p>
-                </div>
-                
-                <!-- Footer Elegante -->
-                <div class="mt-12 mb-4 flex flex-col items-center opacity-60">
-                    <p class="text-center text-xs text-gray-500 font-medium tracking-wide mb-2">Desarrollado por EQB STUDIO</p>
-                    <a href="https://instagram.com/eqbstudio" target="_blank" class="text-xs font-bold text-[#bc1888] hover:opacity-80 transition-opacity">
-                        @eqbstudio en Instagram
-                    </a>
-                </div>
-            </div>
-
-            <!-- BOTÓN DE PÁNICO FLOTANTE (WHATSAPP CANALIZADO) -->
-            <a id="cp-whatsapp-float" href="https://wa.me/573021192800?text=Hola%20EQB%20STUDIO,%20tengo%20una%20duda%20sobre%20mi%20proyecto." target="_blank" rel="noopener noreferrer" class="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-[#25D366] text-white p-3.5 md:p-4 rounded-full shadow-[0_8px_20px_rgba(37,211,102,0.3)] hover:scale-105 active:scale-95 transition-all z-20 group flex items-center justify-center">
-                <svg class="w-6 h-6 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-                <div class="absolute right-full mr-3 bg-slate-900 text-white text-[10px] px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-medium pointer-events-none">¿Dudas? Hablemos</div>
-            </a>
-        </div>
-
         <!-- ========================================== -->
-        <!-- NAVEGACIÓN LATERAL/INFERIOR (ADMIN)        -->
+        <!-- MODAL: CREAR/EDITAR CLIENTE (APP STYLE)    -->
         <!-- ========================================== -->
-        <nav id="main-nav" class="absolute md:relative bottom-0 w-full md:w-60 lg:w-64 glass-bottom-nav md:bg-white md:backdrop-filter-none border-t md:border-t-0 md:border-r border-gray-200/50 pb-safe pt-2 md:pt-8 px-6 md:px-5 flex md:flex-col justify-around md:justify-start items-center md:items-start z-30 md:space-y-3 hidden">
-            <div class="hidden md:block mb-10 px-2 w-full text-center">
-                <div class="bg-white p-3 rounded-2xl premium-shadow inline-flex items-center justify-center mb-4 border border-gray-50 min-w-[4rem] min-h-[4rem]">
-                    <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-10 w-auto max-w-[100px] object-contain pointer-events-none">
-                </div>
-                <h2 class="font-bold text-lg tracking-tight text-slate-800">EQB STUDIO</h2>
-            </div>
-
-            <button onclick="switchTab('home')" class="flex flex-col md:flex-row items-center md:px-4 md:py-3.5 w-auto md:w-full rounded-[16px] text-[#007AFF] md:bg-[#F0F7FF] nav-btn transition-all duration-200 group active:scale-95 md:active:scale-100" data-tab="home">
-                <svg class="w-6 h-6 mb-1 md:mb-0 md:mr-3 shrink-0 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                <span class="text-[10px] md:text-sm font-semibold truncate">Proyectos</span>
-            </button>
-            <button onclick="switchTab('settings')" class="flex flex-col md:flex-row items-center md:px-4 md:py-3.5 w-auto md:w-full rounded-[16px] text-gray-400 hover:bg-gray-50 hover:text-gray-600 transition-all duration-200 nav-btn group active:scale-95 md:active:scale-100" data-tab="settings">
-                <svg class="w-6 h-6 mb-1 md:mb-0 md:mr-3 shrink-0 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                <span class="text-[10px] md:text-sm font-medium truncate">Ajustes</span>
-            </button>
-            <button onclick="lockApp()" class="flex flex-col md:flex-row items-center md:px-4 md:py-3.5 w-auto md:w-full rounded-[16px] text-red-400 hover:bg-red-50 hover:text-red-500 transition-all duration-200 mt-auto md:mb-6 group active:scale-95 md:active:scale-100">
-                <svg class="w-6 h-6 mb-1 md:mb-0 md:mr-3 shrink-0 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                <span class="text-[10px] md:text-sm font-bold truncate">Salir</span>
-            </button>
-        </nav>
-
-        <!-- CONTENIDO PRINCIPAL (ADMIN) -->
-        <div id="main-app" class="flex-1 flex flex-col hidden h-full relative bg-[#F9FAFB]">
-            <div class="flex-1 overflow-y-auto no-scrollbar pb-24 md:pb-8 relative w-full px-5 md:px-10 pt-8" id="scroll-container">
-                
-                <!-- PESTAÑA: HOME -->
-                <div id="tab-home" class="tab-content max-w-5xl mx-auto">
-                    <div class="flex justify-between items-end mb-8">
-                        <div>
-                            <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">Proyectos</h1>
-                            <p class="text-gray-500 text-sm mt-1 font-medium" id="current-date"></p>
-                        </div>
-                        <button onclick="openClientModal()" class="w-12 h-12 bg-[#007AFF] shadow-lg shadow-blue-500/30 rounded-full flex items-center justify-center text-white hover:bg-blue-600 active:scale-95 transition-all text-2xl pb-1">+</button>
-                    </div>
-
-                    <!-- Widgets Financieros -->
-                    <div class="flex overflow-x-auto no-scrollbar space-x-4 mb-8 pb-3 snap-x">
-                        <div class="min-w-[150px] bg-white rounded-[20px] p-5 premium-shadow border border-gray-100 flex-1 shrink-0 snap-start">
-                            <p class="text-[11px] text-gray-500 font-bold uppercase tracking-wider mb-2">Activos</p>
-                            <p class="text-3xl font-bold text-slate-800 tracking-tight" id="stat-active">0</p>
-                        </div>
-                        <div class="min-w-[160px] bg-white rounded-[20px] p-5 premium-shadow border border-gray-100 flex-1 shrink-0 snap-start">
-                            <p class="text-[11px] text-emerald-600 font-bold uppercase tracking-wider mb-2">Cobrado</p>
-                            <p class="text-2xl font-bold text-emerald-600 truncate tracking-tight mt-1" id="stat-paid">$0</p>
-                        </div>
-                        <div class="min-w-[160px] bg-white rounded-[20px] p-5 premium-shadow border border-gray-100 flex-1 shrink-0 snap-start border-l-4 border-l-red-500">
-                            <p class="text-[11px] text-red-500 font-bold uppercase tracking-wider mb-2">Por Cobrar</p>
-                            <p class="text-2xl font-bold text-slate-800 truncate tracking-tight mt-1" id="stat-pending">$0</p>
-                        </div>
-                    </div>
-
-                    <!-- Buscador y Filtros -->
-                    <div class="mb-6 w-full md:max-w-md">
-                        <input type="text" id="searchInput" onkeyup="renderClients()" placeholder="Buscar proyecto..." class="w-full bg-white shadow-sm rounded-[16px] px-4 py-3.5 text-sm font-medium border border-gray-100 focus:outline-none focus:border-[#007AFF] mb-4">
-                        <div class="flex space-x-2 overflow-x-auto no-scrollbar pb-2">
-                            <button onclick="setFilter('all')" id="filter-all" class="filter-btn px-4 py-2 bg-slate-800 text-white rounded-full text-xs font-semibold shrink-0">Todos</button>
-                            <button onclick="setFilter('active')" id="filter-active" class="filter-btn px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-full text-xs font-semibold shrink-0">Activos</button>
-                            <button onclick="setFilter('debt')" id="filter-debt" class="filter-btn px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-full text-xs font-semibold shrink-0">Con Deuda</button>
-                            <button onclick="setFilter('completed')" id="filter-completed" class="filter-btn px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-full text-xs font-semibold shrink-0">Finalizados</button>
-                        </div>
-                    </div>
-
-                    <!-- Lista de Clientes -->
-                    <div id="clientsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-                    
-                    <div id="emptyState" class="hidden text-center py-20 text-slate-500 text-sm font-medium">No se encontraron proyectos.</div>
-                </div>
-
-                <!-- PESTAÑA: AJUSTES -->
-                <div id="tab-settings" class="tab-content hidden max-w-2xl mx-auto pt-4 md:pt-6">
-                    <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-8 text-slate-900">Ajustes</h1>
-                    
-                    <div class="bg-white rounded-[24px] overflow-hidden premium-shadow border border-gray-100 mb-6">
-                        <div class="px-6 py-5 border-b border-gray-50 flex items-center bg-white">
-                            <div>
-                                <p class="text-lg font-bold text-slate-800">Seguridad</p>
-                                <p class="text-xs text-gray-500 font-medium">Gestiona tu acceso maestro</p>
-                            </div>
-                        </div>
-                        <div class="px-6 py-6 bg-gray-50/30">
-                            <input type="password" id="old-pwd" placeholder="Contraseña Actual" class="w-full bg-white rounded-xl px-4 py-3 text-sm font-medium mb-3 border border-gray-200 focus:outline-none focus:border-[#007AFF]">
-                            <input type="password" id="new-pwd" placeholder="Nueva Contraseña" class="w-full bg-white rounded-xl px-4 py-3 text-sm font-medium mb-5 border border-gray-200 focus:outline-none focus:border-[#007AFF]">
-                            <button onclick="changePassword()" class="w-full bg-slate-800 text-white text-sm font-semibold rounded-xl py-3.5 hover:bg-slate-700 transition-all active:scale-95">Actualizar Contraseña</button>
-                            <p id="pwd-msg" class="text-sm mt-3 text-center hidden"></p>
-                        </div>
-                    </div>
-
-                    <div class="mt-8 text-center pb-2">
-                        <button onclick="exportData()" class="text-xs font-semibold text-gray-400 hover:text-[#007AFF] transition-colors underline-offset-4 hover:underline">
-                            Exportar copia de seguridad (JSON)
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ========================================== -->
-        <!-- MODAL: CREAR/EDITAR CLIENTE (FORMULARIO)   -->
-        <!-- ========================================== -->
-        <div id="modal-overlay" class="absolute inset-0 bg-slate-900/40 z-40 hidden transition-opacity opacity-0 backdrop-blur-sm" onclick="closeModals()"></div>
+        <div id="modal-overlay" class="absolute inset-0 bg-slate-900/40 z-40 hidden transition-opacity opacity-0" onclick="closeModals()"></div>
         
-        <div id="clientModal" class="absolute inset-x-0 bottom-0 md:w-full md:max-w-xl ios-bg rounded-t-[32px] md:rounded-2xl shadow-2xl z-50 h-[92%] md:h-auto md:max-h-[96%] slide-up-modal flex flex-col overflow-hidden">
+        <div id="clientModal" class="absolute inset-x-0 bottom-0 bg-white rounded-t-[40px] shadow-2xl z-50 h-[92%] bottom-sheet flex flex-col overflow-hidden">
             
-            <!-- Handle de iOS (Pill) -->
-            <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1 md:hidden opacity-80 shrink-0"></div>
+            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mt-4 mb-2 shrink-0"></div>
 
-            <div class="flex justify-between items-center px-6 py-3 md:py-4 border-b border-gray-200/60 bg-transparent md:bg-white md:rounded-t-2xl shrink-0 z-10">
-                <button onclick="closeClientModal()" class="text-[#007AFF] text-sm md:text-base font-medium active:opacity-60">Cancelar</button>
-                <h3 class="font-bold text-base md:text-lg text-slate-800" id="modal-title">Nuevo Proyecto</h3>
-                <button onclick="saveClient()" class="text-[#007AFF] text-sm md:text-base font-bold active:opacity-60">Guardar</button>
+            <div class="flex justify-between items-center px-8 py-3 border-b border-slate-100 shrink-0">
+                <button onclick="closeClientModal()" class="text-slate-400 font-bold text-sm">Cancel</button>
+                <h3 class="font-black text-lg text-slate-800" id="modal-title">Upload New</h3>
+                <button onclick="saveClient()" class="text-brand-purple font-bold text-sm">Save</button>
             </div>
             
-            <div class="flex-1 overflow-y-auto px-5 py-6 space-y-6 bg-[#F2F2F7] pb-32 md:pb-8 w-full">
+            <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6 bg-[#F8F9FA] pb-10">
                 <input type="hidden" id="clientId">
                 
-                <!-- SECCIÓN 1: INFO CLIENTE -->
-                <div class="w-full">
-                    <p class="text-[11px] font-bold text-gray-500 uppercase ml-3 mb-2">Información del Cliente</p>
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm divide-y divide-gray-100 overflow-hidden">
-                        <input type="text" id="clientName" placeholder="Nombre de la empresa o cliente" class="w-full px-5 py-3.5 text-sm focus:outline-none bg-transparent font-semibold text-slate-900">
-                        <input type="tel" id="clientPhone" placeholder="Teléfono / WhatsApp" class="w-full px-5 py-3.5 text-sm focus:outline-none bg-transparent font-medium">
-                        <input type="email" id="clientEmail" placeholder="Correo electrónico" class="w-full px-5 py-3.5 text-sm focus:outline-none bg-transparent font-medium">
+                <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 space-y-4">
+                    <p class="text-xs font-black text-slate-300 uppercase tracking-widest">Client Details</p>
+                    <input type="text" id="clientName" placeholder="Full Name" class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-bold border border-slate-100 focus:border-brand-purple focus:outline-none">
+                    <input type="tel" id="clientPhone" placeholder="Phone Number" class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-bold border border-slate-100 focus:border-brand-purple focus:outline-none">
+                    <input type="email" id="clientEmail" placeholder="Email Address" class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-bold border border-slate-100 focus:border-brand-purple focus:outline-none">
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 space-y-4">
+                    <p class="text-xs font-black text-slate-300 uppercase tracking-widest">Status & Dates</p>
+                    <select id="clientStatus" class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-bold border border-slate-100 focus:border-brand-purple focus:outline-none">
+                        <option value="Cotizando">Cotizando</option>
+                        <option value="En Progreso">En Progreso</option>
+                        <option value="En Revisión">En Revisión</option>
+                        <option value="Finalizado - En garantía">Finalizado - En garantía</option>
+                        <option value="Finalizado - Tiempo de garantía vencido">Finalizado - Tiempo de garantía vencido</option>
+                    </select>
+                    <div class="flex items-center justify-between bg-slate-50 rounded-xl px-4 py-3 border border-slate-100">
+                        <span class="text-sm font-bold text-slate-500">Deadline</span>
+                        <input type="date" id="clientDeadline" class="bg-transparent font-bold text-brand-purple focus:outline-none">
+                    </div>
+                    <div class="flex items-center justify-between bg-brand-blue/10 rounded-xl px-4 py-3 border border-brand-blue/20">
+                        <span class="text-sm font-bold text-brand-blue">Warranty</span>
+                        <input type="date" id="clientWarranty" class="bg-transparent font-bold text-brand-blue focus:outline-none">
                     </div>
                 </div>
 
-                <!-- SECCIÓN 2: DETALLES -->
-                <div class="w-full">
-                    <p class="text-[11px] font-bold text-gray-500 uppercase ml-3 mb-2">Detalles del Proyecto</p>
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm divide-y divide-gray-100 overflow-hidden">
-                        <div class="px-5 py-3.5 flex justify-between items-center">
-                            <span class="text-sm font-semibold text-slate-800">Estado</span>
-                            <select id="clientStatus" class="text-sm text-gray-500 font-medium bg-transparent focus:outline-none text-right">
-                                <option value="Cotizando">Cotizando</option>
-                                <option value="En Progreso">En Progreso</option>
-                                <option value="En Revisión">En Revisión</option>
-                                <option value="Finalizado - En garantía">Finalizado - En garantía</option>
-                                <option value="Finalizado - Tiempo de garantía vencido">Finalizado - Tiempo de garantía vencido</option>
-                            </select>
-                        </div>
-                        <div class="px-5 py-3.5 flex justify-between items-center">
-                            <span class="text-sm font-semibold text-slate-800">Fecha de Entrega</span>
-                            <input type="date" id="clientDeadline" class="text-sm text-[#007AFF] font-medium bg-transparent focus:outline-none">
-                        </div>
-                        <div class="px-5 py-3.5 flex justify-between items-center bg-blue-50/30 border-t border-blue-100/50">
-                            <span class="text-sm font-semibold text-blue-900">Garantía / Vigencia</span>
-                            <input type="date" id="clientWarranty" class="text-sm text-[#007AFF] font-medium bg-transparent focus:outline-none text-right">
-                        </div>
+                <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50">
+                    <p class="text-xs font-black text-slate-300 uppercase tracking-widest mb-4">Files & Assets</p>
+                    <div id="assets-fields-container" class="space-y-3 mb-4"></div>
+                    <button type="button" onclick="addAssetField()" class="w-full py-3.5 bg-brand-purple text-white rounded-2xl text-sm font-black active:scale-95 transition-transform">+ Add File Link</button>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 space-y-4">
+                    <p class="text-xs font-black text-slate-300 uppercase tracking-widest">Finance</p>
+                    <div id="budget-fields-container" class="space-y-2"></div>
+                    <button type="button" onclick="addBudgetField()" class="w-full py-2 bg-slate-50 text-slate-500 rounded-xl text-xs font-bold border border-slate-200 border-dashed">+ Add Item</button>
+                    
+                    <div class="flex space-x-3 mt-4">
+                        <input type="number" id="clientPrice" placeholder="Total ($)" class="w-1/2 bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-black border border-slate-100 focus:border-brand-purple focus:outline-none">
+                        <input type="number" id="clientPaid" placeholder="Paid ($)" class="w-1/2 bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-black text-emerald-500 border border-slate-100 focus:border-brand-purple focus:outline-none">
                     </div>
                 </div>
 
-                <!-- SECCIÓN: ARCHIVOS -->
-                <div class="w-full">
-                    <p class="text-[11px] font-bold text-gray-500 uppercase ml-3 mb-2">Entregables (Archivos)</p>
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 w-full">
-                        <div id="assets-fields-container" class="space-y-3 mb-4"></div>
-                        <button type="button" onclick="addAssetField()" class="w-full py-3 bg-[#F0F7FF] text-[#007AFF] rounded-xl text-sm font-bold active:scale-[0.98] transition-transform">+ Añadir enlace</button>
-                    </div>
+                <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 space-y-4">
+                    <p class="text-xs font-black text-slate-300 uppercase tracking-widest">Notes</p>
+                    <textarea id="clientNotes" rows="2" placeholder="Private notes..." class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-semibold border border-slate-100 focus:border-brand-purple focus:outline-none"></textarea>
+                    <textarea id="clientExternalNotes" rows="2" placeholder="Message for client..." class="w-full bg-brand-blue/5 rounded-xl px-4 py-3.5 text-sm font-semibold border border-brand-blue/20 text-brand-blue focus:outline-none placeholder-brand-blue/50"></textarea>
                 </div>
-
-                <!-- SECCIÓN 3: FINANZAS -->
-                <div class="w-full">
-                    <p class="text-[11px] font-bold text-gray-500 uppercase ml-3 mb-2">Finanzas</p>
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm divide-y divide-gray-100 overflow-hidden">
-                        <div class="p-5 bg-gray-50/30">
-                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-3">Desglose de Presupuesto</p>
-                            <div id="budget-fields-container" class="space-y-2.5 mb-3"></div>
-                            <button type="button" onclick="addBudgetField()" class="w-full py-2 bg-white text-slate-600 rounded-xl text-xs font-bold border border-gray-200 border-dashed active:scale-[0.98] transition-transform">+ Añadir Concepto</button>
-                        </div>
-                        <div class="currency-input w-full relative">
-                            <input type="number" id="clientPrice" placeholder="Precio Total" class="w-full px-5 py-3.5 text-sm font-semibold focus:outline-none bg-transparent">
-                        </div>
-                        <div class="currency-input w-full">
-                            <input type="number" id="clientPaid" placeholder="Abono Pagado" class="w-full px-5 py-3.5 text-sm font-bold focus:outline-none bg-transparent text-emerald-600">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SECCIÓN 4: NOTAS -->
-                <div class="w-full">
-                    <p class="text-[11px] font-bold text-gray-500 uppercase ml-3 mb-2">Notas del Proyecto</p>
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-100">
-                        <div class="p-5 bg-amber-50/20">
-                            <label class="text-[10px] font-bold text-amber-600 uppercase block mb-1">Notas Internas (Admin)</label>
-                            <textarea id="clientNotes" rows="2" placeholder="Recordatorios privados..." class="w-full text-sm font-medium focus:outline-none resize-none bg-transparent"></textarea>
-                        </div>
-                        <div class="p-5 bg-[#F0F7FF]/50">
-                            <label class="text-[10px] font-bold text-[#007AFF] uppercase block mb-1">Mensaje para el Cliente</label>
-                            <textarea id="clientExternalNotes" rows="2" placeholder="Mensaje visible en su portal..." class="w-full text-sm font-medium focus:outline-none resize-none bg-transparent"></textarea>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
 
         <!-- ========================================== -->
-        <!-- MODAL: PERFIL 360 DEL CLIENTE (VISUALIZAR) -->
+        <!-- MODAL: PERFIL 360 DEL CLIENTE (APP STYLE)  -->
         <!-- ========================================== -->
-        <div id="profileModal" class="absolute inset-x-0 bottom-0 md:w-full md:max-w-md bg-white rounded-t-[32px] md:rounded-2xl shadow-2xl z-50 h-[92%] md:h-auto md:max-h-[96%] slide-up-modal flex flex-col overflow-hidden">
+        <div id="profileModal" class="absolute inset-x-0 bottom-0 bg-white rounded-t-[40px] shadow-2xl z-50 h-[92%] bottom-sheet flex flex-col overflow-hidden">
             
-            <!-- Handle de iOS (Pill) -->
-            <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1 md:hidden opacity-80 shrink-0"></div>
+            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mt-4 mb-2 shrink-0"></div>
 
-            <div class="flex justify-between items-center px-6 py-3 md:py-4 border-b border-gray-100 bg-white/80 backdrop-blur-md md:rounded-t-2xl shrink-0 z-10">
-                <span class="w-12"></span>
-                <h3 class="font-bold text-xs text-gray-400 uppercase tracking-wider truncate px-2">Perfil</h3>
-                <button onclick="closeProfileModal()" class="w-12 text-right text-gray-400 font-bold text-xl active:opacity-60">×</button>
+            <div class="flex justify-between items-center px-8 py-3 border-b border-slate-100 shrink-0">
+                <span class="w-10"></span>
+                <h3 class="font-black text-lg text-slate-800">My Profile</h3>
+                <button onclick="closeProfileModal()" class="w-10 text-right text-slate-400 font-bold text-2xl">×</button>
             </div>
             
-            <div class="flex-1 overflow-y-auto bg-white md:rounded-b-2xl pb-10 w-full relative">
-                <div class="px-6 py-8 text-center w-full relative flex flex-col items-center">
-                    <div class="w-16 h-16 bg-[#007AFF] squarcle mx-auto flex items-center justify-center text-white text-2xl font-bold mb-3 shadow-md" id="profileInitials"></div>
-                    <h2 class="text-2xl font-bold text-slate-900 break-words" id="profileName">Nombre</h2>
-                    <span id="profileStatusBadge" class="inline-block mt-2 text-[10px] font-bold px-3 py-1 rounded-lg uppercase border">Estado</span>
+            <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6 bg-[#F8F9FA] pb-10">
+                
+                <!-- Client Card Header -->
+                <div class="bg-brand-purple rounded-3xl p-6 text-white flex items-center shadow-lg shadow-purple-500/20 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                    <div class="w-14 h-14 bg-brand-orange rounded-full flex items-center justify-center text-white text-xl font-black mr-4 shadow-md border-2 border-white/20 z-10" id="profileInitials"></div>
+                    <div class="z-10">
+                        <h2 class="text-xl font-black truncate" id="profileName">Name</h2>
+                        <p class="text-sm font-semibold opacity-80 truncate" id="profileService">Service</p>
+                    </div>
                 </div>
 
-                <div class="flex justify-center space-x-3 py-2 w-full px-6" id="profileActions"></div>
+                <div class="flex space-x-3" id="profileActions"></div>
 
-                <div class="px-6 py-6 space-y-5 w-full mt-2">
-                    <div class="bg-[#F0F7FF] p-5 rounded-2xl border border-blue-100/50 w-full shadow-sm">
-                        <p class="text-[11px] text-blue-600 font-bold uppercase mb-2">Portal Cliente</p>
-                        <div class="flex justify-between items-end w-full">
-                            <p class="text-sm font-semibold text-slate-800" id="profilePINDisplay">Sin acceso generado</p>
-                            <button onclick="generateClientPIN()" class="bg-white text-[#007AFF] text-xs font-bold px-3 py-1.5 rounded-lg border border-gray-100 shadow-sm active:scale-95 transition-transform" id="btnGeneratePIN">Generar PIN</button>
-                        </div>
+                <!-- Access Info -->
+                <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 flex justify-between items-center">
+                    <div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Vault PIN</p>
+                        <p class="text-2xl font-black text-slate-800" id="profilePINDisplay">----</p>
                     </div>
+                    <button onclick="generateClientPIN()" class="bg-brand-blue text-white text-xs font-black px-4 py-2.5 rounded-xl shadow-md active:scale-95 transition-transform">Generate</button>
+                </div>
 
-                    <div class="grid grid-cols-2 gap-4 bg-gray-50/50 p-5 rounded-2xl border border-gray-100 w-full">
-                        <div>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Servicio</p>
-                            <p class="text-sm font-bold text-slate-800 truncate" id="profileService"></p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Entrega</p>
-                            <p class="text-sm font-bold text-slate-800 truncate" id="profileDeadline"></p>
-                        </div>
+                <!-- Grid Details -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Status</p>
+                        <p class="text-sm font-bold text-slate-800" id="profileStatusBadge">Estado</p>
+                    </div>
+                    <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Deadline</p>
+                        <p class="text-sm font-bold text-slate-800" id="profileDeadline">Fecha</p>
+                    </div>
+                </div>
+
+                <!-- Finance -->
+                <div class="bg-white rounded-3xl p-6 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Drive Storage (Finance)</p>
+                    <div class="flex justify-between text-sm mb-2 font-bold">
+                        <span class="text-slate-500">Total: <span id="profileTotal" class="text-slate-800"></span></span>
+                        <span class="text-brand-pink">Debt: <span id="profileDebt"></span></span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2 mb-2 overflow-hidden">
+                        <div id="profileProgress" class="bg-brand-blue h-2 rounded-full" style="width: 0%"></div>
                     </div>
                     
-                    <div id="profileWarrantyContainer" class="bg-blue-50/50 p-4 rounded-2xl border border-blue-100/50 w-full hidden">
-                        <p class="text-[10px] text-blue-500 font-bold uppercase mb-1">Garantía / Vigencia</p>
-                        <p class="text-sm text-slate-700 font-bold" id="profileWarrantyText"></p>
+                    <div id="profile-budget-container" class="mt-4 pt-4 border-t border-slate-100 hidden">
+                        <div id="profile-budget-list" class="space-y-2"></div>
                     </div>
-
-                    <div class="bg-gray-50/50 p-5 rounded-2xl border border-gray-100 w-full">
-                        <p class="text-[10px] text-gray-400 font-bold uppercase mb-3">Finanzas</p>
-                        <div class="flex justify-between text-sm mb-1.5 w-full">
-                            <span class="text-slate-500 font-medium">Total: <span id="profileTotal" class="font-bold text-slate-800"></span></span>
-                            <span class="text-red-500 font-medium text-xs">Deuda: <span id="profileDebt" class="font-bold"></span></span>
-                        </div>
-                        <div class="w-full bg-gray-200/80 rounded-full h-2.5 mb-1 overflow-hidden mt-3 shadow-inner">
-                            <div id="profileProgress" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
-                        </div>
-                        <p class="text-xs text-emerald-600 text-right mt-1 font-bold" id="profilePaidText"></p>
-                        
-                        <div id="profile-budget-container" class="mt-4 pt-4 border-t border-gray-200/60 hidden w-full">
-                            <div id="profile-budget-list" class="space-y-1.5 w-full"></div>
-                        </div>
-                    </div>
-
-                    <div id="profileInternalNotesContainer" class="bg-[#FFFBEB] p-5 rounded-2xl border border-amber-100/50 w-full hidden">
-                        <p class="text-[10px] text-amber-600 font-bold uppercase mb-1">Notas Internas</p>
-                        <p class="text-sm text-gray-700 font-medium select-text" id="profileInternalNotes"></p>
-                    </div>
-
-                    <div id="profileExternalNotesContainer" class="bg-[#F0F7FF] p-5 rounded-2xl border border-blue-100/50 w-full hidden">
-                        <p class="text-[10px] text-blue-600 font-bold uppercase mb-1">Mensaje al Cliente</p>
-                        <p class="text-sm text-gray-700 font-medium select-text" id="profileExternalNotes"></p>
-                    </div>
-
-                    <button onclick="deleteCurrentClient()" class="w-full mt-6 py-3 bg-red-50 text-red-500 text-sm font-bold rounded-xl border border-red-100 active:scale-95 transition-transform">Eliminar Proyecto</button>
                 </div>
+
+                <button onclick="deleteCurrentClient()" class="w-full py-4 bg-white text-red-500 text-sm font-black rounded-2xl border border-red-100 shadow-sm active:scale-95 transition-transform">Delete Account</button>
             </div>
         </div>
 
@@ -515,13 +504,7 @@
         let dbReady = false;
         let globalUnsubscribe = null;
 
-        signInAnonymously(auth).then(() => {
-            const cloudStatus = document.getElementById('cloud-status');
-            if(cloudStatus) cloudStatus.classList.add('hidden');
-            dbReady = true;
-        }).catch(err => {
-            console.error("Fallo de Auth:", err);
-        });
+        signInAnonymously(auth).then(() => { dbReady = true; }).catch(err => { console.error("Fallo Auth:", err); });
 
         async function hashPassword(password) {
             try {
@@ -531,7 +514,7 @@
                     const hashArray = Array.from(new Uint8Array(hashBuffer));
                     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
                 }
-            } catch (e) { console.warn("Fallback crypto"); }
+            } catch (e) {}
             return 'fallback_' + btoa(encodeURIComponent(password));
         }
 
@@ -553,13 +536,10 @@
 
         const getInitials = (name) => name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
         const generateId = () => crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
-
         const escapeHTML = (str) => {
             if (!str) return '';
             return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
         };
-        
-        async function checkAuthState() {}
 
         async function handleAuth() {
             const input = document.getElementById('auth-password');
@@ -569,7 +549,7 @@
             if (!pwd) return;
 
             const originalBtnText = btn.innerHTML;
-            btn.innerHTML = 'Verificando...'; btn.disabled = true; input.disabled = true;
+            btn.innerHTML = 'Wait...'; btn.disabled = true; input.disabled = true;
 
             const isAdmin = await verifyAdminAccess(pwd);
             if (isAdmin) {
@@ -577,15 +557,13 @@
             }
 
             if (!dbReady) {
-                errorMsg.textContent = "Sin conexión a internet";
-                errorMsg.className = "text-sm mt-3 text-center font-medium bg-amber-50 text-amber-600 px-4 py-2 rounded-lg fade-in block";
+                errorMsg.textContent = "Offline"; errorMsg.classList.remove('hidden');
                 btn.innerHTML = originalBtnText; btn.disabled = false; input.disabled = false; return;
             }
 
             try {
                 const q = query(collection(db, "proyectos_eqbito"), where("clientCode", "==", pwd));
                 const querySnapshot = await getDocs(q);
-                
                 if (!querySnapshot.empty) {
                     const clientDoc = querySnapshot.docs[0];
                     unlockApp('client', { id: clientDoc.id, ...clientDoc.data() });
@@ -594,10 +572,8 @@
             } catch (err) {}
 
             btn.innerHTML = originalBtnText; btn.disabled = false; input.disabled = false;
-            errorMsg.textContent = "Credenciales incorrectas";
-            errorMsg.className = "text-sm mt-3 text-center font-medium bg-red-50 text-red-500 px-4 py-2 rounded-lg fade-in block";
-            input.classList.add('border-red-500');
-            setTimeout(() => { input.classList.remove('border-red-500'); errorMsg.classList.add('hidden'); }, 2500);
+            errorMsg.textContent = "Invalid Password"; errorMsg.classList.remove('hidden');
+            setTimeout(() => { errorMsg.classList.add('hidden'); }, 2500);
             input.value = '';
         }
 
@@ -610,7 +586,6 @@
                 
                 if (mode === 'admin') {
                     document.getElementById('main-app').classList.remove('hidden');
-                    document.getElementById('main-nav').classList.remove('hidden');
                     document.getElementById('client-portal').classList.add('hidden');
                     setDate();
                     
@@ -625,7 +600,6 @@
                     }
                 } else if (mode === 'client' && clientData) {
                     document.getElementById('main-app').classList.add('hidden');
-                    document.getElementById('main-nav').classList.add('hidden');
                     document.getElementById('client-portal').classList.remove('hidden');
                     
                     globalUnsubscribe = onSnapshot(doc(db, "proyectos_eqbito", clientData.id), (docSnap) => {
@@ -641,59 +615,32 @@
             document.getElementById('auth-screen').classList.remove('hidden');
             setTimeout(() => {
                 document.getElementById('main-app').classList.add('hidden');
-                document.getElementById('main-nav').classList.add('hidden');
                 document.getElementById('client-portal').classList.add('hidden');
                 document.getElementById('auth-screen').classList.remove('opacity-0', 'pointer-events-none');
             }, 50);
         }
 
+        function getFileIcon(url, name) {
+            // Un icono SVG genérico pero bonito para los archivos
+            return `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>`;
+        }
+
         function renderClientPortal(c) {
             document.getElementById('cp-name').textContent = escapeHTML(c.name);
             document.getElementById('cp-service').textContent = escapeHTML(c.service);
+            document.getElementById('cp-status').textContent = escapeHTML(c.status);
             
-            const statusBadge = document.getElementById('cp-status');
-            statusBadge.textContent = escapeHTML(c.status);
-            statusBadge.className = `text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-wider border ${getStatusColor(c.status)}`;
+            const isCompleted = c.status && c.status.includes('Finalizado');
+            document.getElementById('cp-deadline-label').textContent = isCompleted ? "Completed" : "In Progress";
 
-            // LÓGICA DE BÓVEDA
-            const progressContainer = document.getElementById('cp-progress-container');
-            const completedContainer = document.getElementById('cp-completed-container');
-            const greetingDesc = document.getElementById('cp-greeting-desc');
-            const mainCard = document.getElementById('cp-main-card');
-            const assetsTitle = document.getElementById('cp-assets-title');
-
-            if (c.status && c.status.includes('Finalizado')) {
-                progressContainer.classList.add('hidden');
-                completedContainer.classList.remove('hidden');
-                greetingDesc.textContent = "Tu proyecto ha finalizado. Aquí tienes acceso a tus archivos.";
-                mainCard.classList.replace('border-gray-100', 'border-emerald-200');
-                assetsTitle.textContent = "Tus Archivos (Bóveda)";
-            } else {
-                progressContainer.classList.remove('hidden');
-                completedContainer.classList.add('hidden');
-                greetingDesc.textContent = "Aquí puedes monitorear el progreso de tu proyecto en tiempo real.";
-                mainCard.classList.replace('border-emerald-200', 'border-gray-100');
-                assetsTitle.textContent = "Archivos y Entregables";
-
-                document.getElementById('cp-deadline').textContent = c.deadline ? new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }) : "Por definir";
-            }
-            
-            // Garantía UI
-            const warrantyContainer = document.getElementById('cp-warranty-container');
             if (c.warranty && c.warranty.trim() !== '') {
-                // Formatear si viene del input date
-                let warrantyText = c.warranty;
-                if (/^\d{4}-\d{2}-\d{2}$/.test(c.warranty)) {
-                    warrantyText = "Válido hasta: " + new Date(c.warranty + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
-                }
-                document.getElementById('cp-warranty-text').textContent = escapeHTML(warrantyText);
-                warrantyContainer.classList.remove('hidden');
+                document.getElementById('cp-warranty-text').textContent = new Date(c.warranty + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
+                document.getElementById('cp-warranty-container').classList.remove('hidden');
             } else {
-                warrantyContainer.classList.add('hidden');
+                document.getElementById('cp-warranty-container').classList.add('hidden');
             }
 
-            // WhatsApp Link Dinámico (Botón Flotante)
-            const waMsg = encodeURIComponent(`Hola EQB STUDIO, soy ${c.name}. Tengo una consulta sobre mi proyecto.`);
+            const waMsg = encodeURIComponent(`Hola EQB STUDIO, soy ${c.name}.`);
             document.getElementById('cp-whatsapp-float').href = `https://wa.me/573021192800?text=${waMsg}`;
 
             const extNotesEl = document.getElementById('cp-external-notes');
@@ -704,31 +651,38 @@
 
             const assetsListEl = document.getElementById('cp-assets-list');
             assetsListEl.innerHTML = '';
-            let parsedAssets = Array.isArray(c.assets) ? c.assets : (typeof c.assets === 'string' && c.assets.trim() !== '' ? [{ name: 'Enlace', url: c.assets }] : []);
+            let parsedAssets = Array.isArray(c.assets) ? c.assets : [];
 
             if (parsedAssets.length > 0) {
-                parsedAssets.forEach(asset => {
+                const colors = ['bg-brand-blue text-white', 'bg-brand-pink text-white', 'bg-brand-orange text-white', 'bg-brand-purple text-white'];
+                parsedAssets.forEach((asset, idx) => {
+                    const colorClass = colors[idx % colors.length];
                     assetsListEl.insertAdjacentHTML('beforeend', `
-                        <a href="${encodeURI(asset.url)}" target="_blank" class="flex items-center bg-gray-50/80 border border-gray-100 p-3.5 rounded-xl hover:bg-blue-50 hover:border-blue-100 transition-colors group active:scale-95">
-                            <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center mr-3 text-gray-400 group-hover:text-[#007AFF]">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                        <a href="${encodeURI(asset.url)}" target="_blank" class="bg-white rounded-3xl p-4 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 flex items-center active:scale-95 transition-transform">
+                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mr-4 shadow-sm ${colorClass}">
+                                ${getFileIcon(asset.url, asset.name)}
                             </div>
-                            <p class="text-sm font-bold text-slate-700 group-hover:text-[#007AFF] truncate flex-1">${escapeHTML(asset.name)}</p>
+                            <div class="flex-1">
+                                <h4 class="font-black text-slate-800">${escapeHTML(asset.name)}</h4>
+                                <p class="text-xs font-bold text-slate-400">Available File</p>
+                            </div>
+                            <div class="text-slate-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                            </div>
                         </a>
                     `);
                 });
             } else {
-                assetsListEl.innerHTML = `<p class="text-xs text-gray-500 font-medium">Aún no hay archivos en tu bóveda.</p>`;
+                assetsListEl.innerHTML = `<p class="text-sm font-bold text-slate-400 text-center py-4">No files found.</p>`;
             }
         }
 
         function addBudgetField(concept = '', amount = '') {
-            const container = document.getElementById('budget-fields-container');
-            container.insertAdjacentHTML('beforeend', `
-                <div class="budget-item flex gap-2 items-center bg-white p-2 rounded-xl border border-gray-100">
-                    <input type="text" placeholder="Concepto" value="${escapeHTML(concept)}" class="budget-concept flex-1 px-3 py-2 text-xs bg-gray-50 rounded-lg focus:outline-none focus:border-[#007AFF] border border-transparent">
-                    <input type="number" placeholder="$" value="${amount}" oninput="calculateTotalBudget()" class="budget-amount w-24 px-3 py-2 text-xs bg-gray-50 rounded-lg text-[#007AFF] font-bold focus:outline-none border border-transparent" min="0">
-                    <button type="button" onclick="this.parentElement.remove(); calculateTotalBudget();" class="text-red-500 font-bold px-2">x</button>
+            document.getElementById('budget-fields-container').insertAdjacentHTML('beforeend', `
+                <div class="budget-item flex gap-2 items-center bg-slate-50 p-2 rounded-2xl border border-slate-100">
+                    <input type="text" placeholder="Item Name" value="${escapeHTML(concept)}" class="budget-concept flex-1 px-3 py-2 text-sm font-bold bg-transparent focus:outline-none">
+                    <input type="number" placeholder="$" value="${amount}" oninput="calculateTotalBudget()" class="budget-amount w-20 px-2 py-2 text-sm font-black text-brand-purple bg-white rounded-xl shadow-sm focus:outline-none text-center" min="0">
+                    <button type="button" onclick="this.parentElement.remove(); calculateTotalBudget();" class="text-red-400 font-black px-2">×</button>
                 </div>
             `);
             calculateTotalBudget();
@@ -739,8 +693,8 @@
             const priceInput = document.getElementById('clientPrice');
             if (items.length > 0) {
                 let total = 0; items.forEach(item => total += parseFloat(item.querySelector('.budget-amount').value) || 0);
-                priceInput.value = total; priceInput.readOnly = true; priceInput.classList.add('opacity-70');
-            } else { priceInput.readOnly = false; priceInput.classList.remove('opacity-70'); }
+                priceInput.value = total; priceInput.readOnly = true;
+            } else { priceInput.readOnly = false; }
         }
 
         function getBudgetFromForm() {
@@ -755,10 +709,10 @@
 
         function addAssetField(name = '', url = '') {
             document.getElementById('assets-fields-container').insertAdjacentHTML('beforeend', `
-                <div class="asset-item flex flex-col gap-2 bg-gray-50 p-3 rounded-xl border border-gray-100 relative">
-                    <button type="button" onclick="this.parentElement.remove()" class="absolute -top-2 -right-2 bg-white text-red-500 rounded-full w-6 h-6 shadow-sm font-bold flex justify-center items-center">×</button>
-                    <input type="text" placeholder="Nombre (ej: Logo)" value="${escapeHTML(name)}" class="asset-name w-full px-3 py-2 text-sm rounded-lg border border-gray-200 focus:outline-none">
-                    <input type="url" placeholder="Link" value="${escapeHTML(url)}" class="asset-url w-full px-3 py-2 text-sm rounded-lg border border-gray-200 focus:outline-none text-[#007AFF]">
+                <div class="asset-item flex flex-col gap-2 bg-slate-50 p-4 rounded-2xl border border-slate-100 relative">
+                    <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-red-400 font-black text-lg w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm">×</button>
+                    <input type="text" placeholder="File Name (e.g. Logo)" value="${escapeHTML(name)}" class="asset-name w-full px-4 py-3 text-sm font-bold rounded-xl border border-slate-200 focus:outline-none focus:border-brand-purple">
+                    <input type="url" placeholder="Drive URL" value="${escapeHTML(url)}" class="asset-url w-full px-4 py-3 text-sm font-semibold rounded-xl border border-slate-200 focus:outline-none focus:border-brand-purple text-brand-purple bg-white">
                 </div>
             `);
         }
@@ -767,7 +721,7 @@
             const assetsArray = [];
             document.querySelectorAll('.asset-item').forEach(item => {
                 const url = item.querySelector('.asset-url').value.trim();
-                if (url) assetsArray.push({ name: item.querySelector('.asset-name').value.trim() || 'Archivo', url: url });
+                if (url) assetsArray.push({ name: item.querySelector('.asset-name').value.trim() || 'File', url: url });
             });
             return assetsArray;
         }
@@ -778,18 +732,26 @@
             const isAdmin = await verifyAdminAccess(oldInput);
             if (isAdmin) {
                 localStorage.setItem('eqbito360_auth', await hashPassword(newInput));
-                msg.textContent = "Contraseña actualizada"; msg.className = "text-sm mt-2 font-bold text-emerald-600 block";
+                msg.textContent = "Success"; msg.className = "text-sm mt-2 font-black text-emerald-500 block";
                 document.getElementById('old-pwd').value = ''; document.getElementById('new-pwd').value = '';
-            } else { msg.textContent = "Contraseña actual incorrecta"; msg.className = "text-sm mt-2 font-bold text-red-500 block"; }
-            setTimeout(() => msg.classList.add('hidden'), 3500);
+            } else { msg.textContent = "Error"; msg.className = "text-sm mt-2 font-black text-red-500 block"; }
+            setTimeout(() => msg.classList.add('hidden'), 2000);
         }
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                if (btn.dataset.tab === tabId) { btn.classList.add('text-[#007AFF]', 'md:bg-[#F0F7FF]'); btn.classList.remove('text-gray-400'); } 
-                else { btn.classList.remove('text-[#007AFF]', 'md:bg-[#F0F7FF]'); btn.classList.add('text-gray-400'); }
+                const iconContainer = btn.querySelector('.nav-icon-container');
+                const textEl = btn.querySelector('.nav-text');
+                if (btn.dataset.tab === tabId) {
+                    iconContainer.className = "w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container bg-brand-purple text-white transition-colors";
+                    textEl.className = "text-[10px] mt-1 font-bold nav-text text-brand-purple";
+                } else {
+                    iconContainer.className = "w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container text-slate-400 transition-colors";
+                    textEl.className = "text-[10px] mt-1 font-bold nav-text text-slate-400";
+                }
             });
         }
 
@@ -798,29 +760,20 @@
         function openClientModal(id = null) {
             document.getElementById('profileModal').classList.remove('active');
             ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientWarranty', 'clientPrice', 'clientPaid', 'clientNotes', 'clientExternalNotes'].forEach(id => document.getElementById(id).value = '');
-            
             document.getElementById('clientStatus').value = 'Cotizando';
-            document.getElementById('modal-title').textContent = 'Nuevo Proyecto';
+            document.getElementById('modal-title').textContent = 'Upload New';
             document.getElementById('assets-fields-container').innerHTML = ''; document.getElementById('budget-fields-container').innerHTML = '';
 
             if (id) {
                 const c = clients.find(x => x.id === escapeHTML(id));
                 if (c) {
-                    document.getElementById('modal-title').textContent = 'Editar Proyecto';
+                    document.getElementById('modal-title').textContent = 'Edit Profile';
                     document.getElementById('clientId').value = c.id; document.getElementById('clientName').value = c.name;
                     document.getElementById('clientPhone').value = c.phone || ''; document.getElementById('clientEmail').value = c.email || '';
-                    
                     document.getElementById('clientStatus').value = c.status; document.getElementById('clientDeadline').value = c.deadline || '';
-                    
-                    if (c.warranty && /^\d{4}-\d{2}-\d{2}$/.test(c.warranty)) {
-                        document.getElementById('clientWarranty').value = c.warranty;
-                    } else {
-                        document.getElementById('clientWarranty').value = '';
-                    }
-
+                    document.getElementById('clientWarranty').value = c.warranty || '';
                     document.getElementById('clientPrice').value = c.price || ''; document.getElementById('clientPaid').value = c.paid || '';
                     document.getElementById('clientNotes').value = c.notes || ''; document.getElementById('clientExternalNotes').value = c.externalNotes || '';
-                    
                     if (Array.isArray(c.assets)) c.assets.forEach(a => addAssetField(a.name, a.url));
                     if (Array.isArray(c.budget)) c.budget.forEach(b => addBudgetField(b.concept, b.amount));
                 }
@@ -836,7 +789,7 @@
             document.getElementById('clientModal').classList.remove('active');
             if(!document.getElementById('profileModal').classList.contains('active')) {
                 document.getElementById('modal-overlay').classList.add('opacity-0');
-                setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 300);
+                setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 400);
             }
         }
 
@@ -846,16 +799,14 @@
 
             const id = document.getElementById('clientId').value;
             const existingClient = clients.find(c => c.id === id);
-
             const budgetData = getBudgetFromForm();
-            const autoService = budgetData.length > 0 ? budgetData.map(b => b.concept).join(' + ') : 'Proyecto General';
+            const autoService = budgetData.length > 0 ? budgetData.map(b => b.concept).join(' + ') : 'Cloud Storage';
 
             const newClient = {
                 id: id || generateId(),
                 name: escapeHTML(name), phone: escapeHTML(document.getElementById('clientPhone').value.trim()), email: escapeHTML(document.getElementById('clientEmail').value.trim()),
                 service: autoService, status: escapeHTML(document.getElementById('clientStatus').value),
-                deadline: escapeHTML(document.getElementById('clientDeadline').value),
-                warranty: escapeHTML(document.getElementById('clientWarranty').value.trim()),
+                deadline: escapeHTML(document.getElementById('clientDeadline').value), warranty: escapeHTML(document.getElementById('clientWarranty').value.trim()),
                 assets: getAssetsFromForm(), budget: budgetData,
                 price: parseFloat(document.getElementById('clientPrice').value) || 0, paid: parseFloat(document.getElementById('clientPaid').value) || 0,
                 notes: escapeHTML(document.getElementById('clientNotes').value), externalNotes: escapeHTML(document.getElementById('clientExternalNotes').value),
@@ -870,7 +821,7 @@
 
         async function deleteCurrentClient() {
             if (!currentProfileId) return;
-            if (confirm('¿Eliminar proyecto permanentemente?')) {
+            if (confirm('Delete this account permanently?')) {
                 clients = clients.filter(c => c.id !== currentProfileId);
                 renderClients(); closeProfileModal();
                 try { await deleteDoc(doc(db, "proyectos_eqbito", currentProfileId)); } catch(e) {}
@@ -880,7 +831,7 @@
         function exportData() {
             if(clients.length === 0) return;
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clients, null, 2));
-            const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `eqbstudio_crm.json`);
+            const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `spaceapp_db.json`);
             document.body.appendChild(anchor); anchor.click(); anchor.remove();
         }
 
@@ -900,40 +851,26 @@
 
             document.getElementById('profileInitials').textContent = getInitials(c.name);
             document.getElementById('profileName').textContent = escapeHTML(c.name);
-            document.getElementById('profileStatusBadge').textContent = escapeHTML(c.status); document.getElementById('profileStatusBadge').className = `inline-block mt-2 text-[10px] font-bold px-3 py-1 rounded-lg uppercase border ${getStatusColor(c.status)}`;
             document.getElementById('profileService').textContent = escapeHTML(c.service);
-            document.getElementById('profilePINDisplay').textContent = c.clientCode || "Sin acceso";
-            document.getElementById('profileDeadline').textContent = c.deadline ? new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }) : "Sin definir";
+            document.getElementById('profileStatusBadge').textContent = escapeHTML(c.status); 
+            document.getElementById('profilePINDisplay').textContent = c.clientCode || "----";
+            document.getElementById('profileDeadline').textContent = c.deadline ? new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }) : "--";
             
-            if (c.warranty && c.warranty.trim() !== '') {
-                let warrantyText = c.warranty;
-                if (/^\d{4}-\d{2}-\d{2}$/.test(c.warranty)) {
-                    warrantyText = "Hasta: " + new Date(c.warranty + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
-                }
-                document.getElementById('profileWarrantyText').textContent = escapeHTML(warrantyText);
-                document.getElementById('profileWarrantyContainer').classList.remove('hidden');
-            } else {
-                document.getElementById('profileWarrantyContainer').classList.add('hidden');
-            }
-
             const p = parseFloat(c.price) || 0; const pd = parseFloat(c.paid) || 0; const percent = p > 0 ? Math.min((pd / p) * 100, 100) : 0;
             document.getElementById('profileTotal').textContent = formatMoney(p); document.getElementById('profileDebt').textContent = formatMoney(Math.max(p - pd, 0));
-            document.getElementById('profileProgress').style.width = `${percent}%`; document.getElementById('profilePaidText').textContent = `${Math.round(percent)}% Pagado`;
+            document.getElementById('profileProgress').style.width = `${percent}%`; 
 
             const pBudgetCont = document.getElementById('profile-budget-container'); const pBudgetList = document.getElementById('profile-budget-list');
             if (c.budget && c.budget.length > 0) {
-                pBudgetCont.classList.remove('hidden'); pBudgetList.innerHTML = c.budget.map(item => `<div class="flex justify-between items-center text-xs"><span class="text-slate-500">${escapeHTML(item.concept)}</span><span class="font-bold">${formatMoney(item.amount)}</span></div>`).join('');
+                pBudgetCont.classList.remove('hidden'); pBudgetList.innerHTML = c.budget.map(item => `<div class="flex justify-between items-center text-xs"><span class="font-bold text-slate-500">${escapeHTML(item.concept)}</span><span class="font-black text-slate-800">${formatMoney(item.amount)}</span></div>`).join('');
             } else { pBudgetCont.classList.add('hidden'); }
-
-            if (c.notes) { document.getElementById('profileInternalNotes').textContent = escapeHTML(c.notes); document.getElementById('profileInternalNotesContainer').classList.remove('hidden'); } else { document.getElementById('profileInternalNotesContainer').classList.add('hidden'); }
-            if (c.externalNotes) { document.getElementById('profileExternalNotes').textContent = escapeHTML(c.externalNotes); document.getElementById('profileExternalNotesContainer').classList.remove('hidden'); } else { document.getElementById('profileExternalNotesContainer').classList.add('hidden'); }
 
             let actionsHTML = '';
             if (c.phone) {
-                const msg = encodeURIComponent(`¡Hola ${c.name}! 👋 Te compartimos el acceso a tu Bóveda Digital en EQB STUDIO.\n\nEntra al siguiente enlace para ver tus archivos y el progreso de tu proyecto:\n🔗 http://eqbito.vercel.app\n🔐 Tu PIN de acceso: ${c.clientCode || '(Genera tu PIN)'}`);
-                actionsHTML += `<a href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${msg}" target="_blank" class="px-4 py-2 bg-green-50 text-green-600 rounded-xl text-xs font-bold active:scale-95 transition-transform">WhatsApp</a>`;
+                const msg = encodeURIComponent(`Hola ${c.name}. Accede a tu bóveda: http://eqbito.vercel.app | PIN: ${c.clientCode || ''}`);
+                actionsHTML += `<a href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${msg}" target="_blank" class="flex-1 bg-brand-blue/10 text-brand-blue py-3 rounded-2xl font-black text-center text-sm">Message</a>`;
             }
-            actionsHTML += `<button onclick="openClientModal('${c.id}')" class="px-4 py-2 bg-blue-50 text-blue-600 rounded-xl text-xs font-bold active:scale-95 transition-transform">Editar</button>`;
+            actionsHTML += `<button onclick="openClientModal('${c.id}')" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-2xl font-black text-sm">Edit</button>`;
             document.getElementById('profileActions').innerHTML = actionsHTML;
 
             document.getElementById('modal-overlay').classList.remove('hidden');
@@ -944,27 +881,18 @@
             document.getElementById('profileModal').classList.remove('active'); currentProfileId = null;
             if(!document.getElementById('clientModal').classList.contains('active')) {
                 document.getElementById('modal-overlay').classList.add('opacity-0');
-                setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 300);
+                setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 400);
             }
         }
 
         function setFilter(filter) {
             currentFilter = filter;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.className = 'filter-btn px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-full text-xs font-semibold shrink-0');
-            document.getElementById(`filter-${filter}`).className = 'filter-btn px-4 py-2 bg-slate-800 text-white rounded-full text-xs font-semibold shrink-0';
             renderClients();
         }
 
-        function getStatusColor(status) {
-            if (!status) return 'bg-gray-100 text-gray-700';
-            if (status.includes('Finalizado - En garantía')) return 'bg-emerald-100/80 text-emerald-800 border-emerald-200';
-            if (status.includes('vencido')) return 'bg-slate-200/80 text-slate-600 border-slate-300';
-            return { 'Cotizando': 'bg-gray-100 text-gray-700 border-gray-200/60', 'En Progreso': 'bg-amber-100/60 text-amber-700', 'En Revisión': 'bg-purple-100/60 text-purple-700', 'Finalizado': 'bg-emerald-100/60 text-emerald-700' }[status] || 'bg-gray-100 text-gray-700';
-        }
-
         function setDate() {
-            const rawDate = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            document.getElementById('current-date').textContent = rawDate.charAt(0).toUpperCase() + rawDate.slice(1);
+            const rawDate = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('current-date').textContent = "Let's manage your brand storage.";
         }
 
         function renderClients() {
@@ -992,17 +920,23 @@
             if (filtered.length === 0) { empty.classList.remove('hidden'); list.classList.add('hidden'); } 
             else {
                 empty.classList.add('hidden'); list.classList.remove('hidden');
-                filtered.forEach(c => {
+                const colors = ['bg-brand-orange text-white', 'bg-brand-pink text-white', 'bg-brand-blue text-white', 'bg-brand-purple text-white'];
+                
+                filtered.forEach((c, index) => {
+                    const iconColor = colors[index % colors.length];
                     const pending = (parseFloat(c.price) || 0) - (parseFloat(c.paid) || 0);
+                    
                     list.insertAdjacentHTML('beforeend', `
-                        <div class="bg-white rounded-[20px] p-5 premium-shadow border border-gray-100 cursor-pointer active:scale-[0.98] transition-transform" onclick="openProfileModal('${escapeHTML(c.id)}')">
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="font-bold text-lg text-slate-800 truncate pr-2">${escapeHTML(c.name)}</h3>
-                                <span class="text-[9px] font-bold px-2 py-1 rounded-md uppercase ${getStatusColor(c.status)}">${escapeHTML(c.status)}</span>
+                        <div class="bg-white rounded-3xl p-4 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 flex items-center cursor-pointer active:scale-95 transition-transform" onclick="openProfileModal('${escapeHTML(c.id)}')">
+                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mr-4 shadow-sm ${iconColor}">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                             </div>
-                            <p class="text-xs text-gray-500 font-semibold mb-3 truncate">${escapeHTML(c.service || 'Sin servicio')}</p>
-                            <div class="flex justify-between items-end pt-3 border-t border-gray-50">
-                                <div><p class="text-[10px] text-gray-400 font-bold uppercase">Deuda</p><p class="text-sm font-bold ${pending > 0 ? 'text-red-500' : 'text-emerald-500'}">${pending > 0 ? formatMoney(pending) : 'Pagado'}</p></div>
+                            <div class="flex-1 overflow-hidden">
+                                <h4 class="font-black text-slate-800 truncate text-base">${escapeHTML(c.name)}</h4>
+                                <p class="text-[11px] font-bold text-slate-400 truncate uppercase tracking-widest">${escapeHTML(c.status)}</p>
+                            </div>
+                            <div class="text-right pl-2">
+                                <span class="text-xs font-black ${pending > 0 ? 'text-brand-pink' : 'text-slate-300'}">${pending > 0 ? 'Debt' : 'Paid'}</span>
                             </div>
                         </div>
                     `);
