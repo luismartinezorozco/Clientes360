@@ -129,7 +129,7 @@
                     <input type="password" id="auth-password" class="w-full bg-white rounded-2xl px-5 py-4 text-base font-bold text-slate-800 shadow-[0_4px_15px_rgba(0,0,0,0.03)] border border-slate-100 focus:outline-none focus:border-purple-400 transition-all">
                 </div>
                 
-                <button onclick="handleAuth()" id="auth-btn" class="w-full bg-brand-purple text-white font-bold rounded-2xl py-4 shadow-[0_8px_20px_rgba(92,51,162,0.3)] active:scale-[0.98] transition-transform text-lg mt-4">Sign In</button>
+                <button onclick="handleAuth()" id="auth-btn" class="w-full bg-brand-purple text-white font-bold rounded-2xl py-4 shadow-[0_8px_20px_rgba(92,51,162,0.3)] active:scale-[0.98] transition-transform text-lg mt-4">Acceder</button>
                 
                 <p id="auth-error" class="text-red-500 text-sm mt-4 hidden text-center font-bold">Credenciales incorrectas</p>
 
@@ -152,21 +152,23 @@
                 <div id="tab-home" class="tab-content h-full flex flex-col">
                     <!-- Header App -->
                     <div class="flex justify-between items-center mb-6">
-                        <svg class="w-7 h-7 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+                        <div class="flex items-center">
+                            <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-6 w-auto mr-2">
+                            <span class="font-black text-slate-800 tracking-widest text-sm uppercase">EQB Studio</span>
+                        </div>
                         <div class="flex items-center space-x-3">
-                            <!-- Botón Log Out reubicado aquí -->
                             <button onclick="lockApp()" class="text-[11px] font-bold text-red-500 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg active:scale-95 transition-colors">Salir</button>
                             <div class="w-10 h-10 rounded-full bg-brand-orange flex items-center justify-center text-white font-black shadow-md border-2 border-white">EQ</div>
                         </div>
                     </div>
 
-                    <h1 class="text-3xl font-black text-slate-800 leading-tight">Hello!</h1>
-                    <h2 class="text-3xl font-black text-slate-800 leading-tight mb-1">Admin Panel</h2>
-                    <p class="text-slate-500 text-sm font-semibold mb-6" id="current-date">Manage your cloud storage.</p>
+                    <h1 class="text-3xl font-black text-slate-800 leading-tight">¡Hola!</h1>
+                    <h2 class="text-3xl font-black text-slate-800 leading-tight mb-1">Panel de Control</h2>
+                    <p class="text-slate-500 text-sm font-semibold mb-6" id="current-date">Gestiona tus proyectos y clientes.</p>
 
                     <!-- Barra de Búsqueda -->
                     <div class="relative mb-8">
-                        <input type="text" id="searchInput" onkeyup="renderClients()" placeholder="Search clients..." class="w-full bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-slate-100 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold focus:outline-none text-slate-800">
+                        <input type="text" id="searchInput" onkeyup="renderClients()" placeholder="Buscar clientes o proyectos..." class="w-full bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-slate-100 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold focus:outline-none text-slate-800">
                         <div class="absolute left-4 top-1/2 -translate-y-1/2 bg-brand-purple p-1.5 rounded-lg text-white">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </div>
@@ -215,31 +217,31 @@
                         </div>
                     </div>
 
-                    <h3 class="font-black text-slate-800 text-lg mb-4">Recent Uploads</h3>
+                    <h3 class="font-black text-slate-800 text-lg mb-4">Proyectos Recientes</h3>
                     
                     <!-- Lista de Clientes -->
                     <div id="clientsList" class="flex flex-col space-y-3"></div>
-                    <div id="emptyState" class="hidden text-center py-10 text-slate-400 text-sm font-bold">No data found.</div>
+                    <div id="emptyState" class="hidden text-center py-10 text-slate-400 text-sm font-bold">No se encontraron datos.</div>
                 </div>
 
                 <!-- PESTAÑA: AJUSTES -->
                 <div id="tab-settings" class="tab-content hidden h-full flex flex-col">
                     <div class="flex items-center mb-8">
-                        <h1 class="text-3xl font-black text-slate-800">Settings</h1>
+                        <h1 class="text-3xl font-black text-slate-800">Ajustes</h1>
                     </div>
                     
                     <div class="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] mb-6">
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Seguridad</p>
                         <input type="password" id="old-pwd" placeholder="Contraseña Actual" class="w-full bg-slate-50 rounded-xl px-5 py-4 text-sm font-bold mb-3 border border-slate-100 focus:outline-none focus:border-brand-purple">
                         <input type="password" id="new-pwd" placeholder="Nueva Contraseña" class="w-full bg-slate-50 rounded-xl px-5 py-4 text-sm font-bold mb-4 border border-slate-100 focus:outline-none focus:border-brand-purple">
-                        <button onclick="changePassword()" class="w-full bg-slate-800 text-white text-sm font-bold rounded-xl py-4 active:scale-95 transition-transform">Update Password</button>
+                        <button onclick="changePassword()" class="w-full bg-slate-800 text-white text-sm font-bold rounded-xl py-4 active:scale-95 transition-transform">Actualizar Contraseña</button>
                         <p id="pwd-msg" class="text-sm mt-3 text-center hidden"></p>
                     </div>
 
                     <div class="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Datos</p>
                         <button onclick="exportData()" class="flex items-center justify-between w-full p-4 bg-slate-50 rounded-xl font-bold text-slate-700 active:scale-95 transition-transform">
-                            <span>Export Data Backup</span>
+                            <span>Exportar Copia de Seguridad</span>
                             <svg class="w-5 h-5 text-brand-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                         </button>
                     </div>
@@ -257,7 +259,7 @@
                     <div class="w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container bg-brand-purple text-white transition-colors active:scale-95">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     </div>
-                    <span class="text-[10px] mt-1 font-bold nav-text text-brand-purple">Home</span>
+                    <span class="text-[10px] mt-1 font-bold nav-text text-brand-purple">Inicio</span>
                 </button>
                 
                 <!-- FAB CENTRAL (Upload) - Posición Absoluta para centrado perfecto -->
@@ -265,7 +267,7 @@
                     <button onclick="openClientModal()" class="w-16 h-16 bg-brand-pink rounded-full flex items-center justify-center text-white floating-fab active:scale-90 transition-transform border-[5px] border-[#F8F9FA]">
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
                     </button>
-                    <span class="text-[10px] font-bold text-slate-800 absolute -bottom-4 w-full text-center tracking-wide">Upload</span>
+                    <span class="text-[10px] font-bold text-slate-800 absolute -bottom-4 w-full text-center tracking-wide">Añadir</span>
                 </div>
 
                 <!-- Tab: Settings -->
@@ -273,7 +275,7 @@
                     <div class="w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container text-slate-400 transition-colors active:scale-95">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     </div>
-                    <span class="text-[10px] mt-1 font-bold nav-text text-slate-400">Settings</span>
+                    <span class="text-[10px] mt-1 font-bold nav-text text-slate-400">Ajustes</span>
                 </button>
 
             </nav>
@@ -293,9 +295,9 @@
 
             <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-40" id="client-scroll-area">
                 
-                <h1 class="text-3xl font-black text-slate-800 leading-tight">Hello!</h1>
-                <h2 class="text-3xl font-black text-slate-800 leading-tight mb-1 truncate" id="cp-name">Client Name</h2>
-                <p class="text-slate-500 text-sm font-semibold mb-8">Let's manage your brand files.</p>
+                <h1 class="text-3xl font-black text-slate-800 leading-tight">¡Hola!</h1>
+                <h2 class="text-3xl font-black text-slate-800 leading-tight mb-1 truncate" id="cp-name">Nombre del Cliente</h2>
+                <p class="text-slate-500 text-sm font-semibold mb-8">Gestiona y descarga tus archivos de marca.</p>
 
                 <!-- Grid de Info (App Style) -->
                 <div class="grid grid-cols-2 gap-4 mb-8">
@@ -303,16 +305,16 @@
                         <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         </div>
-                        <p class="font-black tracking-wide text-lg truncate" id="cp-service">Service</p>
-                        <p class="text-sm font-semibold opacity-80 mt-0.5">Active Service</p>
+                        <p class="font-black tracking-wide text-lg truncate" id="cp-service">Servicio</p>
+                        <p class="text-sm font-semibold opacity-80 mt-0.5">Servicio Activo</p>
                     </div>
 
                     <div class="bg-brand-orange rounded-3xl p-5 text-white shadow-lg shadow-orange-500/20">
                         <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
-                        <p class="font-black tracking-wide text-lg truncate" id="cp-status">Status</p>
-                        <p class="text-sm font-semibold opacity-80 mt-0.5" id="cp-deadline-label">Progress</p>
+                        <p class="font-black tracking-wide text-lg truncate" id="cp-status">Estado</p>
+                        <p class="text-sm font-semibold opacity-80 mt-0.5" id="cp-deadline-label">Progreso</p>
                     </div>
                 </div>
 
@@ -329,21 +331,21 @@
                     </div>
                 </div>
 
-                <h3 class="font-black text-slate-800 text-lg mb-4">My Files</h3>
+                <h3 class="font-black text-slate-800 text-lg mb-4">Mis Archivos</h3>
                 
                 <!-- Archivos Bóveda -->
                 <div id="cp-assets-list" class="flex flex-col space-y-3 mb-8"></div>
 
                 <!-- Mensaje Externo -->
                 <div id="cp-external-notes-container" class="bg-white rounded-3xl p-5 border border-slate-100 shadow-[0_4px_15px_rgba(0,0,0,0.03)] hidden mb-8">
-                    <h4 class="font-black text-slate-800 text-sm tracking-wider uppercase mb-2">Note from Studio</h4>
+                    <h4 class="font-black text-slate-800 text-sm tracking-wider uppercase mb-2">Nota del Estudio</h4>
                     <p class="text-sm text-slate-500 font-semibold select-text" id="cp-external-notes"></p>
                 </div>
 
                 <!-- Botón Contacto App Style -->
                 <a id="cp-whatsapp-float" href="#" target="_blank" class="bg-brand-purple w-full rounded-2xl py-4 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-purple-500/30 active:scale-95 transition-transform mb-6">
                     <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-                    Contact Support
+                    Contactar Soporte
                 </a>
             </div>
         </div>
@@ -358,23 +360,24 @@
             <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mt-4 mb-2 shrink-0"></div>
 
             <div class="flex justify-between items-center px-8 py-4 border-b border-slate-100 shrink-0">
-                <button onclick="closeClientModal()" class="text-slate-400 font-bold text-base active:opacity-50 transition-opacity">Cancel</button>
-                <h3 class="font-black text-xl text-slate-800" id="modal-title">Upload New</h3>
-                <button onclick="saveClient()" class="text-brand-purple font-bold text-base active:opacity-50 transition-opacity">Save</button>
+                <button onclick="closeClientModal()" class="text-slate-400 font-bold text-base active:opacity-50 transition-opacity">Cancelar</button>
+                <h3 class="font-black text-xl text-slate-800" id="modal-title">Nuevo Proyecto</h3>
+                <button onclick="saveClient()" class="text-brand-purple font-bold text-base active:opacity-50 transition-opacity">Guardar</button>
             </div>
             
-            <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6 bg-[#F8F9FA] pb-24">
+            <!-- Mayor padding bottom (pb-32) para no solaparse con el borde del celular -->
+            <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6 bg-[#F8F9FA] pb-32">
                 <input type="hidden" id="clientId">
                 
                 <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 space-y-4">
-                    <p class="text-xs font-black text-slate-300 uppercase tracking-widest">Client Details</p>
-                    <input type="text" id="clientName" placeholder="Full Name" class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-bold border border-slate-100 focus:border-brand-purple focus:outline-none">
-                    <input type="tel" id="clientPhone" placeholder="Phone Number" class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-bold border border-slate-100 focus:border-brand-purple focus:outline-none">
-                    <input type="email" id="clientEmail" placeholder="Email Address" class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-bold border border-slate-100 focus:border-brand-purple focus:outline-none">
+                    <p class="text-xs font-black text-slate-300 uppercase tracking-widest">Detalles del Cliente</p>
+                    <input type="text" id="clientName" placeholder="Nombre Completo" class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-bold border border-slate-100 focus:border-brand-purple focus:outline-none">
+                    <input type="tel" id="clientPhone" placeholder="Teléfono / WhatsApp" class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-bold border border-slate-100 focus:border-brand-purple focus:outline-none">
+                    <input type="email" id="clientEmail" placeholder="Correo Electrónico" class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-bold border border-slate-100 focus:border-brand-purple focus:outline-none">
                 </div>
 
                 <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 space-y-4">
-                    <p class="text-xs font-black text-slate-300 uppercase tracking-widest">Status & Dates</p>
+                    <p class="text-xs font-black text-slate-300 uppercase tracking-widest">Estado y Fechas</p>
                     <select id="clientStatus" class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-bold border border-slate-100 focus:border-brand-purple focus:outline-none">
                         <option value="Cotizando">Cotizando</option>
                         <option value="En Progreso">En Progreso</option>
@@ -383,36 +386,36 @@
                         <option value="Finalizado - Tiempo de garantía vencido">Finalizado - Tiempo de garantía vencido</option>
                     </select>
                     <div class="flex items-center justify-between bg-slate-50 rounded-xl px-4 py-3 border border-slate-100">
-                        <span class="text-sm font-bold text-slate-500">Deadline</span>
+                        <span class="text-sm font-bold text-slate-500">Fecha de Entrega</span>
                         <input type="date" id="clientDeadline" class="bg-transparent font-bold text-brand-purple focus:outline-none">
                     </div>
                     <div class="flex items-center justify-between bg-brand-blue/10 rounded-xl px-4 py-3 border border-brand-blue/20">
-                        <span class="text-sm font-bold text-brand-blue">Warranty</span>
+                        <span class="text-sm font-bold text-brand-blue">Garantía / Vigencia</span>
                         <input type="date" id="clientWarranty" class="bg-transparent font-bold text-brand-blue focus:outline-none">
                     </div>
                 </div>
 
                 <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50">
-                    <p class="text-xs font-black text-slate-300 uppercase tracking-widest mb-4">Files & Assets</p>
+                    <p class="text-xs font-black text-slate-300 uppercase tracking-widest mb-4">Archivos y Entregables</p>
                     <div id="assets-fields-container" class="space-y-3 mb-4"></div>
-                    <button type="button" onclick="addAssetField()" class="w-full py-3.5 bg-brand-purple text-white rounded-2xl text-sm font-black active:scale-95 transition-transform">+ Add File Link</button>
+                    <button type="button" onclick="addAssetField()" class="w-full py-3.5 bg-brand-purple text-white rounded-2xl text-sm font-black active:scale-95 transition-transform">+ Añadir Enlace</button>
                 </div>
 
                 <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 space-y-4">
-                    <p class="text-xs font-black text-slate-300 uppercase tracking-widest">Finance</p>
+                    <p class="text-xs font-black text-slate-300 uppercase tracking-widest">Finanzas</p>
                     <div id="budget-fields-container" class="space-y-2"></div>
-                    <button type="button" onclick="addBudgetField()" class="w-full py-3 bg-slate-50 text-slate-500 rounded-xl text-sm font-bold border border-slate-200 border-dashed hover:bg-slate-100 active:scale-95 transition-all">+ Add Item</button>
+                    <button type="button" onclick="addBudgetField()" class="w-full py-3 bg-slate-50 text-slate-500 rounded-xl text-sm font-bold border border-slate-200 border-dashed hover:bg-slate-100 active:scale-95 transition-all">+ Añadir Concepto</button>
                     
                     <div class="flex space-x-3 mt-4">
                         <input type="number" id="clientPrice" placeholder="Total ($)" class="w-1/2 bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-black border border-slate-100 focus:border-brand-purple focus:outline-none">
-                        <input type="number" id="clientPaid" placeholder="Paid ($)" class="w-1/2 bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-black text-emerald-500 border border-slate-100 focus:border-brand-purple focus:outline-none">
+                        <input type="number" id="clientPaid" placeholder="Pagado ($)" class="w-1/2 bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-black text-emerald-500 border border-slate-100 focus:border-brand-purple focus:outline-none">
                     </div>
                 </div>
 
                 <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 space-y-4">
-                    <p class="text-xs font-black text-slate-300 uppercase tracking-widest">Notes</p>
-                    <textarea id="clientNotes" rows="2" placeholder="Private notes..." class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-semibold border border-slate-100 focus:border-brand-purple focus:outline-none"></textarea>
-                    <textarea id="clientExternalNotes" rows="2" placeholder="Message for client..." class="w-full bg-brand-blue/5 rounded-xl px-4 py-3.5 text-sm font-semibold border border-brand-blue/20 text-brand-blue focus:outline-none placeholder-brand-blue/50"></textarea>
+                    <p class="text-xs font-black text-slate-300 uppercase tracking-widest">Notas Adicionales</p>
+                    <textarea id="clientNotes" rows="2" placeholder="Notas internas (solo admin)..." class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-semibold border border-slate-100 focus:border-brand-purple focus:outline-none"></textarea>
+                    <textarea id="clientExternalNotes" rows="2" placeholder="Mensaje visible para el cliente..." class="w-full bg-brand-blue/5 rounded-xl px-4 py-3.5 text-sm font-semibold border border-brand-blue/20 text-brand-blue focus:outline-none placeholder-brand-blue/50"></textarea>
                 </div>
             </div>
         </div>
@@ -426,19 +429,20 @@
 
             <div class="flex justify-between items-center px-8 py-3 border-b border-slate-100 shrink-0">
                 <span class="w-10"></span>
-                <h3 class="font-black text-xl text-slate-800">My Profile</h3>
+                <h3 class="font-black text-xl text-slate-800">Perfil del Proyecto</h3>
                 <button onclick="closeProfileModal()" class="w-10 text-right text-slate-400 font-bold text-3xl active:opacity-50 transition-opacity">×</button>
             </div>
             
-            <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6 bg-[#F8F9FA] pb-24">
+            <!-- Mayor padding bottom (pb-32) para no solaparse con el borde del celular -->
+            <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6 bg-[#F8F9FA] pb-32">
                 
                 <!-- Client Card Header -->
                 <div class="bg-brand-purple rounded-3xl p-6 text-white flex items-center shadow-lg shadow-purple-500/20 relative overflow-hidden">
                     <div class="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
                     <div class="w-14 h-14 bg-brand-orange rounded-full flex items-center justify-center text-white text-xl font-black mr-4 shadow-md border-2 border-white/20 z-10" id="profileInitials"></div>
                     <div class="z-10 w-full overflow-hidden">
-                        <h2 class="text-xl font-black truncate w-full pr-2" id="profileName">Name</h2>
-                        <p class="text-sm font-semibold opacity-80 truncate w-full pr-2" id="profileService">Service</p>
+                        <h2 class="text-xl font-black truncate w-full pr-2" id="profileName">Nombre</h2>
+                        <p class="text-sm font-semibold opacity-80 truncate w-full pr-2" id="profileService">Servicio</p>
                     </div>
                 </div>
 
@@ -447,30 +451,30 @@
                 <!-- Access Info -->
                 <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 flex justify-between items-center">
                     <div>
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Vault PIN</p>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">PIN de Bóveda</p>
                         <p class="text-2xl font-black text-slate-800" id="profilePINDisplay">----</p>
                     </div>
-                    <button onclick="generateClientPIN()" class="bg-brand-blue text-white text-xs font-black px-4 py-2.5 rounded-xl shadow-md active:scale-95 transition-transform">Generate</button>
+                    <button onclick="generateClientPIN()" class="bg-brand-blue text-white text-xs font-black px-4 py-2.5 rounded-xl shadow-md active:scale-95 transition-transform">Generar</button>
                 </div>
 
                 <!-- Grid Details -->
                 <div class="grid grid-cols-2 gap-4">
                     <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Status</p>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Estado</p>
                         <p class="text-sm font-bold text-slate-800" id="profileStatusBadge">Estado</p>
                     </div>
                     <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Deadline</p>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Fecha de Entrega</p>
                         <p class="text-sm font-bold text-slate-800" id="profileDeadline">Fecha</p>
                     </div>
                 </div>
 
                 <!-- Finance -->
                 <div class="bg-white rounded-3xl p-6 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Finance Overview</p>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Resumen Financiero</p>
                     <div class="flex justify-between text-sm mb-2 font-bold">
                         <span class="text-slate-500">Total: <span id="profileTotal" class="text-slate-800"></span></span>
-                        <span class="text-brand-pink">Debt: <span id="profileDebt"></span></span>
+                        <span class="text-brand-pink">Deuda: <span id="profileDebt"></span></span>
                     </div>
                     <div class="w-full bg-slate-100 rounded-full h-2 mb-2 overflow-hidden">
                         <div id="profileProgress" class="bg-brand-blue h-2 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
@@ -481,7 +485,7 @@
                     </div>
                 </div>
 
-                <button onclick="deleteCurrentClient()" class="w-full py-4 bg-white text-red-500 text-sm font-black rounded-2xl border border-red-100 shadow-sm active:scale-95 transition-transform mt-6">Delete Account</button>
+                <button onclick="deleteCurrentClient()" class="w-full py-4 bg-white text-red-500 text-sm font-black rounded-2xl border border-red-100 shadow-sm active:scale-95 transition-transform mt-6">Eliminar Proyecto</button>
             </div>
         </div>
 
@@ -557,7 +561,7 @@
             if (!pwd) return;
 
             const originalBtnText = btn.innerHTML;
-            btn.innerHTML = 'Wait...'; btn.disabled = true; input.disabled = true;
+            btn.innerHTML = 'Verificando...'; btn.disabled = true; input.disabled = true;
 
             const isAdmin = await verifyAdminAccess(pwd);
             if (isAdmin) {
@@ -565,7 +569,7 @@
             }
 
             if (!dbReady) {
-                errorMsg.textContent = "Offline"; errorMsg.classList.remove('hidden');
+                errorMsg.textContent = "Sin conexión a Internet"; errorMsg.classList.remove('hidden');
                 btn.innerHTML = originalBtnText; btn.disabled = false; input.disabled = false; return;
             }
 
@@ -580,7 +584,7 @@
             } catch (err) {}
 
             btn.innerHTML = originalBtnText; btn.disabled = false; input.disabled = false;
-            errorMsg.textContent = "Invalid Password"; errorMsg.classList.remove('hidden');
+            errorMsg.textContent = "Contraseña o PIN incorrecto"; errorMsg.classList.remove('hidden');
             setTimeout(() => { errorMsg.classList.add('hidden'); }, 2500);
             input.value = '';
         }
@@ -638,7 +642,7 @@
             document.getElementById('cp-status').textContent = escapeHTML(c.status);
             
             const isCompleted = c.status && c.status.includes('Finalizado');
-            document.getElementById('cp-deadline-label').textContent = isCompleted ? "Completed" : "In Progress";
+            document.getElementById('cp-deadline-label').textContent = isCompleted ? "Finalizado" : "En Progreso";
 
             if (c.warranty && c.warranty.trim() !== '') {
                 document.getElementById('cp-warranty-text').textContent = new Date(c.warranty + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -671,7 +675,7 @@
                             </div>
                             <div class="flex-1 overflow-hidden">
                                 <h4 class="font-black text-slate-800 truncate text-sm pr-2">${escapeHTML(asset.name)}</h4>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Available File</p>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Archivo Disponible</p>
                             </div>
                             <div class="text-slate-300">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
@@ -680,14 +684,14 @@
                     `);
                 });
             } else {
-                assetsListEl.innerHTML = `<p class="text-sm font-bold text-slate-400 text-center py-4">No files found.</p>`;
+                assetsListEl.innerHTML = `<p class="text-sm font-bold text-slate-400 text-center py-4">No se encontraron archivos.</p>`;
             }
         }
 
         function addBudgetField(concept = '', amount = '') {
             document.getElementById('budget-fields-container').insertAdjacentHTML('beforeend', `
                 <div class="budget-item flex gap-2 items-center bg-slate-50 p-2 rounded-2xl border border-slate-100">
-                    <input type="text" placeholder="Item Name" value="${escapeHTML(concept)}" class="budget-concept flex-1 px-3 py-2 text-sm font-bold bg-transparent focus:outline-none">
+                    <input type="text" placeholder="Concepto" value="${escapeHTML(concept)}" class="budget-concept flex-1 px-3 py-2 text-sm font-bold bg-transparent focus:outline-none">
                     <input type="number" placeholder="$" value="${amount}" oninput="calculateTotalBudget()" class="budget-amount w-20 px-2 py-2 text-sm font-black text-brand-purple bg-white rounded-xl shadow-sm focus:outline-none text-center" min="0">
                     <button type="button" onclick="this.parentElement.remove(); calculateTotalBudget();" class="text-red-400 font-black px-2 hover:opacity-70">×</button>
                 </div>
@@ -718,8 +722,8 @@
             document.getElementById('assets-fields-container').insertAdjacentHTML('beforeend', `
                 <div class="asset-item flex flex-col gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 relative">
                     <button type="button" onclick="this.parentElement.remove()" class="absolute top-3 right-3 text-red-400 font-black text-lg w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:scale-110 transition-transform">×</button>
-                    <input type="text" placeholder="File Name (e.g. Logo)" value="${escapeHTML(name)}" class="asset-name w-full pr-12 px-4 py-3 text-sm font-bold rounded-xl border border-slate-200 focus:outline-none focus:border-brand-purple">
-                    <input type="url" placeholder="Drive URL" value="${escapeHTML(url)}" class="asset-url w-full px-4 py-3 text-sm font-semibold rounded-xl border border-slate-200 focus:outline-none focus:border-brand-purple text-brand-purple bg-white">
+                    <input type="text" placeholder="Nombre del archivo (ej. Logo)" value="${escapeHTML(name)}" class="asset-name w-full pr-12 px-4 py-3 text-sm font-bold rounded-xl border border-slate-200 focus:outline-none focus:border-brand-purple">
+                    <input type="url" placeholder="URL del enlace (Drive, etc.)" value="${escapeHTML(url)}" class="asset-url w-full px-4 py-3 text-sm font-semibold rounded-xl border border-slate-200 focus:outline-none focus:border-brand-purple text-brand-purple bg-white">
                 </div>
             `);
         }
@@ -728,7 +732,7 @@
             const assetsArray = [];
             document.querySelectorAll('.asset-item').forEach(item => {
                 const url = item.querySelector('.asset-url').value.trim();
-                if (url) assetsArray.push({ name: item.querySelector('.asset-name').value.trim() || 'File', url: url });
+                if (url) assetsArray.push({ name: item.querySelector('.asset-name').value.trim() || 'Archivo', url: url });
             });
             return assetsArray;
         }
@@ -739,9 +743,9 @@
             const isAdmin = await verifyAdminAccess(oldInput);
             if (isAdmin) {
                 localStorage.setItem('eqbito360_auth', await hashPassword(newInput));
-                msg.textContent = "Success"; msg.className = "text-sm mt-2 font-black text-emerald-500 block";
+                msg.textContent = "Contraseña actualizada"; msg.className = "text-sm mt-2 font-black text-emerald-500 block";
                 document.getElementById('old-pwd').value = ''; document.getElementById('new-pwd').value = '';
-            } else { msg.textContent = "Error"; msg.className = "text-sm mt-2 font-black text-red-500 block"; }
+            } else { msg.textContent = "Contraseña actual incorrecta"; msg.className = "text-sm mt-2 font-black text-red-500 block"; }
             setTimeout(() => msg.classList.add('hidden'), 2000);
         }
 
@@ -768,13 +772,13 @@
             document.getElementById('profileModal').classList.remove('active');
             ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientWarranty', 'clientPrice', 'clientPaid', 'clientNotes', 'clientExternalNotes'].forEach(id => document.getElementById(id).value = '');
             document.getElementById('clientStatus').value = 'Cotizando';
-            document.getElementById('modal-title').textContent = 'Upload New';
+            document.getElementById('modal-title').textContent = 'Nuevo Proyecto';
             document.getElementById('assets-fields-container').innerHTML = ''; document.getElementById('budget-fields-container').innerHTML = '';
 
             if (id) {
                 const c = clients.find(x => x.id === escapeHTML(id));
                 if (c) {
-                    document.getElementById('modal-title').textContent = 'Edit Profile';
+                    document.getElementById('modal-title').textContent = 'Editar Proyecto';
                     document.getElementById('clientId').value = c.id; document.getElementById('clientName').value = c.name;
                     document.getElementById('clientPhone').value = c.phone || ''; document.getElementById('clientEmail').value = c.email || '';
                     document.getElementById('clientStatus').value = c.status; document.getElementById('clientDeadline').value = c.deadline || '';
@@ -807,7 +811,7 @@
             const id = document.getElementById('clientId').value;
             const existingClient = clients.find(c => c.id === id);
             const budgetData = getBudgetFromForm();
-            const autoService = budgetData.length > 0 ? budgetData.map(b => b.concept).join(' + ') : 'Cloud Storage';
+            const autoService = budgetData.length > 0 ? budgetData.map(b => b.concept).join(' + ') : 'Bóveda Segura';
 
             const newClient = {
                 id: id || generateId(),
@@ -828,7 +832,7 @@
 
         async function deleteCurrentClient() {
             if (!currentProfileId) return;
-            if (confirm('Delete this account permanently?')) {
+            if (confirm('¿Eliminar este proyecto permanentemente?')) {
                 clients = clients.filter(c => c.id !== currentProfileId);
                 renderClients(); closeProfileModal();
                 try { await deleteDoc(doc(db, "proyectos_eqbito", currentProfileId)); } catch(e) {}
@@ -838,7 +842,7 @@
         function exportData() {
             if(clients.length === 0) return;
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clients, null, 2));
-            const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `spaceapp_db.json`);
+            const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `eqbstudio_crm.json`);
             document.body.appendChild(anchor); anchor.click(); anchor.remove();
         }
 
@@ -875,9 +879,9 @@
             let actionsHTML = '';
             if (c.phone) {
                 const msg = encodeURIComponent(`Hola ${c.name}. Accede a tu bóveda: http://eqbito.vercel.app | PIN: ${c.clientCode || ''}`);
-                actionsHTML += `<a href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${msg}" target="_blank" class="flex-1 bg-brand-blue/10 text-brand-blue py-3 rounded-2xl font-black text-center text-sm active:scale-95 transition-transform">Message</a>`;
+                actionsHTML += `<a href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${msg}" target="_blank" class="flex-1 bg-brand-blue/10 text-brand-blue py-3 rounded-2xl font-black text-center text-sm active:scale-95 transition-transform">Mensaje</a>`;
             }
-            actionsHTML += `<button onclick="openClientModal('${c.id}')" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-2xl font-black text-sm active:scale-95 transition-transform">Edit</button>`;
+            actionsHTML += `<button onclick="openClientModal('${c.id}')" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-2xl font-black text-sm active:scale-95 transition-transform">Editar</button>`;
             document.getElementById('profileActions').innerHTML = actionsHTML;
 
             document.getElementById('modal-overlay').classList.remove('hidden');
@@ -898,8 +902,8 @@
         }
 
         function setDate() {
-            const rawDate = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            document.getElementById('current-date').textContent = "Let's manage your brand storage.";
+            const rawDate = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('current-date').textContent = "Gestiona tus proyectos y clientes.";
         }
 
         function renderClients() {
@@ -943,7 +947,7 @@
                                 <p class="text-[11px] font-bold text-slate-400 truncate uppercase tracking-widest">${escapeHTML(c.status)}</p>
                             </div>
                             <div class="text-right pl-2">
-                                <span class="text-xs font-black ${pending > 0 ? 'text-brand-pink' : 'text-slate-300'}">${pending > 0 ? 'Debt' : 'Paid'}</span>
+                                <span class="text-xs font-black ${pending > 0 ? 'text-brand-pink' : 'text-slate-300'}">${pending > 0 ? 'Deuda' : 'Pagado'}</span>
                             </div>
                         </div>
                     `);
