@@ -149,17 +149,14 @@
             <div class="flex-1 overflow-y-auto no-scrollbar pb-48 pt-10 px-6" id="scroll-container">
                 
                 <!-- PESTAÑA: HOME -->
-                <div id="tab-home" class="tab-content h-full flex flex-col">
+                <div id="tab-home" class="tab-content">
                     <!-- Header App -->
                     <div class="flex justify-between items-center mb-6">
                         <div class="flex items-center">
                             <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-6 w-auto mr-2">
                             <span class="font-black text-slate-800 tracking-widest text-sm uppercase">EQB Studio</span>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <button onclick="lockApp()" class="text-[11px] font-bold text-red-500 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg active:scale-95 transition-colors">Salir</button>
-                            <div class="w-10 h-10 rounded-full bg-brand-orange flex items-center justify-center text-white font-black shadow-md border-2 border-white">EQ</div>
-                        </div>
+                        <button onclick="lockApp()" class="text-xs font-bold text-red-500 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-xl active:scale-95 transition-colors border border-red-100 shadow-sm cursor-pointer">Salir</button>
                     </div>
 
                     <h1 class="text-3xl font-black text-slate-800 leading-tight">¡Hola!</h1>
@@ -225,7 +222,7 @@
                 </div>
 
                 <!-- PESTAÑA: AJUSTES -->
-                <div id="tab-settings" class="tab-content hidden h-full flex flex-col">
+                <div id="tab-settings" class="tab-content hidden">
                     <div class="flex items-center mb-8">
                         <h1 class="text-3xl font-black text-slate-800">Ajustes</h1>
                     </div>
@@ -290,7 +287,7 @@
                 <div class="flex items-center">
                     <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-8 w-auto mr-3">
                 </div>
-                <div class="w-10 h-10 rounded-full bg-brand-orange flex items-center justify-center text-white font-black shadow-md border-2 border-white active:scale-90 transition-transform cursor-pointer" onclick="lockApp()">X</div>
+                <button onclick="lockApp()" class="text-xs font-bold text-red-500 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-xl active:scale-95 transition-colors border border-red-100 shadow-sm cursor-pointer">Salir</button>
             </div>
 
             <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-40" id="client-scroll-area">
