@@ -21,7 +21,7 @@
             margin: 0;
             padding: 0;
             width: 100%;
-            height: 100%;
+            height: 100vh;
             overflow: hidden;
             font-family: 'Nunito', sans-serif;
             background-color: #ffffff; /* Fondo blanco en móvil para fundirse con la barra inferior */
@@ -31,13 +31,14 @@
 
         /* Soporte para altura dinámica en móviles modernos */
         @supports (height: 100dvh) {
-            body { height: 100dvh; }
+            html, body { height: 100dvh; }
         }
 
         /* Contenedor simulando pantalla de celular en PC */
         .app-frame {
             width: 100%;
-            height: 100%;
+            height: 100vh;
+            height: 100dvh;
             background-color: #F8F9FA;
             position: relative;
             overflow: hidden;
@@ -252,7 +253,7 @@
             <!-- ========================================== -->
             <!-- NAVEGACIÓN INFERIOR (ÓPTIMA: 3 ELEMENTOS)  -->
             <!-- ========================================== -->
-            <nav class="absolute bottom-0 w-full bg-white rounded-t-[35px] shadow-[0_-10px_30px_rgba(0,0,0,0.06)] px-10 py-3 flex justify-between items-center z-40 pb-safe">
+            <nav class="absolute bottom-0 w-full bg-white rounded-t-[35px] shadow-[0_-10px_30px_rgba(0,0,0,0.06)] px-10 pt-3 pb-safe flex justify-between items-center z-40">
                 
                 <!-- Tab: Home -->
                 <button onclick="switchTab('home')" class="flex flex-col items-center justify-center w-16 nav-btn" data-tab="home">
@@ -262,9 +263,9 @@
                     <span class="text-[10px] mt-1 font-bold nav-text text-brand-purple">Inicio</span>
                 </button>
                 
-                <!-- FAB CENTRAL (Upload) - Posición Absoluta para centrado perfecto -->
+                <!-- FAB CENTRAL (Upload) -->
                 <div class="absolute left-1/2 -translate-x-1/2 -top-7">
-                    <button onclick="openClientModal()" class="w-16 h-16 bg-brand-pink rounded-full flex items-center justify-center text-white floating-fab active:scale-90 transition-transform border-[5px] border-[#F8F9FA]">
+                    <button onclick="openClientModal()" class="w-16 h-16 bg-brand-pink rounded-full flex items-center justify-center text-white floating-fab active:scale-90 transition-transform border-[5px] border-white">
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
                     </button>
                     <span class="text-[10px] font-bold text-slate-800 absolute -bottom-4 w-full text-center tracking-wide">Añadir</span>
@@ -365,7 +366,6 @@
                 <button onclick="saveClient()" class="text-brand-purple font-bold text-base active:opacity-50 transition-opacity">Guardar</button>
             </div>
             
-            <!-- Mayor padding bottom (pb-32) para no solaparse con el borde del celular -->
             <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6 bg-[#F8F9FA] pb-32">
                 <input type="hidden" id="clientId">
                 
@@ -433,7 +433,6 @@
                 <button onclick="closeProfileModal()" class="w-10 text-right text-slate-400 font-bold text-3xl active:opacity-50 transition-opacity">×</button>
             </div>
             
-            <!-- Mayor padding bottom (pb-32) para no solaparse con el borde del celular -->
             <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6 bg-[#F8F9FA] pb-32">
                 
                 <!-- Client Card Header -->
