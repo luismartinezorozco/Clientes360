@@ -18,10 +18,9 @@
         
         /* Bloqueo estricto para evitar scroll global y rebotes */
         html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            margin: 0; padding: 0;
             overflow: hidden;
             font-family: 'Nunito', sans-serif;
             background-color: #ffffff;
@@ -29,37 +28,34 @@
             overscroll-behavior-y: none;
         }
 
-        /* Soporte para altura dinámica en móviles modernos */
-        @supports (height: 100dvh) {
-            html, body { height: 100dvh; }
-            .app-frame { height: 100dvh !important; }
-        }
-
-        /* Contenedor simulando pantalla de celular en PC */
         .app-frame {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             background-color: #F8F9FA;
-            position: relative;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
             -webkit-user-select: none;
             user-select: none;
+            overflow: hidden;
         }
 
-        @media (min-width: 600px) {
-            body {
+        /* En computadoras, centramos el frame como un celular */
+        @media (min-width: 768px) {
+            html, body {
                 background-color: #0f172a;
                 display: flex;
-                justify-content: center;
                 align-items: center;
+                justify-content: center;
+                position: static;
             }
             .app-frame {
+                position: relative;
                 width: 400px;
-                height: 850px;
-                max-height: 92vh;
-                border-radius: 45px;
+                height: 85vh;
+                max-height: 850px;
+                border-radius: 40px;
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 12px #1E293B;
                 border: 1px solid rgba(255,255,255,0.1);
             }
@@ -97,9 +93,9 @@
         .fade-in { animation: fadeIn 0.3s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Espaciado seguro ajustado para el área de iOS */
+        /* Espaciado seguro para la línea inferior de iPhone */
         .pb-safe { 
-            padding-bottom: max(env(safe-area-inset-bottom), 10px) !important; 
+            padding-bottom: max(env(safe-area-inset-bottom), 12px) !important; 
         }
     </style>
 </head>
@@ -110,10 +106,8 @@
         <!-- ========================================== -->
         <!-- PANTALLA DE LOGIN                          -->
         <!-- ========================================== -->
-        <div id="auth-screen" class="absolute inset-0 bg-[#F8F9FA] z-50 flex flex-col transition-opacity duration-300">
-            <!-- Curva Superior Morada -->
-            <div class="bg-brand-purple h-[35%] rounded-b-[40px] flex items-center justify-center relative shadow-md">
-                <!-- Decoración -->
+        <div id="auth-screen" class="flex-1 bg-[#F8F9FA] z-50 flex flex-col transition-opacity duration-300">
+            <div class="bg-brand-purple h-[35%] rounded-b-[40px] flex items-center justify-center relative shadow-md shrink-0">
                 <div class="absolute -left-10 top-10 w-32 h-32 bg-white/10 rounded-full"></div>
                 <div class="absolute -right-10 bottom-10 w-24 h-24 bg-white/10 rounded-full"></div>
                 
@@ -123,8 +117,7 @@
                 </div>
             </div>
 
-            <!-- Formulario -->
-            <div class="flex-1 px-8 pt-10 flex flex-col relative">
+            <div class="flex-1 overflow-y-auto px-8 pt-10 pb-safe flex flex-col relative">
                 <h2 class="text-2xl font-black text-slate-800 mb-2">LOGIN</h2>
                 <p class="text-slate-500 font-semibold text-sm mb-8">Ingresa tus datos para acceder a la cuenta.</p>
                 
@@ -137,35 +130,36 @@
                 
                 <p id="auth-error" class="text-red-500 text-sm mt-4 hidden text-center font-bold">Credenciales incorrectas</p>
 
-                <div class="mt-auto pb-8 text-center">
+                <div class="mt-auto pt-8 pb-4 text-center">
                     <p class="text-xs text-slate-400 font-semibold">¿Necesitas ayuda? <a href="https://instagram.com/eqbstudio" target="_blank" class="text-brand-purple font-bold">Contáctanos</a></p>
                 </div>
             </div>
         </div>
 
-
         <!-- ========================================== -->
         <!-- CONTENIDO PRINCIPAL (ADMIN)                -->
         <!-- ========================================== -->
-        <div id="main-app" class="flex-1 flex flex-col hidden h-full relative overflow-hidden">
+        <div id="main-app" class="flex-1 flex flex-col hidden relative overflow-hidden bg-[#F8F9FA]">
             
-            <div class="flex-1 overflow-y-auto no-scrollbar pb-32 pt-10 px-6" id="scroll-container">
+            <div class="flex-1 overflow-y-auto no-scrollbar pt-10 px-6" id="scroll-container">
                 
                 <!-- PESTAÑA: HOME -->
-                <div id="tab-home" class="tab-content">
+                <div id="tab-home" class="tab-content pb-10">
                     <div class="flex justify-between items-center mb-6">
                         <div class="flex items-center">
                             <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-6 w-auto mr-2">
                             <span class="font-black text-slate-800 tracking-widest text-sm uppercase">EQB Studio</span>
                         </div>
-                        <button onclick="lockApp()" class="text-xs font-bold text-red-500 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-xl active:scale-95 transition-colors border border-red-100 shadow-sm cursor-pointer">Salir</button>
+                        <button onclick="lockApp()" class="flex items-center text-xs font-bold text-red-500 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-xl active:scale-95 transition-colors border border-red-100 shadow-sm cursor-pointer">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                            Salir
+                        </button>
                     </div>
 
                     <h1 class="text-3xl font-black text-slate-800 leading-tight">¡Hola!</h1>
                     <h2 class="text-3xl font-black text-slate-800 leading-tight mb-1">Panel de Control</h2>
-                    <p class="text-slate-500 text-sm font-semibold mb-6">Gestiona tus proyectos y clientes.</p>
+                    <p class="text-slate-500 text-sm font-semibold mb-6" id="current-date">Gestiona tus proyectos y clientes.</p>
 
-                    <!-- Barra de Búsqueda -->
                     <div class="relative mb-8">
                         <input type="text" id="searchInput" onkeyup="renderClients()" placeholder="Buscar clientes o proyectos..." class="w-full bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-slate-100 rounded-2xl pl-12 pr-4 py-4 text-sm font-bold focus:outline-none text-slate-800">
                         <div class="absolute left-4 top-1/2 -translate-y-1/2 bg-brand-purple p-1.5 rounded-lg text-white">
@@ -173,7 +167,6 @@
                         </div>
                     </div>
 
-                    <!-- Dashboard Grid -->
                     <div class="grid grid-cols-2 gap-4 mb-8">
                         <div class="bg-brand-purple rounded-3xl p-5 text-white shadow-lg shadow-purple-500/20 relative overflow-hidden active:scale-95 transition-transform cursor-pointer" onclick="setFilter('active')">
                             <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full"></div>
@@ -218,7 +211,7 @@
                 </div>
 
                 <!-- PESTAÑA: AJUSTES -->
-                <div id="tab-settings" class="tab-content hidden">
+                <div id="tab-settings" class="tab-content hidden pb-10">
                     <div class="flex items-center mb-8">
                         <h1 class="text-3xl font-black text-slate-800">Ajustes</h1>
                     </div>
@@ -242,8 +235,7 @@
 
             </div>
 
-            <!-- Navegación Inferior Flotante -->
-            <nav class="absolute bottom-0 w-full bg-white rounded-t-[30px] shadow-[0_-4px_25px_rgba(0,0,0,0.05)] shrink-0 z-40 relative">
+            <nav class="bg-white rounded-t-[30px] shadow-[0_-4px_25px_rgba(0,0,0,0.05)] shrink-0 z-40 relative">
                 <div class="flex justify-between items-center px-10 pt-4 pb-safe relative">
                     
                     <button onclick="switchTab('home')" class="flex flex-col items-center justify-center w-16 nav-btn" data-tab="home">
@@ -253,7 +245,6 @@
                         <span class="text-[10px] mt-1 font-bold nav-text text-brand-purple">Inicio</span>
                     </button>
                     
-                    <!-- Botón Upload Central -->
                     <div class="absolute left-1/2 -translate-x-1/2 -top-6 flex flex-col items-center justify-center">
                         <button onclick="openClientModal()" class="w-14 h-14 bg-brand-pink rounded-full flex items-center justify-center text-white floating-fab active:scale-90 transition-transform border-[4px] border-white">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
@@ -271,60 +262,56 @@
             </nav>
         </div>
 
-
         <!-- ========================================== -->
-        <!-- ENTORNO DEL CLIENTE (BÓVEDA DIGITAL LIMPIA)-->
+        <!-- ENTORNO DEL CLIENTE (BÓVEDA DIGITAL)       -->
         <!-- ========================================== -->
         <div id="client-portal" class="flex-1 w-full h-full flex flex-col hidden relative bg-[#F8F9FA] overflow-hidden">
-            <!-- Header Cliente -->
             <div class="flex justify-between items-center px-6 pt-10 pb-4 bg-white shadow-sm z-10 shrink-0">
                 <div class="flex items-center">
                     <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-6 w-auto mr-3">
                 </div>
-                <button onclick="lockApp()" class="text-xs font-bold text-slate-500 hover:text-slate-800 bg-slate-50 hover:bg-slate-100 px-4 py-2 rounded-xl active:scale-95 transition-colors border border-slate-100 shadow-sm">Salir</button>
+                <button onclick="lockApp()" class="flex items-center text-xs font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 px-3 py-2 rounded-xl active:scale-95 transition-transform shadow-sm border border-slate-100">
+                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Salir
+                </button>
             </div>
 
-            <div class="flex-1 overflow-y-auto no-scrollbar px-6 pt-6 pb-32 relative">
+            <div class="flex-1 overflow-y-auto no-scrollbar px-6 pt-6 pb-32 relative" id="client-scroll-area">
                 
-                <!-- Saludo -->
                 <div class="mb-6">
                     <h1 class="text-2xl font-black text-slate-800 leading-tight" id="cp-greeting">¡Hola, Cliente!</h1>
                     <p class="text-slate-500 text-sm font-semibold">Aquí está tu bóveda de marca.</p>
                 </div>
 
-                <!-- Tarjeta Única de Proyecto -->
                 <div class="bg-brand-purple rounded-3xl p-6 text-white shadow-[0_10px_30px_rgba(92,51,162,0.3)] mb-8 relative overflow-hidden">
-                    <!-- Decoración interna -->
                     <div class="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
                     
                     <div class="relative z-10">
                         <div class="flex justify-between items-start mb-4">
                             <div class="pr-2">
                                 <p class="text-[10px] font-bold text-purple-200 uppercase tracking-widest mb-0.5">Servicio Activo</p>
-                                <p class="font-black text-xl leading-tight" id="cp-service">Branding General</p>
+                                <p class="font-black text-xl leading-tight" id="cp-service">Servicio</p>
                             </div>
-                            <span class="px-3 py-1.5 bg-white/20 rounded-xl text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm shadow-sm" id="cp-status">En Progreso</span>
+                            <span class="px-3 py-1.5 bg-white/20 rounded-xl text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm shadow-sm" id="cp-status">Estado</span>
                         </div>
 
-                        <div id="cp-dates-container" class="mt-4 pt-4 border-t border-white/20">
-                            <p class="text-xs font-semibold tracking-wide" id="cp-deadline-warranty">⏳ Entrega estimada: --</p>
+                        <div id="cp-dates-container" class="mt-4 pt-4 border-t border-white/20 flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <p class="text-xs font-semibold tracking-wide" id="cp-deadline-warranty">Entrega estimada: --</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Lista de Archivos Centralizada -->
                 <h3 class="font-black text-slate-800 text-lg mb-4">Archivos Disponibles</h3>
                 <div id="cp-assets-list" class="flex flex-col space-y-3 mb-8"></div>
 
-                <!-- Mensaje Externo -->
                 <div id="cp-external-notes-container" class="bg-brand-blue/10 rounded-3xl p-5 border border-brand-blue/20 hidden mb-8">
                     <h4 class="font-black text-brand-blue text-sm tracking-wider uppercase mb-2">Nota del Estudio</h4>
-                    <p class="text-sm text-slate-600 font-semibold select-text leading-relaxed" id="cp-external-notes"></p>
+                    <p class="text-sm text-slate-600 font-semibold select-text leading-relaxed whitespace-pre-wrap" id="cp-external-notes"></p>
                 </div>
 
             </div>
 
-            <!-- Botón FAB Flotante de Contacto -->
             <a id="cp-whatsapp-fab" href="#" target="_blank" class="absolute bottom-8 right-6 w-14 h-14 bg-brand-pink text-white rounded-full flex items-center justify-center shadow-[0_8px_20px_rgba(240,20,123,0.4)] active:scale-90 transition-transform z-30 border-[3px] border-white">
                 <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
             </a>
@@ -393,8 +380,8 @@
 
                 <div class="bg-white rounded-3xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 space-y-4">
                     <p class="text-xs font-black text-slate-300 uppercase tracking-widest">Notas Adicionales</p>
-                    <textarea id="clientNotes" rows="2" placeholder="Notas internas (solo admin)..." class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-semibold border border-slate-100 focus:border-brand-purple focus:outline-none"></textarea>
-                    <textarea id="clientExternalNotes" rows="2" placeholder="Mensaje visible para el cliente..." class="w-full bg-brand-blue/5 rounded-xl px-4 py-3.5 text-sm font-semibold border border-brand-blue/20 text-brand-blue focus:outline-none placeholder-brand-blue/50"></textarea>
+                    <textarea id="clientNotes" rows="2" placeholder="Notas internas (solo admin)..." class="w-full bg-slate-50 rounded-xl px-4 py-3.5 text-sm font-semibold border border-slate-100 focus:border-brand-purple focus:outline-none whitespace-pre-wrap"></textarea>
+                    <textarea id="clientExternalNotes" rows="2" placeholder="Mensaje visible para el cliente..." class="w-full bg-brand-blue/5 rounded-xl px-4 py-3.5 text-sm font-semibold border border-brand-blue/20 text-brand-blue focus:outline-none placeholder-brand-blue/50 whitespace-pre-wrap"></textarea>
                 </div>
             </div>
         </div>
@@ -409,7 +396,9 @@
             <div class="flex justify-between items-center px-8 py-3 border-b border-slate-100 shrink-0">
                 <span class="w-10"></span>
                 <h3 class="font-black text-xl text-slate-800">Perfil del Proyecto</h3>
-                <button onclick="closeProfileModal()" class="w-10 text-right text-slate-400 font-bold text-3xl active:opacity-50 transition-opacity">×</button>
+                <button onclick="closeProfileModal()" class="w-10 h-10 flex items-center justify-end text-slate-400 active:opacity-50 transition-opacity">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
             </div>
             
             <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6 bg-[#F8F9FA] pb-32">
@@ -461,6 +450,17 @@
                     <div id="profile-budget-container" class="mt-4 pt-4 border-t border-slate-100 hidden">
                         <div id="profile-budget-list" class="space-y-2"></div>
                     </div>
+                </div>
+
+                <!-- Cajas de Notas con Whitespace Pre-Wrap -->
+                <div id="profileInternalNotesContainer" class="bg-[#FFFBEB] p-5 rounded-2xl border border-amber-100/50 w-full hidden mt-4">
+                    <p class="text-[10px] text-amber-600 font-bold uppercase mb-1 tracking-widest">Notas Internas</p>
+                    <p class="text-sm text-slate-700 font-semibold select-text leading-relaxed whitespace-pre-wrap" id="profileInternalNotes"></p>
+                </div>
+
+                <div id="profileExternalNotesContainer" class="bg-[#F0F7FF] p-5 rounded-2xl border border-blue-100/50 w-full hidden mt-4">
+                    <p class="text-[10px] text-blue-600 font-bold uppercase mb-1 tracking-widest">Mensaje al Cliente</p>
+                    <p class="text-sm text-slate-700 font-semibold select-text leading-relaxed whitespace-pre-wrap" id="profileExternalNotes"></p>
                 </div>
 
                 <button onclick="deleteCurrentClient()" class="w-full py-4 bg-white text-red-500 text-sm font-black rounded-2xl border border-red-100 shadow-sm active:scale-95 transition-transform mt-6">Eliminar Proyecto</button>
@@ -655,8 +655,6 @@
 
         function setDate() {
             const rawDate = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            // Capitalizar primera letra de la fecha
-            // document.getElementById('current-date').textContent = rawDate.charAt(0).toUpperCase() + rawDate.slice(1);
         }
 
         function setFilter(filter) {
@@ -666,14 +664,12 @@
 
         // 7. RENDERIZADO DEL PORTAL DEL CLIENTE (DISEÑO UNIFICADO)
         function renderClientPortal(c) {
-            // Nombre amigable (solo el primer nombre si es posible)
             const firstName = c.name.split(' ')[0];
             document.getElementById('cp-greeting').textContent = `¡Hola, ${escapeHTML(firstName)}!`;
             
             document.getElementById('cp-service').textContent = escapeHTML(c.service);
             document.getElementById('cp-status').textContent = escapeHTML(c.status);
             
-            // Lógica de fechas (Garantía vs Entrega)
             const datesContainer = document.getElementById('cp-dates-container');
             const deadlineWarranty = document.getElementById('cp-deadline-warranty');
             const isCompleted = c.status && c.status.includes('Finalizado');
@@ -696,7 +692,6 @@
                 }
             }
 
-            // Mensaje Externo
             const extNotesContainer = document.getElementById('cp-external-notes-container');
             if (c.externalNotes && c.externalNotes.trim() !== '') {
                 document.getElementById('cp-external-notes').textContent = escapeHTML(c.externalNotes); 
@@ -705,11 +700,9 @@
                 extNotesContainer.classList.add('hidden'); 
             }
 
-            // WhatsApp Floating Action Button
             const waMsg = encodeURIComponent(`Hola EQB STUDIO, soy ${c.name}. Tengo una consulta sobre mi proyecto.`);
             document.getElementById('cp-whatsapp-fab').href = `https://wa.me/573021192800?text=${waMsg}`;
 
-            // Archivos (Diseño Lista)
             const assetsListEl = document.getElementById('cp-assets-list');
             assetsListEl.innerHTML = '';
             let parsedAssets = Array.isArray(c.assets) ? c.assets : [];
@@ -783,7 +776,7 @@
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                             </div>
                             <div class="flex-1 overflow-hidden">
-                                <h4 class="font-black text-slate-800 truncate text-base pr-2">${escapeHTML(c.name)}</h4>
+                                <h4 class="font-black text-slate-800 truncate text-base">${escapeHTML(c.name)}</h4>
                                 <p class="text-[11px] font-bold text-slate-400 truncate uppercase tracking-widest">${escapeHTML(c.status)}</p>
                             </div>
                             <div class="text-right pl-2">
@@ -870,10 +863,20 @@
             let actionsHTML = '';
             if (c.phone) {
                 const msg = encodeURIComponent(`Hola ${c.name}. Accede a tu bóveda: http://eqbito.vercel.app | PIN: ${c.clientCode || ''}`);
-                actionsHTML += `<a href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${msg}" target="_blank" class="flex-1 bg-brand-blue/10 text-brand-blue py-3 rounded-2xl font-black text-center text-sm active:scale-95 transition-transform">Mensaje</a>`;
+                actionsHTML += `
+                <a href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${msg}" target="_blank" class="flex-1 flex items-center justify-center bg-brand-blue/10 text-brand-blue py-3 rounded-2xl font-black text-sm active:scale-95 transition-transform">
+                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                </a>`;
             }
-            actionsHTML += `<button onclick="openClientModal('${c.id}')" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-2xl font-black text-sm active:scale-95 transition-transform">Editar</button>`;
+            actionsHTML += `
+            <button onclick="openClientModal('${c.id}')" class="flex-1 flex items-center justify-center bg-slate-100 text-slate-600 py-3 rounded-2xl font-black text-sm active:scale-95 transition-transform">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                Editar
+            </button>`;
             document.getElementById('profileActions').innerHTML = actionsHTML;
+
+            if (c.notes) { document.getElementById('profileInternalNotes').textContent = escapeHTML(c.notes); document.getElementById('profileInternalNotesContainer').classList.remove('hidden'); } else { document.getElementById('profileInternalNotesContainer').classList.add('hidden'); }
+            if (c.externalNotes) { document.getElementById('profileExternalNotes').textContent = escapeHTML(c.externalNotes); document.getElementById('profileExternalNotesContainer').classList.remove('hidden'); } else { document.getElementById('profileExternalNotesContainer').classList.add('hidden'); }
 
             document.getElementById('modal-overlay').classList.remove('hidden');
             setTimeout(() => { document.getElementById('modal-overlay').classList.remove('opacity-0'); document.getElementById('profileModal').classList.add('active'); }, 10);
@@ -894,7 +897,9 @@
                 <div class="budget-item flex gap-2 items-center bg-slate-50 p-2 rounded-2xl border border-slate-100">
                     <input type="text" placeholder="Concepto" value="${escapeHTML(concept)}" class="budget-concept flex-1 px-3 py-2 text-sm font-bold bg-transparent focus:outline-none">
                     <input type="number" placeholder="$" value="${amount}" oninput="calculateTotalBudget()" class="budget-amount w-20 px-2 py-2 text-sm font-black text-brand-purple bg-white rounded-xl shadow-sm focus:outline-none text-center" min="0">
-                    <button type="button" onclick="this.parentElement.remove(); calculateTotalBudget();" class="text-red-400 font-black px-2 hover:opacity-70">×</button>
+                    <button type="button" onclick="this.parentElement.remove(); calculateTotalBudget();" class="text-red-400 p-2 hover:bg-red-50 rounded-lg transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
                 </div>
             `);
             calculateTotalBudget();
@@ -925,7 +930,9 @@
         function addAssetField(name = '', url = '') {
             document.getElementById('assets-fields-container').insertAdjacentHTML('beforeend', `
                 <div class="asset-item flex flex-col gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 relative">
-                    <button type="button" onclick="this.parentElement.remove()" class="absolute top-3 right-3 text-red-400 font-black text-lg w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:scale-110 transition-transform">×</button>
+                    <button type="button" onclick="this.parentElement.remove()" class="absolute top-3 right-3 text-red-400 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:scale-110 transition-transform">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
                     <input type="text" placeholder="Nombre del archivo (ej. Logo)" value="${escapeHTML(name)}" class="asset-name w-full pr-12 px-4 py-3 text-sm font-bold rounded-xl border border-slate-200 focus:outline-none focus:border-brand-purple">
                     <input type="url" placeholder="URL del enlace (Drive, etc.)" value="${escapeHTML(url)}" class="asset-url w-full px-4 py-3 text-sm font-semibold rounded-xl border border-slate-200 focus:outline-none focus:border-brand-purple text-brand-purple bg-white">
                 </div>
