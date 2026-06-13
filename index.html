@@ -16,11 +16,12 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
         
-        /* Estructura fijada a la ventana para evitar el recuadro blanco inferior en móviles */
+        /* Bloqueo estricto para evitar scroll global y rebotes */
         html, body {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            margin: 0; padding: 0;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
             font-family: 'Nunito', sans-serif;
             background-color: #ffffff;
@@ -28,34 +29,37 @@
             overscroll-behavior-y: none;
         }
 
+        /* Soporte para altura dinámica en móviles modernos */
+        @supports (height: 100dvh) {
+            html, body { height: 100dvh; }
+            .app-frame { height: 100dvh !important; }
+        }
+
+        /* Contenedor simulando pantalla de celular en PC */
         .app-frame {
-            position: absolute;
-            inset: 0;
             width: 100%;
             height: 100%;
             background-color: #F8F9FA;
+            position: relative;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             -webkit-user-select: none;
             user-select: none;
-            overflow: hidden;
         }
 
-        /* En computadoras, centramos el frame como un celular */
-        @media (min-width: 768px) {
-            html, body {
+        @media (min-width: 600px) {
+            body {
                 background-color: #0f172a;
                 display: flex;
-                align-items: center;
                 justify-content: center;
-                position: static;
+                align-items: center;
             }
             .app-frame {
-                position: relative;
                 width: 400px;
-                height: 85vh;
-                max-height: 850px;
-                border-radius: 40px;
+                height: 850px;
+                max-height: 92vh;
+                border-radius: 45px;
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 12px #1E293B;
                 border: 1px solid rgba(255,255,255,0.1);
             }
@@ -93,9 +97,9 @@
         .fade-in { animation: fadeIn 0.3s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Espaciado seguro para la línea inferior de iPhone */
+        /* Espaciado seguro ajustado para el área de iOS */
         .pb-safe { 
-            padding-bottom: max(env(safe-area-inset-bottom), 12px) !important; 
+            padding-bottom: max(env(safe-area-inset-bottom), 10px) !important; 
         }
     </style>
 </head>
@@ -106,9 +110,9 @@
         <!-- ========================================== -->
         <!-- PANTALLA DE LOGIN                          -->
         <!-- ========================================== -->
-        <div id="auth-screen" class="flex-1 bg-[#F8F9FA] z-50 flex flex-col transition-opacity duration-300">
+        <div id="auth-screen" class="absolute inset-0 bg-[#F8F9FA] z-50 flex flex-col transition-opacity duration-300">
             <!-- Curva Superior Morada -->
-            <div class="bg-brand-purple h-[35%] rounded-b-[40px] flex items-center justify-center relative shadow-md shrink-0">
+            <div class="bg-brand-purple h-[35%] rounded-b-[40px] flex items-center justify-center relative shadow-md">
                 <!-- Decoración -->
                 <div class="absolute -left-10 top-10 w-32 h-32 bg-white/10 rounded-full"></div>
                 <div class="absolute -right-10 bottom-10 w-24 h-24 bg-white/10 rounded-full"></div>
@@ -120,7 +124,7 @@
             </div>
 
             <!-- Formulario -->
-            <div class="flex-1 overflow-y-auto px-8 pt-10 pb-safe flex flex-col relative">
+            <div class="flex-1 px-8 pt-10 flex flex-col relative">
                 <h2 class="text-2xl font-black text-slate-800 mb-2">LOGIN</h2>
                 <p class="text-slate-500 font-semibold text-sm mb-8">Ingresa tus datos para acceder a la cuenta.</p>
                 
@@ -133,7 +137,7 @@
                 
                 <p id="auth-error" class="text-red-500 text-sm mt-4 hidden text-center font-bold">Credenciales incorrectas</p>
 
-                <div class="mt-auto pt-8 pb-4 text-center">
+                <div class="mt-auto pb-8 text-center">
                     <p class="text-xs text-slate-400 font-semibold">¿Necesitas ayuda? <a href="https://instagram.com/eqbstudio" target="_blank" class="text-brand-purple font-bold">Contáctanos</a></p>
                 </div>
             </div>
@@ -143,15 +147,12 @@
         <!-- ========================================== -->
         <!-- CONTENIDO PRINCIPAL (ADMIN)                -->
         <!-- ========================================== -->
-        <!-- Usamos flex-col para apilar el contenido y la barra inferior -->
-        <div id="main-app" class="flex-1 flex flex-col hidden relative overflow-hidden bg-[#F8F9FA]">
+        <div id="main-app" class="flex-1 flex flex-col hidden h-full relative overflow-hidden">
             
-            <!-- Contenedor scrollable (ocupa el espacio restante automáticamente) -->
-            <div class="flex-1 overflow-y-auto no-scrollbar pt-10 px-6" id="scroll-container">
+            <div class="flex-1 overflow-y-auto no-scrollbar pb-32 pt-10 px-6" id="scroll-container">
                 
                 <!-- PESTAÑA: HOME -->
-                <div id="tab-home" class="tab-content pb-10">
-                    <!-- Header App -->
+                <div id="tab-home" class="tab-content">
                     <div class="flex justify-between items-center mb-6">
                         <div class="flex items-center">
                             <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-6 w-auto mr-2">
@@ -162,7 +163,7 @@
 
                     <h1 class="text-3xl font-black text-slate-800 leading-tight">¡Hola!</h1>
                     <h2 class="text-3xl font-black text-slate-800 leading-tight mb-1">Panel de Control</h2>
-                    <p class="text-slate-500 text-sm font-semibold mb-6" id="current-date">Gestiona tus proyectos y clientes.</p>
+                    <p class="text-slate-500 text-sm font-semibold mb-6">Gestiona tus proyectos y clientes.</p>
 
                     <!-- Barra de Búsqueda -->
                     <div class="relative mb-8">
@@ -172,9 +173,8 @@
                         </div>
                     </div>
 
-                    <!-- Dashboard Grid (4 Colores) -->
+                    <!-- Dashboard Grid -->
                     <div class="grid grid-cols-2 gap-4 mb-8">
-                        <!-- Card 1: Purple (Activos) -->
                         <div class="bg-brand-purple rounded-3xl p-5 text-white shadow-lg shadow-purple-500/20 relative overflow-hidden active:scale-95 transition-transform cursor-pointer" onclick="setFilter('active')">
                             <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full"></div>
                             <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
@@ -184,7 +184,6 @@
                             <p class="text-sm font-semibold opacity-80 mt-0.5"><span id="stat-active">0</span> Clientes</p>
                         </div>
 
-                        <!-- Card 2: Orange (Cobrado) -->
                         <div class="bg-brand-orange rounded-3xl p-5 text-white shadow-lg shadow-orange-500/20 relative overflow-hidden active:scale-95 transition-transform cursor-pointer" onclick="setFilter('completed')">
                             <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full"></div>
                             <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
@@ -194,7 +193,6 @@
                             <p class="text-sm font-semibold opacity-80 mt-0.5 truncate" id="stat-paid">$0</p>
                         </div>
 
-                        <!-- Card 3: Blue (Por Cobrar) -->
                         <div class="bg-brand-blue rounded-3xl p-5 text-white shadow-lg shadow-blue-500/20 relative overflow-hidden active:scale-95 transition-transform cursor-pointer" onclick="setFilter('debt')">
                             <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full"></div>
                             <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
@@ -204,7 +202,6 @@
                             <p class="text-sm font-semibold opacity-80 mt-0.5 truncate" id="stat-pending">$0</p>
                         </div>
 
-                        <!-- Card 4: Pink (Todos) -->
                         <div class="bg-brand-pink rounded-3xl p-5 text-white shadow-lg shadow-pink-500/20 relative overflow-hidden active:scale-95 transition-transform cursor-pointer" onclick="setFilter('all')">
                             <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full"></div>
                             <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
@@ -216,14 +213,12 @@
                     </div>
 
                     <h3 class="font-black text-slate-800 text-lg mb-4">Proyectos Recientes</h3>
-                    
-                    <!-- Lista de Clientes -->
                     <div id="clientsList" class="flex flex-col space-y-3"></div>
                     <div id="emptyState" class="hidden text-center py-10 text-slate-400 text-sm font-bold">No se encontraron datos.</div>
                 </div>
 
                 <!-- PESTAÑA: AJUSTES -->
-                <div id="tab-settings" class="tab-content hidden pb-10">
+                <div id="tab-settings" class="tab-content hidden">
                     <div class="flex items-center mb-8">
                         <h1 class="text-3xl font-black text-slate-800">Ajustes</h1>
                     </div>
@@ -247,13 +242,10 @@
 
             </div>
 
-            <!-- ========================================== -->
-            <!-- NAVEGACIÓN INFERIOR (ESTÁTICA, SIN HUECOS) -->
-            <!-- ========================================== -->
-            <nav class="bg-white rounded-t-[30px] shadow-[0_-4px_25px_rgba(0,0,0,0.05)] shrink-0 z-40 relative">
+            <!-- Navegación Inferior Flotante -->
+            <nav class="absolute bottom-0 w-full bg-white rounded-t-[30px] shadow-[0_-4px_25px_rgba(0,0,0,0.05)] shrink-0 z-40 relative">
                 <div class="flex justify-between items-center px-10 pt-4 pb-safe relative">
                     
-                    <!-- Tab: Home -->
                     <button onclick="switchTab('home')" class="flex flex-col items-center justify-center w-16 nav-btn" data-tab="home">
                         <div class="w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container bg-brand-purple text-white transition-colors active:scale-95">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
@@ -261,7 +253,7 @@
                         <span class="text-[10px] mt-1 font-bold nav-text text-brand-purple">Inicio</span>
                     </button>
                     
-                    <!-- FAB CENTRAL (Upload) - Flota sobre la barra -->
+                    <!-- Botón Upload Central -->
                     <div class="absolute left-1/2 -translate-x-1/2 -top-6 flex flex-col items-center justify-center">
                         <button onclick="openClientModal()" class="w-14 h-14 bg-brand-pink rounded-full flex items-center justify-center text-white floating-fab active:scale-90 transition-transform border-[4px] border-white">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
@@ -269,7 +261,6 @@
                         <span class="text-[10px] font-bold text-slate-800 mt-1 tracking-wide">Añadir</span>
                     </div>
 
-                    <!-- Tab: Settings -->
                     <button onclick="switchTab('settings')" class="flex flex-col items-center justify-center w-16 nav-btn" data-tab="settings">
                         <div class="w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container text-slate-400 transition-colors active:scale-95">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -282,72 +273,61 @@
 
 
         <!-- ========================================== -->
-        <!-- ENTORNO DEL CLIENTE (BÓVEDA DIGITAL)       -->
+        <!-- ENTORNO DEL CLIENTE (BÓVEDA DIGITAL LIMPIA)-->
         <!-- ========================================== -->
         <div id="client-portal" class="flex-1 w-full h-full flex flex-col hidden relative bg-[#F8F9FA] overflow-hidden">
-            <div class="flex justify-between items-center px-6 pt-10 pb-4 bg-[#F8F9FA] z-10 shrink-0">
+            <!-- Header Cliente -->
+            <div class="flex justify-between items-center px-6 pt-10 pb-4 bg-white shadow-sm z-10 shrink-0">
                 <div class="flex items-center">
-                    <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-8 w-auto mr-3">
+                    <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-6 w-auto mr-3">
                 </div>
-                <button onclick="lockApp()" class="text-xs font-bold text-red-500 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-xl active:scale-95 transition-colors border border-red-100 shadow-sm cursor-pointer">Salir</button>
+                <button onclick="lockApp()" class="text-xs font-bold text-slate-500 hover:text-slate-800 bg-slate-50 hover:bg-slate-100 px-4 py-2 rounded-xl active:scale-95 transition-colors border border-slate-100 shadow-sm">Salir</button>
             </div>
 
-            <!-- Scroll libre en el portal del cliente -->
-            <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-20" id="client-scroll-area">
+            <div class="flex-1 overflow-y-auto no-scrollbar px-6 pt-6 pb-32 relative">
                 
-                <h1 class="text-3xl font-black text-slate-800 leading-tight">¡Hola!</h1>
-                <h2 class="text-3xl font-black text-slate-800 leading-tight mb-1 truncate" id="cp-name">Nombre del Cliente</h2>
-                <p class="text-slate-500 text-sm font-semibold mb-8">Gestiona y descarga tus archivos de marca.</p>
-
-                <!-- Grid de Info (App Style) -->
-                <div class="grid grid-cols-2 gap-4 mb-8">
-                    <div class="bg-brand-purple rounded-3xl p-5 text-white shadow-lg shadow-purple-500/20">
-                        <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        </div>
-                        <p class="font-black tracking-wide text-lg truncate" id="cp-service">Servicio</p>
-                        <p class="text-sm font-semibold opacity-80 mt-0.5">Servicio Activo</p>
-                    </div>
-
-                    <div class="bg-brand-orange rounded-3xl p-5 text-white shadow-lg shadow-orange-500/20">
-                        <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </div>
-                        <p class="font-black tracking-wide text-lg truncate" id="cp-status">Estado</p>
-                        <p class="text-sm font-semibold opacity-80 mt-0.5" id="cp-deadline-label">Progreso</p>
-                    </div>
+                <!-- Saludo -->
+                <div class="mb-6">
+                    <h1 class="text-2xl font-black text-slate-800 leading-tight" id="cp-greeting">¡Hola, Cliente!</h1>
+                    <p class="text-slate-500 text-sm font-semibold">Aquí está tu bóveda de marca.</p>
                 </div>
 
-                <!-- Garantía (Si existe) -->
-                <div id="cp-warranty-container" class="bg-brand-blue rounded-3xl p-5 text-white shadow-lg shadow-blue-500/20 mb-8 hidden">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mr-4">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                <!-- Tarjeta Única de Proyecto -->
+                <div class="bg-brand-purple rounded-3xl p-6 text-white shadow-[0_10px_30px_rgba(92,51,162,0.3)] mb-8 relative overflow-hidden">
+                    <!-- Decoración interna -->
+                    <div class="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="pr-2">
+                                <p class="text-[10px] font-bold text-purple-200 uppercase tracking-widest mb-0.5">Servicio Activo</p>
+                                <p class="font-black text-xl leading-tight" id="cp-service">Branding General</p>
+                            </div>
+                            <span class="px-3 py-1.5 bg-white/20 rounded-xl text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm shadow-sm" id="cp-status">En Progreso</span>
                         </div>
-                        <div>
-                            <p class="font-black tracking-wide text-lg" id="cp-warranty-text">--</p>
-                            <p class="text-sm font-semibold opacity-80 mt-0.5">Garantía / Vigencia</p>
+
+                        <div id="cp-dates-container" class="mt-4 pt-4 border-t border-white/20">
+                            <p class="text-xs font-semibold tracking-wide" id="cp-deadline-warranty">⏳ Entrega estimada: --</p>
                         </div>
                     </div>
                 </div>
 
-                <h3 class="font-black text-slate-800 text-lg mb-4">Mis Archivos</h3>
-                
-                <!-- Archivos Bóveda -->
+                <!-- Lista de Archivos Centralizada -->
+                <h3 class="font-black text-slate-800 text-lg mb-4">Archivos Disponibles</h3>
                 <div id="cp-assets-list" class="flex flex-col space-y-3 mb-8"></div>
 
                 <!-- Mensaje Externo -->
-                <div id="cp-external-notes-container" class="bg-white rounded-3xl p-5 border border-slate-100 shadow-[0_4px_15px_rgba(0,0,0,0.03)] hidden mb-8">
-                    <h4 class="font-black text-slate-800 text-sm tracking-wider uppercase mb-2">Nota del Estudio</h4>
-                    <p class="text-sm text-slate-500 font-semibold select-text" id="cp-external-notes"></p>
+                <div id="cp-external-notes-container" class="bg-brand-blue/10 rounded-3xl p-5 border border-brand-blue/20 hidden mb-8">
+                    <h4 class="font-black text-brand-blue text-sm tracking-wider uppercase mb-2">Nota del Estudio</h4>
+                    <p class="text-sm text-slate-600 font-semibold select-text leading-relaxed" id="cp-external-notes"></p>
                 </div>
 
-                <!-- Botón Contacto App Style -->
-                <a id="cp-whatsapp-float" href="#" target="_blank" class="bg-brand-purple w-full rounded-2xl py-4 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-purple-500/30 active:scale-95 transition-transform mb-6">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-                    Contactar Soporte
-                </a>
             </div>
+
+            <!-- Botón FAB Flotante de Contacto -->
+            <a id="cp-whatsapp-fab" href="#" target="_blank" class="absolute bottom-8 right-6 w-14 h-14 bg-brand-pink text-white rounded-full flex items-center justify-center shadow-[0_8px_20px_rgba(240,20,123,0.4)] active:scale-90 transition-transform z-30 border-[3px] border-white">
+                <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+            </a>
         </div>
 
         <!-- ========================================== -->
@@ -489,8 +469,11 @@
 
     </div>
 
-    <!-- SCRIPT FIREBASE Y LÓGICA -->
+    <!-- ========================================== -->
+    <!-- SCRIPT FIREBASE Y LÓGICA DE LA APP         -->
+    <!-- ========================================== -->
     <script type="module">
+        // 1. CONFIGURACIÓN FIREBASE
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -508,14 +491,18 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // 2. ESTADO GLOBAL
         let clients = []; 
         let currentFilter = 'all';
         let currentProfileId = null;
         let dbReady = false;
         let globalUnsubscribe = null;
 
+        // 3. INICIALIZACIÓN
         signInAnonymously(auth).then(() => { dbReady = true; }).catch(err => { console.error("Fallo Auth:", err); });
+        setDate();
 
+        // 4. FUNCIONES DE AYUDA (HELPERS)
         async function hashPassword(password) {
             try {
                 if (window.crypto && window.crypto.subtle) {
@@ -528,6 +515,20 @@
             return 'fallback_' + btoa(encodeURIComponent(password));
         }
 
+        const formatMoney = (amount) => {
+            if (!amount || isNaN(amount)) return '$0';
+            return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(amount);
+        };
+
+        const getInitials = (name) => name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        const generateId = () => crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
+        
+        const escapeHTML = (str) => {
+            if (!str) return '';
+            return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
+        };
+
+        // 5. AUTENTICACIÓN
         async function verifyAdminAccess(pwd) {
             let savedHash = localStorage.getItem('eqbito360_auth');
             if (savedHash && savedHash.length !== 64 && !savedHash.startsWith('fallback_')) {
@@ -538,18 +539,6 @@
             const defaultHash = await hashPassword("9753"); 
             return (savedHash && inputHash === savedHash) || (!savedHash && inputHash === defaultHash);
         }
-
-        const formatMoney = (amount) => {
-            if (!amount || isNaN(amount)) return '$0';
-            return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(amount);
-        };
-
-        const getInitials = (name) => name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-        const generateId = () => crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
-        const escapeHTML = (str) => {
-            if (!str) return '';
-            return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
-        };
 
         async function handleAuth() {
             const input = document.getElementById('auth-password');
@@ -587,6 +576,24 @@
             input.value = '';
         }
 
+        async function changePassword() {
+            const oldInput = document.getElementById('old-pwd').value; 
+            const newInput = document.getElementById('new-pwd').value; 
+            const msg = document.getElementById('pwd-msg');
+            if (!oldInput || !newInput) return;
+            
+            const isAdmin = await verifyAdminAccess(oldInput);
+            if (isAdmin) {
+                localStorage.setItem('eqbito360_auth', await hashPassword(newInput));
+                msg.textContent = "Contraseña actualizada"; msg.className = "text-sm mt-2 font-black text-emerald-500 block";
+                document.getElementById('old-pwd').value = ''; document.getElementById('new-pwd').value = '';
+            } else { 
+                msg.textContent = "Contraseña actual incorrecta"; msg.className = "text-sm mt-2 font-black text-red-500 block"; 
+            }
+            setTimeout(() => msg.classList.add('hidden'), 2000);
+        }
+
+        // 6. NAVEGACIÓN Y ESTADOS DE INTERFAZ
         function unlockApp(mode, clientData = null) {
             document.getElementById('auth-screen').classList.add('opacity-0', 'pointer-events-none');
             if (globalUnsubscribe) { globalUnsubscribe(); globalUnsubscribe = null; }
@@ -597,7 +604,6 @@
                 if (mode === 'admin') {
                     document.getElementById('main-app').classList.remove('hidden');
                     document.getElementById('client-portal').classList.add('hidden');
-                    setDate();
                     
                     if (dbReady) {
                         globalUnsubscribe = onSnapshot(collection(db, "proyectos_eqbito"), (snapshot) => {
@@ -630,62 +636,259 @@
             }, 50);
         }
 
-        function getFileIcon(url, name) {
-            return `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>`;
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                const iconContainer = btn.querySelector('.nav-icon-container');
+                const textEl = btn.querySelector('.nav-text');
+                if (btn.dataset.tab === tabId) {
+                    iconContainer.className = "w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container bg-brand-purple text-white transition-colors active:scale-95";
+                    textEl.className = "text-[10px] mt-1 font-bold nav-text text-brand-purple";
+                } else {
+                    iconContainer.className = "w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container text-slate-400 transition-colors active:scale-95";
+                    textEl.className = "text-[10px] mt-1 font-bold nav-text text-slate-400";
+                }
+            });
         }
 
+        function setDate() {
+            const rawDate = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            // Capitalizar primera letra de la fecha
+            // document.getElementById('current-date').textContent = rawDate.charAt(0).toUpperCase() + rawDate.slice(1);
+        }
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            renderClients();
+        }
+
+        // 7. RENDERIZADO DEL PORTAL DEL CLIENTE (DISEÑO UNIFICADO)
         function renderClientPortal(c) {
-            document.getElementById('cp-name').textContent = escapeHTML(c.name);
+            // Nombre amigable (solo el primer nombre si es posible)
+            const firstName = c.name.split(' ')[0];
+            document.getElementById('cp-greeting').textContent = `¡Hola, ${escapeHTML(firstName)}!`;
+            
             document.getElementById('cp-service').textContent = escapeHTML(c.service);
             document.getElementById('cp-status').textContent = escapeHTML(c.status);
             
+            // Lógica de fechas (Garantía vs Entrega)
+            const datesContainer = document.getElementById('cp-dates-container');
+            const deadlineWarranty = document.getElementById('cp-deadline-warranty');
             const isCompleted = c.status && c.status.includes('Finalizado');
-            document.getElementById('cp-deadline-label').textContent = isCompleted ? "Finalizado" : "En Progreso";
 
-            if (c.warranty && c.warranty.trim() !== '') {
-                document.getElementById('cp-warranty-text').textContent = new Date(c.warranty + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
-                document.getElementById('cp-warranty-container').classList.remove('hidden');
+            if (isCompleted) {
+                if (c.warranty && c.warranty.trim() !== '') {
+                    const wDate = new Date(c.warranty + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
+                    deadlineWarranty.innerHTML = `🛡️ Garantía válida hasta: <strong>${wDate}</strong>`;
+                    datesContainer.classList.remove('hidden');
+                } else {
+                    datesContainer.classList.add('hidden');
+                }
             } else {
-                document.getElementById('cp-warranty-container').classList.add('hidden');
+                if (c.deadline && c.deadline.trim() !== '') {
+                    const dDate = new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
+                    deadlineWarranty.innerHTML = `⏳ Entrega estimada: <strong>${dDate}</strong>`;
+                    datesContainer.classList.remove('hidden');
+                } else {
+                    datesContainer.classList.add('hidden');
+                }
             }
 
-            const waMsg = encodeURIComponent(`Hola EQB STUDIO, soy ${c.name}.`);
-            document.getElementById('cp-whatsapp-float').href = `https://wa.me/573021192800?text=${waMsg}`;
-
-            const extNotesEl = document.getElementById('cp-external-notes');
+            // Mensaje Externo
             const extNotesContainer = document.getElementById('cp-external-notes-container');
             if (c.externalNotes && c.externalNotes.trim() !== '') {
-                extNotesEl.textContent = escapeHTML(c.externalNotes); extNotesContainer.classList.remove('hidden');
-            } else { extNotesContainer.classList.add('hidden'); }
+                document.getElementById('cp-external-notes').textContent = escapeHTML(c.externalNotes); 
+                extNotesContainer.classList.remove('hidden');
+            } else { 
+                extNotesContainer.classList.add('hidden'); 
+            }
 
+            // WhatsApp Floating Action Button
+            const waMsg = encodeURIComponent(`Hola EQB STUDIO, soy ${c.name}. Tengo una consulta sobre mi proyecto.`);
+            document.getElementById('cp-whatsapp-fab').href = `https://wa.me/573021192800?text=${waMsg}`;
+
+            // Archivos (Diseño Lista)
             const assetsListEl = document.getElementById('cp-assets-list');
             assetsListEl.innerHTML = '';
             let parsedAssets = Array.isArray(c.assets) ? c.assets : [];
 
             if (parsedAssets.length > 0) {
-                const colors = ['bg-brand-blue text-white', 'bg-brand-pink text-white', 'bg-brand-orange text-white', 'bg-brand-purple text-white'];
-                parsedAssets.forEach((asset, idx) => {
-                    const colorClass = colors[idx % colors.length];
+                parsedAssets.forEach((asset) => {
                     assetsListEl.insertAdjacentHTML('beforeend', `
-                        <a href="${encodeURI(asset.url)}" target="_blank" class="bg-white rounded-3xl p-4 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 flex items-center active:scale-95 transition-transform">
-                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mr-4 shadow-sm ${colorClass}">
-                                ${getFileIcon(asset.url, asset.name)}
+                        <a href="${encodeURI(asset.url)}" target="_blank" class="bg-white rounded-2xl p-4 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-100 flex items-center active:scale-95 transition-transform">
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center mr-4 bg-brand-orange/10 text-brand-orange">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                             </div>
                             <div class="flex-1 overflow-hidden">
-                                <h4 class="font-black text-slate-800 truncate text-sm pr-2">${escapeHTML(asset.name)}</h4>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Archivo Disponible</p>
+                                <h4 class="font-black text-slate-800 truncate text-base">${escapeHTML(asset.name)}</h4>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Tocar para abrir</p>
                             </div>
                             <div class="text-slate-300">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
                             </div>
                         </a>
                     `);
                 });
             } else {
-                assetsListEl.innerHTML = `<p class="text-sm font-bold text-slate-400 text-center py-4">No se encontraron archivos.</p>`;
+                assetsListEl.innerHTML = `<div class="text-center py-8 bg-white rounded-2xl border border-dashed border-slate-200"><p class="text-sm font-bold text-slate-400">Aún no hay archivos disponibles.</p></div>`;
             }
         }
 
+        // 8. RENDERIZADO DEL DASHBOARD (ADMIN)
+        function renderClients() {
+            const activeClients = clients.filter(c => c.status && !c.status.includes('Finalizado') && c.status !== 'Pausado');
+            let totalPaid = 0; let totalPending = 0;
+            
+            clients.forEach(c => {
+                const pending = (parseFloat(c.price) || 0) - (parseFloat(c.paid) || 0); 
+                totalPaid += (parseFloat(c.paid) || 0);
+                if (pending > 0 && c.status && !c.status.includes('Finalizado')) totalPending += pending;
+            });
+            
+            document.getElementById('stat-active').textContent = activeClients.length; 
+            document.getElementById('stat-paid').textContent = formatMoney(totalPaid); 
+            document.getElementById('stat-pending').textContent = formatMoney(totalPending);
+            
+            const query = escapeHTML(document.getElementById('searchInput').value.toLowerCase());
+            const list = document.getElementById('clientsList'); 
+            const empty = document.getElementById('emptyState');
+            list.innerHTML = '';
+            
+            const filtered = clients.filter(c => {
+                const matchSearch = c.name.toLowerCase().includes(query) || (c.service && c.service.toLowerCase().includes(query));
+                let matchFilter = true;
+                if (currentFilter === 'active') matchFilter = c.status && !c.status.includes('Finalizado');
+                else if (currentFilter === 'debt') matchFilter = ((parseFloat(c.price) || 0) - (parseFloat(c.paid) || 0)) > 0;
+                else if (currentFilter === 'completed') matchFilter = c.status && c.status.includes('Finalizado');
+                return matchSearch && matchFilter;
+            });
+
+            if (filtered.length === 0) { 
+                empty.classList.remove('hidden'); 
+                list.classList.add('hidden'); 
+            } else {
+                empty.classList.add('hidden'); 
+                list.classList.remove('hidden');
+                const colors = ['bg-brand-orange text-white', 'bg-brand-pink text-white', 'bg-brand-blue text-white', 'bg-brand-purple text-white'];
+                
+                filtered.forEach((c, index) => {
+                    const iconColor = colors[index % colors.length];
+                    const pending = (parseFloat(c.price) || 0) - (parseFloat(c.paid) || 0);
+                    
+                    list.insertAdjacentHTML('beforeend', `
+                        <div class="bg-white rounded-3xl p-4 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 flex items-center cursor-pointer active:scale-95 transition-transform" onclick="openProfileModal('${escapeHTML(c.id)}')">
+                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mr-4 shadow-sm ${iconColor}">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                            </div>
+                            <div class="flex-1 overflow-hidden">
+                                <h4 class="font-black text-slate-800 truncate text-base pr-2">${escapeHTML(c.name)}</h4>
+                                <p class="text-[11px] font-bold text-slate-400 truncate uppercase tracking-widest">${escapeHTML(c.status)}</p>
+                            </div>
+                            <div class="text-right pl-2">
+                                <span class="text-xs font-black ${pending > 0 ? 'text-brand-pink' : 'text-slate-300'}">${pending > 0 ? 'Deuda' : 'Pagado'}</span>
+                            </div>
+                        </div>
+                    `);
+                });
+            }
+        }
+
+        // 9. FUNCIONES DE MODALES Y FORMULARIOS
+        function closeModals() { closeClientModal(); closeProfileModal(); }
+
+        function openClientModal(id = null) {
+            document.getElementById('profileModal').classList.remove('active');
+            ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientWarranty', 'clientPrice', 'clientPaid', 'clientNotes', 'clientExternalNotes'].forEach(id => document.getElementById(id).value = '');
+            
+            document.getElementById('clientStatus').value = 'Cotizando';
+            document.getElementById('modal-title').textContent = 'Nuevo Proyecto';
+            document.getElementById('assets-fields-container').innerHTML = ''; 
+            document.getElementById('budget-fields-container').innerHTML = '';
+
+            if (id) {
+                const c = clients.find(x => x.id === escapeHTML(id));
+                if (c) {
+                    document.getElementById('modal-title').textContent = 'Editar Proyecto';
+                    document.getElementById('clientId').value = c.id; 
+                    document.getElementById('clientName').value = c.name;
+                    document.getElementById('clientPhone').value = c.phone || ''; 
+                    document.getElementById('clientEmail').value = c.email || '';
+                    document.getElementById('clientStatus').value = c.status; 
+                    document.getElementById('clientDeadline').value = c.deadline || '';
+                    document.getElementById('clientWarranty').value = c.warranty || '';
+                    document.getElementById('clientPrice').value = c.price || ''; 
+                    document.getElementById('clientPaid').value = c.paid || '';
+                    document.getElementById('clientNotes').value = c.notes || ''; 
+                    document.getElementById('clientExternalNotes').value = c.externalNotes || '';
+                    
+                    if (Array.isArray(c.assets)) c.assets.forEach(a => addAssetField(a.name, a.url));
+                    if (Array.isArray(c.budget)) c.budget.forEach(b => addBudgetField(b.concept, b.amount));
+                }
+            }
+            if (document.getElementById('assets-fields-container').children.length === 0) addAssetField(); 
+            calculateTotalBudget();
+            
+            document.getElementById('modal-overlay').classList.remove('hidden');
+            setTimeout(() => { document.getElementById('modal-overlay').classList.remove('opacity-0'); document.getElementById('clientModal').classList.add('active'); }, 10);
+        }
+
+        function closeClientModal() {
+            document.getElementById('clientModal').classList.remove('active');
+            if(!document.getElementById('profileModal').classList.contains('active')) {
+                document.getElementById('modal-overlay').classList.add('opacity-0');
+                setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 350);
+            }
+        }
+
+        function openProfileModal(id) {
+            const c = clients.find(x => x.id === escapeHTML(id)); if (!c) return;
+            currentProfileId = escapeHTML(id);
+
+            document.getElementById('profileInitials').textContent = getInitials(c.name);
+            document.getElementById('profileName').textContent = escapeHTML(c.name);
+            document.getElementById('profileService').textContent = escapeHTML(c.service);
+            document.getElementById('profileStatusBadge').textContent = escapeHTML(c.status); 
+            document.getElementById('profilePINDisplay').textContent = c.clientCode || "----";
+            document.getElementById('profileDeadline').textContent = c.deadline ? new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }) : "--";
+            
+            const p = parseFloat(c.price) || 0; const pd = parseFloat(c.paid) || 0; const percent = p > 0 ? Math.min((pd / p) * 100, 100) : 0;
+            document.getElementById('profileTotal').textContent = formatMoney(p); 
+            document.getElementById('profileDebt').textContent = formatMoney(Math.max(p - pd, 0));
+            document.getElementById('profileProgress').style.width = `${percent}%`; 
+
+            const pBudgetCont = document.getElementById('profile-budget-container'); 
+            const pBudgetList = document.getElementById('profile-budget-list');
+            if (c.budget && c.budget.length > 0) {
+                pBudgetCont.classList.remove('hidden'); 
+                pBudgetList.innerHTML = c.budget.map(item => `<div class="flex justify-between items-center text-xs"><span class="font-bold text-slate-500">${escapeHTML(item.concept)}</span><span class="font-black text-slate-800">${formatMoney(item.amount)}</span></div>`).join('');
+            } else { 
+                pBudgetCont.classList.add('hidden'); 
+            }
+
+            let actionsHTML = '';
+            if (c.phone) {
+                const msg = encodeURIComponent(`Hola ${c.name}. Accede a tu bóveda: http://eqbito.vercel.app | PIN: ${c.clientCode || ''}`);
+                actionsHTML += `<a href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${msg}" target="_blank" class="flex-1 bg-brand-blue/10 text-brand-blue py-3 rounded-2xl font-black text-center text-sm active:scale-95 transition-transform">Mensaje</a>`;
+            }
+            actionsHTML += `<button onclick="openClientModal('${c.id}')" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-2xl font-black text-sm active:scale-95 transition-transform">Editar</button>`;
+            document.getElementById('profileActions').innerHTML = actionsHTML;
+
+            document.getElementById('modal-overlay').classList.remove('hidden');
+            setTimeout(() => { document.getElementById('modal-overlay').classList.remove('opacity-0'); document.getElementById('profileModal').classList.add('active'); }, 10);
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.remove('active'); 
+            currentProfileId = null;
+            if(!document.getElementById('clientModal').classList.contains('active')) {
+                document.getElementById('modal-overlay').classList.add('opacity-0');
+                setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 350);
+            }
+        }
+
+        // 10. FUNCIONES INTERNAS (CAMPOS DINÁMICOS)
         function addBudgetField(concept = '', amount = '') {
             document.getElementById('budget-fields-container').insertAdjacentHTML('beforeend', `
                 <div class="budget-item flex gap-2 items-center bg-slate-50 p-2 rounded-2xl border border-slate-100">
@@ -701,9 +904,12 @@
             const items = document.querySelectorAll('.budget-item');
             const priceInput = document.getElementById('clientPrice');
             if (items.length > 0) {
-                let total = 0; items.forEach(item => total += parseFloat(item.querySelector('.budget-amount').value) || 0);
+                let total = 0; 
+                items.forEach(item => total += parseFloat(item.querySelector('.budget-amount').value) || 0);
                 priceInput.value = total; priceInput.readOnly = true;
-            } else { priceInput.readOnly = false; }
+            } else { 
+                priceInput.readOnly = false; 
+            }
         }
 
         function getBudgetFromForm() {
@@ -735,73 +941,7 @@
             return assetsArray;
         }
 
-        async function changePassword() {
-            const oldInput = document.getElementById('old-pwd').value; const newInput = document.getElementById('new-pwd').value; const msg = document.getElementById('pwd-msg');
-            if (!oldInput || !newInput) return;
-            const isAdmin = await verifyAdminAccess(oldInput);
-            if (isAdmin) {
-                localStorage.setItem('eqbito360_auth', await hashPassword(newInput));
-                msg.textContent = "Contraseña actualizada"; msg.className = "text-sm mt-2 font-black text-emerald-500 block";
-                document.getElementById('old-pwd').value = ''; document.getElementById('new-pwd').value = '';
-            } else { msg.textContent = "Contraseña actual incorrecta"; msg.className = "text-sm mt-2 font-black text-red-500 block"; }
-            setTimeout(() => msg.classList.add('hidden'), 2000);
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-            
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                const iconContainer = btn.querySelector('.nav-icon-container');
-                const textEl = btn.querySelector('.nav-text');
-                if (btn.dataset.tab === tabId) {
-                    iconContainer.className = "w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container bg-brand-purple text-white transition-colors";
-                    textEl.className = "text-[10px] mt-1 font-bold nav-text text-brand-purple";
-                } else {
-                    iconContainer.className = "w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container text-slate-400 transition-colors";
-                    textEl.className = "text-[10px] mt-1 font-bold nav-text text-slate-400";
-                }
-            });
-        }
-
-        function closeModals() { closeClientModal(); closeProfileModal(); }
-
-        function openClientModal(id = null) {
-            document.getElementById('profileModal').classList.remove('active');
-            ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientWarranty', 'clientPrice', 'clientPaid', 'clientNotes', 'clientExternalNotes'].forEach(id => document.getElementById(id).value = '');
-            document.getElementById('clientStatus').value = 'Cotizando';
-            document.getElementById('modal-title').textContent = 'Nuevo Proyecto';
-            document.getElementById('assets-fields-container').innerHTML = ''; document.getElementById('budget-fields-container').innerHTML = '';
-
-            if (id) {
-                const c = clients.find(x => x.id === escapeHTML(id));
-                if (c) {
-                    document.getElementById('modal-title').textContent = 'Editar Proyecto';
-                    document.getElementById('clientId').value = c.id; document.getElementById('clientName').value = c.name;
-                    document.getElementById('clientPhone').value = c.phone || ''; document.getElementById('clientEmail').value = c.email || '';
-                    document.getElementById('clientStatus').value = c.status; document.getElementById('clientDeadline').value = c.deadline || '';
-                    document.getElementById('clientWarranty').value = c.warranty || '';
-                    document.getElementById('clientPrice').value = c.price || ''; document.getElementById('clientPaid').value = c.paid || '';
-                    document.getElementById('clientNotes').value = c.notes || ''; document.getElementById('clientExternalNotes').value = c.externalNotes || '';
-                    if (Array.isArray(c.assets)) c.assets.forEach(a => addAssetField(a.name, a.url));
-                    if (Array.isArray(c.budget)) c.budget.forEach(b => addBudgetField(b.concept, b.amount));
-                }
-            }
-            if (document.getElementById('assets-fields-container').children.length === 0) addAssetField(); 
-            calculateTotalBudget();
-            
-            document.getElementById('modal-overlay').classList.remove('hidden');
-            setTimeout(() => { document.getElementById('modal-overlay').classList.remove('opacity-0'); document.getElementById('clientModal').classList.add('active'); }, 10);
-        }
-
-        function closeClientModal() {
-            document.getElementById('clientModal').classList.remove('active');
-            if(!document.getElementById('profileModal').classList.contains('active')) {
-                document.getElementById('modal-overlay').classList.add('opacity-0');
-                setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 350);
-            }
-        }
-
+        // 11. BASE DE DATOS Y ACCIONES CRUD
         async function saveClient() {
             const name = document.getElementById('clientName').value.trim();
             if (!name) return;
@@ -813,18 +953,33 @@
 
             const newClient = {
                 id: id || generateId(),
-                name: escapeHTML(name), phone: escapeHTML(document.getElementById('clientPhone').value.trim()), email: escapeHTML(document.getElementById('clientEmail').value.trim()),
-                service: autoService, status: escapeHTML(document.getElementById('clientStatus').value),
-                deadline: escapeHTML(document.getElementById('clientDeadline').value), warranty: escapeHTML(document.getElementById('clientWarranty').value.trim()),
-                assets: getAssetsFromForm(), budget: budgetData,
-                price: parseFloat(document.getElementById('clientPrice').value) || 0, paid: parseFloat(document.getElementById('clientPaid').value) || 0,
-                notes: escapeHTML(document.getElementById('clientNotes').value), externalNotes: escapeHTML(document.getElementById('clientExternalNotes').value),
-                clientCode: existingClient ? existingClient.clientCode : null, createdAt: existingClient ? existingClient.createdAt : new Date().toISOString()
+                name: escapeHTML(name), 
+                phone: escapeHTML(document.getElementById('clientPhone').value.trim()), 
+                email: escapeHTML(document.getElementById('clientEmail').value.trim()),
+                service: autoService, 
+                status: escapeHTML(document.getElementById('clientStatus').value),
+                deadline: escapeHTML(document.getElementById('clientDeadline').value), 
+                warranty: escapeHTML(document.getElementById('clientWarranty').value.trim()),
+                assets: getAssetsFromForm(), 
+                budget: budgetData,
+                price: parseFloat(document.getElementById('clientPrice').value) || 0, 
+                paid: parseFloat(document.getElementById('clientPaid').value) || 0,
+                notes: escapeHTML(document.getElementById('clientNotes').value), 
+                externalNotes: escapeHTML(document.getElementById('clientExternalNotes').value),
+                clientCode: existingClient ? existingClient.clientCode : null, 
+                createdAt: existingClient ? existingClient.createdAt : new Date().toISOString()
             };
 
-            if (id) { const idx = clients.findIndex(c => c.id === id); if (idx > -1) clients[idx] = newClient; } else clients.unshift(newClient);
+            if (id) { 
+                const idx = clients.findIndex(c => c.id === id); 
+                if (idx > -1) clients[idx] = newClient; 
+            } else {
+                clients.unshift(newClient);
+            }
 
-            renderClients(); closeClientModal(); if(currentProfileId === newClient.id) openProfileModal(newClient.id);
+            renderClients(); 
+            closeClientModal(); 
+            if(currentProfileId === newClient.id) openProfileModal(newClient.id);
             try { await setDoc(doc(db, "proyectos_eqbito", newClient.id), newClient); } catch (e) {}
         }
 
@@ -832,16 +987,10 @@
             if (!currentProfileId) return;
             if (confirm('¿Eliminar este proyecto permanentemente?')) {
                 clients = clients.filter(c => c.id !== currentProfileId);
-                renderClients(); closeProfileModal();
+                renderClients(); 
+                closeProfileModal();
                 try { await deleteDoc(doc(db, "proyectos_eqbito", currentProfileId)); } catch(e) {}
             }
-        }
-
-        function exportData() {
-            if(clients.length === 0) return;
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clients, null, 2));
-            const anchor = document.createElement('a'); anchor.setAttribute("href", dataStr); anchor.setAttribute("download", `eqbstudio_crm.json`);
-            document.body.appendChild(anchor); anchor.click(); anchor.remove();
         }
 
         async function generateClientPIN() {
@@ -854,105 +1003,18 @@
             }
         }
 
-        function openProfileModal(id) {
-            const c = clients.find(x => x.id === escapeHTML(id)); if (!c) return;
-            currentProfileId = escapeHTML(id);
-
-            document.getElementById('profileInitials').textContent = getInitials(c.name);
-            document.getElementById('profileName').textContent = escapeHTML(c.name);
-            document.getElementById('profileService').textContent = escapeHTML(c.service);
-            document.getElementById('profileStatusBadge').textContent = escapeHTML(c.status); 
-            document.getElementById('profilePINDisplay').textContent = c.clientCode || "----";
-            document.getElementById('profileDeadline').textContent = c.deadline ? new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }) : "--";
-            
-            const p = parseFloat(c.price) || 0; const pd = parseFloat(c.paid) || 0; const percent = p > 0 ? Math.min((pd / p) * 100, 100) : 0;
-            document.getElementById('profileTotal').textContent = formatMoney(p); document.getElementById('profileDebt').textContent = formatMoney(Math.max(p - pd, 0));
-            document.getElementById('profileProgress').style.width = `${percent}%`; 
-
-            const pBudgetCont = document.getElementById('profile-budget-container'); const pBudgetList = document.getElementById('profile-budget-list');
-            if (c.budget && c.budget.length > 0) {
-                pBudgetCont.classList.remove('hidden'); pBudgetList.innerHTML = c.budget.map(item => `<div class="flex justify-between items-center text-xs"><span class="font-bold text-slate-500">${escapeHTML(item.concept)}</span><span class="font-black text-slate-800">${formatMoney(item.amount)}</span></div>`).join('');
-            } else { pBudgetCont.classList.add('hidden'); }
-
-            let actionsHTML = '';
-            if (c.phone) {
-                const msg = encodeURIComponent(`Hola ${c.name}. Accede a tu bóveda: http://eqbito.vercel.app | PIN: ${c.clientCode || ''}`);
-                actionsHTML += `<a href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${msg}" target="_blank" class="flex-1 bg-brand-blue/10 text-brand-blue py-3 rounded-2xl font-black text-center text-sm active:scale-95 transition-transform">Mensaje</a>`;
-            }
-            actionsHTML += `<button onclick="openClientModal('${c.id}')" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-2xl font-black text-sm active:scale-95 transition-transform">Editar</button>`;
-            document.getElementById('profileActions').innerHTML = actionsHTML;
-
-            document.getElementById('modal-overlay').classList.remove('hidden');
-            setTimeout(() => { document.getElementById('modal-overlay').classList.remove('opacity-0'); document.getElementById('profileModal').classList.add('active'); }, 10);
+        function exportData() {
+            if(clients.length === 0) return;
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clients, null, 2));
+            const anchor = document.createElement('a'); 
+            anchor.setAttribute("href", dataStr); 
+            anchor.setAttribute("download", `eqbstudio_crm.json`);
+            document.body.appendChild(anchor); 
+            anchor.click(); 
+            anchor.remove();
         }
 
-        function closeProfileModal() {
-            document.getElementById('profileModal').classList.remove('active'); currentProfileId = null;
-            if(!document.getElementById('clientModal').classList.contains('active')) {
-                document.getElementById('modal-overlay').classList.add('opacity-0');
-                setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 350);
-            }
-        }
-
-        function setFilter(filter) {
-            currentFilter = filter;
-            renderClients();
-        }
-
-        function setDate() {
-            const rawDate = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            document.getElementById('current-date').textContent = "Gestiona tus proyectos y clientes.";
-        }
-
-        function renderClients() {
-            const activeClients = clients.filter(c => c.status && !c.status.includes('Finalizado') && c.status !== 'Pausado');
-            let totalPaid = 0; let totalPending = 0;
-            clients.forEach(c => {
-                const pending = (parseFloat(c.price) || 0) - (parseFloat(c.paid) || 0); totalPaid += (parseFloat(c.paid) || 0);
-                if (pending > 0 && c.status && !c.status.includes('Finalizado')) totalPending += pending;
-            });
-            document.getElementById('stat-active').textContent = activeClients.length; document.getElementById('stat-paid').textContent = formatMoney(totalPaid); document.getElementById('stat-pending').textContent = formatMoney(totalPending);
-            
-            const query = escapeHTML(document.getElementById('searchInput').value.toLowerCase());
-            const list = document.getElementById('clientsList'); const empty = document.getElementById('emptyState');
-            list.innerHTML = '';
-            
-            const filtered = clients.filter(c => {
-                const matchSearch = c.name.toLowerCase().includes(query) || (c.service && c.service.toLowerCase().includes(query));
-                let matchFilter = true;
-                if (currentFilter === 'active') matchFilter = c.status && !c.status.includes('Finalizado');
-                else if (currentFilter === 'debt') matchFilter = ((parseFloat(c.price) || 0) - (parseFloat(c.paid) || 0)) > 0;
-                else if (currentFilter === 'completed') matchFilter = c.status && c.status.includes('Finalizado');
-                return matchSearch && matchFilter;
-            });
-
-            if (filtered.length === 0) { empty.classList.remove('hidden'); list.classList.add('hidden'); } 
-            else {
-                empty.classList.add('hidden'); list.classList.remove('hidden');
-                const colors = ['bg-brand-orange text-white', 'bg-brand-pink text-white', 'bg-brand-blue text-white', 'bg-brand-purple text-white'];
-                
-                filtered.forEach((c, index) => {
-                    const iconColor = colors[index % colors.length];
-                    const pending = (parseFloat(c.price) || 0) - (parseFloat(c.paid) || 0);
-                    
-                    list.insertAdjacentHTML('beforeend', `
-                        <div class="bg-white rounded-3xl p-4 shadow-[0_4px_15px_rgba(0,0,0,0.02)] border border-slate-50 flex items-center cursor-pointer active:scale-95 transition-transform" onclick="openProfileModal('${escapeHTML(c.id)}')">
-                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mr-4 shadow-sm ${iconColor}">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
-                            </div>
-                            <div class="flex-1 overflow-hidden">
-                                <h4 class="font-black text-slate-800 truncate text-base pr-2">${escapeHTML(c.name)}</h4>
-                                <p class="text-[11px] font-bold text-slate-400 truncate uppercase tracking-widest">${escapeHTML(c.status)}</p>
-                            </div>
-                            <div class="text-right pl-2">
-                                <span class="text-xs font-black ${pending > 0 ? 'text-brand-pink' : 'text-slate-300'}">${pending > 0 ? 'Deuda' : 'Pagado'}</span>
-                            </div>
-                        </div>
-                    `);
-                });
-            }
-        }
-
+        // Asignación de funciones al entorno global
         Object.assign(window, { handleAuth, lockApp, switchTab, openClientModal, closeClientModal, saveClient, deleteCurrentClient, exportData, generateClientPIN, openProfileModal, closeProfileModal, setFilter, renderClients, changePassword, addAssetField, addBudgetField, calculateTotalBudget });
     </script>
 </body>
