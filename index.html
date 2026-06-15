@@ -41,8 +41,6 @@
             inset: 0;
             display: flex;
             flex-direction: column;
-            -webkit-user-select: none;
-            user-select: none;
             overflow: hidden;
         }
 
@@ -70,8 +68,6 @@
         }
 
         input, textarea, select {
-            -webkit-user-select: auto;
-            user-select: auto;
             color: #ffffff;
         }
 
@@ -152,12 +148,12 @@
                     <h2 class="text-2xl md:text-3xl font-black text-white mb-2">ACCESO</h2>
                     <p class="text-zinc-400 font-medium text-sm md:text-base mb-8 text-center">Ingresa tu código para abrir tu bóveda.</p>
                     
-                    <div class="relative mb-6 w-full">
+                    <div class="relative mb-6 w-full z-20">
                         <p class="text-[10px] font-bold text-zinc-500 mb-2 uppercase tracking-widest pl-2">Contraseña o PIN</p>
-                        <input type="password" id="auth-password" class="w-full bg-[#111111] rounded-2xl px-5 py-4 text-base font-bold text-white border border-[#333333] focus:outline-none focus:border-[#FF5500] transition-all text-center tracking-widest placeholder-zinc-600">
+                        <input type="password" id="auth-password" onkeypress="if(event.key === 'Enter') handleAuth()" class="w-full bg-[#111111] rounded-2xl px-5 py-4 text-base font-bold text-white border border-[#333333] focus:outline-none focus:border-[#FF5500] focus:ring-1 focus:ring-[#FF5500] transition-all text-center tracking-widest placeholder-zinc-600">
                     </div>
                     
-                    <button onclick="handleAuth()" id="auth-btn" class="w-full bg-brand-orange text-white font-bold rounded-2xl py-4 shadow-[0_8px_20px_rgba(255,85,0,0.25)] active:scale-[0.98] hover:brightness-110 transition-all text-lg mt-2">Ingresar</button>
+                    <button onclick="handleAuth()" id="auth-btn" class="w-full bg-brand-orange text-white font-bold rounded-2xl py-4 shadow-[0_8px_20px_rgba(255,85,0,0.25)] active:scale-[0.98] hover:brightness-110 transition-all text-lg mt-2 relative z-20">Ingresar</button>
                     
                     <p id="auth-error" class="text-red-400 text-sm mt-4 hidden text-center font-bold bg-red-500/10 py-2 w-full rounded-xl border border-red-500/20">Credenciales incorrectas</p>
 
