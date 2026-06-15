@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>EQB STUDIO - Plataforma</title>
+    <title>EQB STUDIO - Bóveda Digital</title>
     
     <link rel="icon" type="image/svg+xml" href="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg">
     <link rel="apple-touch-icon" href="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg">
@@ -26,22 +26,20 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         
-        /* Bloqueo estricto para móvil */
+        /* Bloqueo estricto y estructura base para evitar rebotes */
         html, body {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
             background-color: #000000; -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none;
         }
 
-        @supports (height: 100dvh) { html, body { height: 100dvh; } }
-
-        /* Contenedor principal responsive */
+        /* Contenedor responsivo principal */
         .app-frame {
             position: absolute; inset: 0; width: 100%; height: 100%;
             background-color: #050505; display: flex; flex-direction: column; overflow: hidden;
-            -webkit-user-select: none; user-select: none;
         }
 
-        /* DISEÑO PARA PC: Dashboard Flotante */
+        /* ADAPTACIÓN PARA PC Y TABLETS */
         @media (min-width: 768px) {
             html, body { display: flex; align-items: center; justify-content: center; position: static; background-color: #000000; }
             .app-frame {
@@ -49,22 +47,22 @@
                 border-radius: 40px; box-shadow: 0 25px 50px -12px rgba(255, 85, 0, 0.15), 0 0 0 1px rgba(255,255,255,0.05);
                 border: 1px solid #1A1A1A;
             }
-            #scroll-container, #client-scroll-area { padding-bottom: 120px !important; }
         }
 
-        /* Corrección vital para que se pueda escribir en PC */
+        /* LIBERACIÓN DE INPUTS PARA PC (Evita que no se pueda escribir) */
         input, textarea, select { 
-            -webkit-user-select: auto !important; 
-            user-select: auto !important; 
-            pointer-events: auto !important; 
+            -webkit-user-select: auto !important; user-select: auto !important; pointer-events: auto !important; 
         }
+
+        /* Optimización de calendarios para que se vean bien en modo oscuro */
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         .floating-fab { box-shadow: 0 8px 25px rgba(255, 85, 0, 0.4); }
 
-        /* Modales */
+        /* MODALES ANIMADOS */
         .bottom-sheet { transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s; }
         @media (max-width: 767px) {
             .bottom-sheet { transform: translateY(100%); }
@@ -83,20 +81,22 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         .pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 12px) !important; }
-        .dark-glass { background: rgba(17, 17, 17, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
+        .dark-glass { background: rgba(17, 17, 17, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
 <body class="text-zinc-300">
 
     <div class="app-frame" id="app-container">
         
+        <!-- ========================================== -->
+        <!-- PANTALLA DE LOGIN                          -->
+        <!-- ========================================== -->
         <div id="auth-screen" class="absolute inset-0 bg-[#000000] z-50 flex flex-col transition-opacity duration-300">
             <div class="h-[40%] flex items-center justify-center relative shrink-0 overflow-hidden">
                 <div class="absolute -left-10 top-10 w-40 h-40 bg-brand-orange/20 rounded-full blur-3xl"></div>
                 <div class="absolute -right-10 bottom-10 w-32 h-32 bg-brand-orange/10 rounded-full blur-3xl"></div>
                 
                 <div class="flex flex-col items-center z-10">
-                    <!-- LOGO EN BLANCO: brightness-0 invert -->
                     <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-20 md:h-24 w-auto mb-6 brightness-0 invert drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
                     <h1 class="text-white text-2xl md:text-3xl font-black tracking-[0.2em] uppercase">EQB STUDIO</h1>
                 </div>
@@ -107,12 +107,12 @@
                     <p class="text-zinc-400 font-medium text-sm md:text-base mb-8 text-center tracking-wide">Ingresa tu código de acceso para abrir tu bóveda.</p>
                     
                     <div class="relative w-full">
-                        <input type="password" id="auth-password" onkeydown="if(event.key === 'Enter') handleAuth()" placeholder="Contraseña o PIN" class="w-full bg-[#111111] rounded-2xl px-5 py-4 text-base font-bold text-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] border border-[#222222] focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange transition-all text-center tracking-widest placeholder-zinc-600">
+                        <input type="password" id="auth-password" onkeydown="if(event.key === 'Enter') handleAuth()" placeholder="Contraseña o PIN" class="w-full bg-[#111111] rounded-2xl px-5 py-4 text-base font-bold text-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] border border-[#222222] focus:outline-none focus:border-brand-orange transition-all text-center tracking-widest placeholder-zinc-600">
                     </div>
                     
                     <button onclick="handleAuth()" id="auth-btn" class="w-full bg-brand-orange text-white font-black rounded-2xl py-4 shadow-[0_5px_20px_rgba(255,85,0,0.3)] active:scale-[0.98] hover:brightness-110 transition-all text-lg mt-5 uppercase tracking-wider">Ingresar</button>
                     
-                    <p id="auth-error" class="text-red-500 text-sm mt-5 hidden text-center font-bold bg-red-500/10 py-2 px-4 rounded-lg w-full">Credenciales incorrectas</p>
+                    <p id="auth-error" class="text-red-500 text-sm mt-5 hidden text-center font-bold bg-red-500/10 py-2 px-4 rounded-lg w-full border border-red-500/20">Credenciales incorrectas</p>
 
                     <div class="mt-auto pt-8 pb-4 text-center w-full">
                         <p class="text-xs text-zinc-500 font-medium">¿Necesitas ayuda? <a href="https://instagram.com/eqbstudio" target="_blank" class="text-brand-orange font-bold hover:underline">Contáctanos</a></p>
@@ -121,12 +121,17 @@
             </div>
         </div>
 
+        <!-- ========================================== -->
+        <!-- CONTENIDO PRINCIPAL (ADMIN)                -->
+        <!-- ========================================== -->
         <div id="main-app" class="flex-1 flex flex-col hidden relative overflow-hidden bg-[#050505]">
             
-            <div class="flex-1 overflow-y-auto no-scrollbar pt-10 md:pt-14 px-6 md:px-12" id="scroll-container">
+            <!-- PB-40 AQUÍ ES VITAL: Asegura que el menú inferior NUNCA tape a los clientes -->
+            <div class="flex-1 overflow-y-auto no-scrollbar pt-10 md:pt-14 px-6 md:px-12 pb-40" id="scroll-container">
                 
                 <!-- PESTAÑA: HOME -->
-                <div id="tab-home" class="tab-content pb-10">
+                <div id="tab-home" class="tab-content">
+                    <!-- Header -->
                     <div class="flex justify-between items-center mb-8 max-w-6xl mx-auto">
                         <div class="flex items-center">
                             <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-6 md:h-8 w-auto mr-3 brightness-0 invert">
@@ -142,33 +147,34 @@
                         <h1 class="text-3xl md:text-5xl font-black text-white leading-tight">Panel de Control</h1>
                         <p class="text-brand-orange text-sm md:text-lg font-bold mb-8 md:mb-12 mt-1 uppercase tracking-widest">Excelencia en Acción</p>
 
+                        <!-- Buscador -->
                         <div class="relative mb-8 md:mb-10 w-full md:w-1/2">
-                            <input type="text" id="searchInput" onkeyup="renderClients()" placeholder="Buscar cliente o proyecto..." class="w-full bg-[#111111] border border-[#222222] rounded-2xl pl-12 pr-4 py-4 md:py-5 text-sm md:text-base font-medium focus:outline-none text-white focus:border-brand-orange transition-colors">
+                            <input type="text" id="searchInput" onkeyup="renderClients()" placeholder="Buscar cliente o proyecto..." class="w-full bg-[#111111] border border-[#222222] rounded-2xl pl-12 pr-4 py-4 md:py-5 text-sm md:text-base font-medium focus:outline-none text-white focus:border-brand-orange transition-colors placeholder-zinc-600">
                             <div class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                             </div>
                         </div>
 
-                        <!-- Dashboard Grid -->
+                        <!-- Dashboard Grid (Dark & Orange) -->
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-10">
-                            <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] relative overflow-hidden active:scale-95 hover:border-brand-orange/50 transition-all cursor-pointer" onclick="setFilter('active')">
-                                <div class="w-10 h-10 bg-brand-orange/10 text-brand-orange rounded-xl flex items-center justify-center mb-3">
+                            <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] relative overflow-hidden active:scale-95 hover:border-brand-orange/50 transition-all cursor-pointer group" onclick="setFilter('active')">
+                                <div class="w-10 h-10 bg-brand-orange/10 text-brand-orange group-hover:bg-brand-orange group-hover:text-white transition-colors rounded-xl flex items-center justify-center mb-3">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path></svg>
                                 </div>
                                 <p class="font-black tracking-wide text-lg md:text-xl text-white">Activos</p>
                                 <p class="text-sm font-medium text-zinc-500 mt-0.5"><span id="stat-active" class="font-bold text-zinc-300">0</span> Proyectos</p>
                             </div>
 
-                            <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] relative overflow-hidden active:scale-95 hover:border-brand-orange/50 transition-all cursor-pointer" onclick="setFilter('completed')">
-                                <div class="w-10 h-10 bg-brand-orange/10 text-brand-orange rounded-xl flex items-center justify-center mb-3">
+                            <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] relative overflow-hidden active:scale-95 hover:border-brand-orange/50 transition-all cursor-pointer group" onclick="setFilter('completed')">
+                                <div class="w-10 h-10 bg-brand-orange/10 text-brand-orange group-hover:bg-brand-orange group-hover:text-white transition-colors rounded-xl flex items-center justify-center mb-3">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 </div>
                                 <p class="font-black tracking-wide text-lg md:text-xl text-white">Pagados</p>
                                 <p class="text-sm font-bold text-emerald-500 mt-0.5 truncate" id="stat-paid">$0</p>
                             </div>
 
-                            <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] relative overflow-hidden active:scale-95 hover:border-brand-orange/50 transition-all cursor-pointer" onclick="setFilter('debt')">
-                                <div class="w-10 h-10 bg-brand-orange/10 text-brand-orange rounded-xl flex items-center justify-center mb-3">
+                            <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] relative overflow-hidden active:scale-95 hover:border-brand-orange/50 transition-all cursor-pointer group" onclick="setFilter('debt')">
+                                <div class="w-10 h-10 bg-brand-orange/10 text-brand-orange group-hover:bg-brand-orange group-hover:text-white transition-colors rounded-xl flex items-center justify-center mb-3">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 </div>
                                 <p class="font-black tracking-wide text-lg md:text-xl text-white">Deudas</p>
@@ -180,19 +186,20 @@
                                 <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-3 relative z-10">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                                 </div>
-                                <p class="font-black tracking-wide text-lg md:text-xl relative z-10">Historial</p>
-                                <p class="text-sm font-semibold opacity-90 mt-0.5 relative z-10">Ver Todos</p>
+                                <p class="font-black tracking-wide text-lg md:text-xl relative z-10">Todos</p>
+                                <p class="text-sm font-semibold opacity-90 mt-0.5 relative z-10">Historial</p>
                             </div>
                         </div>
 
                         <h3 class="font-black text-white text-lg md:text-2xl mb-4 md:mb-6">Proyectos Recientes</h3>
+                        <!-- Lista de Clientes -->
                         <div id="clientsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
-                        <div id="emptyState" class="hidden text-center py-10 md:py-20 text-zinc-600 text-sm font-bold">No se encontraron datos.</div>
+                        <div id="emptyState" class="hidden text-center py-10 md:py-20 text-zinc-600 text-sm font-bold border border-dashed border-[#222] rounded-3xl">No se encontraron datos.</div>
                     </div>
                 </div>
 
                 <!-- PESTAÑA: AJUSTES -->
-                <div id="tab-settings" class="tab-content hidden pb-10 max-w-2xl mx-auto">
+                <div id="tab-settings" class="tab-content hidden max-w-2xl mx-auto">
                     <div class="flex items-center mb-8 md:mb-12 mt-4">
                         <h1 class="text-3xl md:text-5xl font-black text-white">Ajustes Generales</h1>
                     </div>
@@ -216,9 +223,9 @@
 
             </div>
 
-            <!-- Navegación Inferior Admin -->
+            <!-- NAVEGACIÓN INFERIOR (ÓPTIMA) -->
             <div class="absolute bottom-0 w-full md:w-auto md:left-1/2 md:-translate-x-1/2 z-40">
-                <nav class="dark-glass rounded-t-[30px] md:rounded-[35px] border-t border-white/5 md:border md:mb-6 mx-0 md:mx-4">
+                <nav class="dark-glass rounded-t-[30px] md:rounded-[35px] md:border md:mb-6 mx-0 md:mx-4">
                     <div class="flex justify-between items-center px-10 md:px-8 pt-4 md:py-3 pb-safe md:pb-3 relative gap-12 md:gap-16">
                         
                         <button onclick="switchTab('home')" class="flex flex-col items-center justify-center w-16 nav-btn group" data-tab="home">
@@ -247,7 +254,11 @@
             </div>
         </div>
 
+        <!-- ========================================== -->
+        <!-- ENTORNO DEL CLIENTE (BÓVEDA DIGITAL)       -->
+        <!-- ========================================== -->
         <div id="client-portal" class="flex-1 w-full h-full flex flex-col hidden relative bg-[#000000] overflow-hidden">
+            <!-- Top bar -->
             <div class="flex justify-between items-center px-6 md:px-12 pt-10 pb-4 bg-[#000000] z-10 shrink-0 border-b border-white/5">
                 <div class="flex items-center">
                     <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-6 md:h-7 w-auto mr-3 brightness-0 invert">
@@ -259,7 +270,8 @@
                 </button>
             </div>
 
-            <div class="flex-1 overflow-y-auto no-scrollbar px-6 md:px-12 pt-8 pb-32 relative" id="client-scroll-area">
+            <!-- Scroll Client (pb-40 para limpieza) -->
+            <div class="flex-1 overflow-y-auto no-scrollbar px-6 md:px-12 pt-8 pb-40 relative" id="client-scroll-area">
                 <div class="max-w-4xl mx-auto">
                     
                     <div class="mb-8 md:mb-12">
@@ -267,8 +279,9 @@
                         <h1 class="text-3xl md:text-5xl font-black text-white leading-tight" id="cp-greeting">¡Hola, Cliente!</h1>
                     </div>
 
+                    <!-- Tarjeta Info -->
                     <div class="bg-[#111111] border border-[#222222] rounded-3xl p-6 md:p-8 text-white mb-8 md:mb-12 relative overflow-hidden">
-                        <div class="absolute right-0 top-0 w-40 h-40 bg-brand-orange/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
+                        <div class="absolute right-0 top-0 w-40 h-40 bg-brand-orange/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl pointer-events-none"></div>
                         
                         <div class="relative z-10">
                             <div class="flex justify-between items-start mb-4 md:mb-8">
@@ -288,12 +301,14 @@
                         </div>
                     </div>
 
-                    <!-- Módulo Regalo (Cofre Oculto) -->
+                    <!-- COFRE REGALO STREAMING -->
                     <div id="cp-gift-container" class="hidden mb-8 md:mb-12"></div>
 
+                    <!-- Archivos -->
                     <h3 class="font-black text-white text-lg md:text-2xl mb-4 md:mb-6">Archivos Disponibles</h3>
                     <div id="cp-assets-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 md:mb-12"></div>
 
+                    <!-- Mensaje Estudio -->
                     <div id="cp-external-notes-container" class="bg-[#111] rounded-3xl p-6 md:p-8 border border-[#222] hidden mb-8">
                         <h4 class="font-black text-brand-orange text-xs md:text-sm tracking-widest uppercase mb-4">Mensaje del Estudio</h4>
                         <p class="text-sm md:text-base text-zinc-400 font-medium select-text leading-relaxed whitespace-pre-wrap" id="cp-external-notes"></p>
@@ -307,8 +322,10 @@
             </a>
         </div>
 
-        <!-- MODAL: CREAR/EDITAR CLIENTE -->
-        <div id="modal-overlay" class="absolute inset-0 bg-black/70 z-40 hidden transition-opacity opacity-0 backdrop-blur-sm" onclick="closeModals()"></div>
+        <!-- ========================================== -->
+        <!-- MODAL: CREAR/EDITAR CLIENTE                -->
+        <!-- ========================================== -->
+        <div id="modal-overlay" class="absolute inset-0 bg-black/80 z-40 hidden transition-opacity opacity-0 backdrop-blur-sm" onclick="closeModals()"></div>
         
         <div id="clientModal" class="absolute inset-x-0 bottom-0 bg-[#050505] shadow-2xl z-50 h-[92%] bottom-sheet flex flex-col overflow-hidden border-t border-[#222]">
             
@@ -323,6 +340,7 @@
             <div class="flex-1 overflow-y-auto px-5 py-6 md:px-10 md:py-8 space-y-6 md:space-y-8 pb-32 md:pb-12">
                 <input type="hidden" id="clientId">
                 
+                <!-- Datos Personales -->
                 <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] space-y-4">
                     <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Detalles del Cliente</p>
                     <input type="text" id="clientName" placeholder="Nombre de la marca o empresa" class="w-full bg-[#1A1A1A] rounded-xl px-4 py-3.5 md:py-4 text-sm font-bold border border-[#333] focus:border-brand-orange focus:outline-none transition-colors placeholder-zinc-600 text-white">
@@ -332,6 +350,7 @@
                     </div>
                 </div>
 
+                <!-- Estado y Fechas (Optimizados para no desbordar en móvil) -->
                 <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] space-y-4">
                     <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Estado y Fechas</p>
                     <select id="clientStatus" class="w-full bg-[#1A1A1A] rounded-xl px-4 py-3.5 md:py-4 text-sm font-bold border border-[#333] focus:border-brand-orange focus:outline-none cursor-pointer text-white">
@@ -341,19 +360,21 @@
                         <option value="Finalizado - En garantía">Finalizado - En garantía</option>
                         <option value="Finalizado - Tiempo de garantía vencido">Finalizado - Tiempo de garantía vencido</option>
                     </select>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="flex items-center justify-between bg-[#1A1A1A] rounded-xl px-4 py-3 border border-[#333]">
-                            <span class="text-sm font-bold text-zinc-400">Fecha Entrega</span>
-                            <input type="date" id="clientDeadline" class="bg-transparent font-bold text-white focus:outline-none cursor-pointer">
+                    
+                    <!-- Flex-col en móvil, flex-row en PC para evitar desbordes -->
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-1 flex items-center justify-between bg-[#1A1A1A] rounded-xl px-4 py-3 border border-[#333]">
+                            <span class="text-sm font-bold text-zinc-400">Entrega</span>
+                            <div class="flex-1 ml-4"><input type="date" id="clientDeadline" class="w-full bg-transparent font-bold text-white focus:outline-none cursor-pointer text-right"></div>
                         </div>
-                        <div class="flex items-center justify-between bg-brand-orange/10 rounded-xl px-4 py-3 border border-brand-orange/20">
-                            <span class="text-sm font-bold text-brand-orange">Garantía / Vigencia</span>
-                            <input type="date" id="clientWarranty" class="bg-transparent font-bold text-brand-orange focus:outline-none cursor-pointer">
+                        <div class="flex-1 flex items-center justify-between bg-brand-orange/10 rounded-xl px-4 py-3 border border-brand-orange/20">
+                            <span class="text-sm font-bold text-brand-orange">Garantía</span>
+                            <div class="flex-1 ml-4"><input type="date" id="clientWarranty" class="w-full bg-transparent font-bold text-brand-orange focus:outline-none cursor-pointer text-right"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- SECCIÓN REGALO OCULTO (ADMIN) -->
+                <!-- SECCIÓN REGALO OCULTO -->
                 <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] space-y-4">
                     <p class="text-[10px] font-black text-brand-orange uppercase tracking-widest flex items-center">
                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
@@ -364,15 +385,17 @@
                         <input type="email" id="clientGiftEmail" placeholder="Correo del acceso" class="w-full bg-[#1A1A1A] rounded-xl px-4 py-3.5 md:py-4 text-sm font-bold border border-[#333] focus:border-brand-orange focus:outline-none transition-colors placeholder-zinc-600 text-white">
                         <input type="text" id="clientGiftPassword" placeholder="Contraseña" class="w-full bg-[#1A1A1A] rounded-xl px-4 py-3.5 md:py-4 text-sm font-bold border border-[#333] focus:border-brand-orange focus:outline-none transition-colors placeholder-zinc-600 text-white">
                     </div>
-                    <p class="text-[10px] font-bold text-zinc-500">Deja los campos en blanco si no aplicarás este bono.</p>
+                    <p class="text-[10px] font-bold text-zinc-500">Deja en blanco si no aplicarás este bono a este cliente.</p>
                 </div>
 
+                <!-- Archivos -->
                 <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222]">
                     <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-4">Archivos y Entregables</p>
                     <div id="assets-fields-container" class="space-y-3 mb-4"></div>
                     <button type="button" onclick="addAssetField()" class="w-full py-3.5 bg-[#1A1A1A] hover:bg-[#222] text-white border border-[#333] rounded-2xl text-sm font-black active:scale-95 transition-all">+ Añadir Enlace</button>
                 </div>
 
+                <!-- Finanzas -->
                 <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] space-y-4">
                     <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Finanzas</p>
                     <div id="budget-fields-container" class="space-y-2"></div>
@@ -384,6 +407,7 @@
                     </div>
                 </div>
 
+                <!-- Notas -->
                 <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] space-y-4">
                     <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Notas Adicionales</p>
                     <textarea id="clientNotes" rows="3" placeholder="Notas internas (solo admin)..." class="w-full bg-[#1A1A1A] rounded-xl px-4 py-3.5 text-sm font-semibold border border-[#333] focus:border-brand-orange focus:outline-none whitespace-pre-wrap transition-colors text-white placeholder-zinc-600"></textarea>
@@ -392,7 +416,9 @@
             </div>
         </div>
 
-        <!-- MODAL: PERFIL 360 -->
+        <!-- ========================================== -->
+        <!-- MODAL: PERFIL 360 (VISTA ADMIN DEL CLIENTE)-->
+        <!-- ========================================== -->
         <div id="profileModal" class="absolute inset-x-0 bottom-0 bg-[#050505] shadow-2xl z-50 h-[92%] bottom-sheet flex flex-col overflow-hidden border-t border-[#222]">
             
             <div class="w-12 h-1.5 bg-[#333] rounded-full mx-auto mt-4 mb-2 shrink-0 md:hidden"></div>
@@ -407,6 +433,7 @@
             
             <div class="flex-1 overflow-y-auto px-5 py-6 md:px-10 md:py-8 space-y-6 md:space-y-8 pb-32 md:pb-12">
                 
+                <!-- Card General -->
                 <div class="bg-[#111] rounded-3xl p-6 md:p-8 text-white flex items-center border border-[#222] relative overflow-hidden">
                     <div class="absolute right-0 top-0 w-32 md:w-48 h-32 md:h-48 bg-brand-orange/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
                     <div class="w-14 h-14 md:w-16 md:h-16 bg-white text-black rounded-full flex items-center justify-center text-xl md:text-2xl font-black mr-4 md:mr-6 z-10" id="profileInitials"></div>
@@ -418,12 +445,13 @@
 
                 <div class="flex space-x-3 md:space-x-4" id="profileActions"></div>
 
+                <!-- PIN & Copy -->
                 <div class="bg-[#111] rounded-3xl p-5 md:p-6 border border-[#222] flex justify-between items-center">
                     <div>
                         <p class="text-[10px] md:text-xs font-black text-zinc-500 uppercase tracking-widest mb-1">PIN de Bóveda</p>
                         <div class="flex items-center">
                             <p class="text-2xl md:text-3xl font-black text-white mr-3 tracking-widest" id="profilePINDisplay">----</p>
-                            <button onclick="copyPINToClipboard(this)" class="text-zinc-500 hover:text-white active:scale-90 transition-transform" id="btn-copy-pin">
+                            <button onclick="copyToClipboard('profilePINDisplay', this)" class="text-zinc-500 hover:text-white active:scale-90 transition-transform">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                             </button>
                         </div>
@@ -431,6 +459,7 @@
                     <button onclick="generateClientPIN()" class="bg-brand-orange hover:brightness-110 text-white text-xs md:text-sm font-black px-4 md:px-6 py-2.5 md:py-3 rounded-xl shadow-md active:scale-95 transition-all">Regenerar</button>
                 </div>
 
+                <!-- Grid Details -->
                 <div class="grid grid-cols-2 gap-4 md:gap-6">
                     <div class="bg-[#111] rounded-3xl p-5 md:p-6 border border-[#222]">
                         <p class="text-[10px] md:text-xs font-black text-zinc-500 uppercase tracking-widest mb-1.5">Estado</p>
@@ -442,6 +471,7 @@
                     </div>
                 </div>
 
+                <!-- Finanzas -->
                 <div class="bg-[#111] rounded-3xl p-6 md:p-8 border border-[#222]">
                     <p class="text-[10px] md:text-xs font-black text-zinc-500 uppercase tracking-widest mb-4 md:mb-6">Resumen Financiero</p>
                     <div class="flex justify-between text-sm md:text-base mb-3 font-bold">
@@ -451,17 +481,16 @@
                     <div class="w-full bg-[#222] rounded-full h-2 md:h-3 mb-2 overflow-hidden">
                         <div id="profileProgress" class="bg-brand-orange h-2 md:h-3 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
                     </div>
-                    
                     <div id="profile-budget-container" class="mt-5 md:mt-6 pt-5 md:pt-6 border-t border-[#222] hidden">
                         <div id="profile-budget-list" class="space-y-2 md:space-y-3"></div>
                     </div>
                 </div>
 
+                <!-- Notas -->
                 <div id="profileInternalNotesContainer" class="bg-amber-500/10 p-5 md:p-6 rounded-3xl border border-amber-500/20 w-full hidden mt-4">
                     <p class="text-[10px] md:text-xs text-amber-500 font-black uppercase mb-2 tracking-widest">Notas Internas</p>
                     <p class="text-sm md:text-base text-amber-100/80 font-medium select-text leading-relaxed whitespace-pre-wrap" id="profileInternalNotes"></p>
                 </div>
-
                 <div id="profileExternalNotesContainer" class="bg-brand-blue/10 p-5 md:p-6 rounded-3xl border border-brand-blue/20 w-full hidden mt-4">
                     <p class="text-[10px] md:text-xs text-brand-blue font-black uppercase mb-2 tracking-widest">Mensaje al Cliente</p>
                     <p class="text-sm md:text-base text-brand-blue/80 font-medium select-text leading-relaxed whitespace-pre-wrap" id="profileExternalNotes"></p>
@@ -473,6 +502,9 @@
 
     </div>
 
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT GLOBAL - LÓGICA Y FIREBASE      -->
+    <!-- ========================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -497,8 +529,9 @@
         let dbReady = false;
         let globalUnsubscribe = null;
 
-        signInAnonymously(auth).then(() => { dbReady = true; }).catch(err => {});
+        signInAnonymously(auth).then(() => { dbReady = true; }).catch(err => { console.error("Fallo Auth:", err); });
 
+        // Helpers de Seguridad y UI
         async function hashPassword(password) {
             try {
                 if (window.crypto && window.crypto.subtle) {
@@ -524,6 +557,23 @@
             return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
         };
 
+        // UI Copiado universal
+        function copyToClipboard(elementIdOrText, btnEl, isId = true) {
+            const textToCopy = isId ? document.getElementById(elementIdOrText).innerText : elementIdOrText;
+            
+            const tempInput = document.createElement("input");
+            tempInput.value = textToCopy;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            
+            const originalHTML = btnEl.innerHTML;
+            btnEl.innerHTML = `<svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>`;
+            setTimeout(() => { btnEl.innerHTML = originalHTML; }, 2000);
+        }
+
+        // Login
         async function verifyAdminAccess(pwd) {
             let savedHash = localStorage.getItem('eqbito360_auth');
             if (savedHash && savedHash.length !== 64 && !savedHash.startsWith('fallback_')) {
@@ -535,7 +585,7 @@
             return (savedHash && inputHash === savedHash) || (!savedHash && inputHash === defaultHash);
         }
 
-        window.handleAuth = async function() {
+        async function handleAuth() {
             const input = document.getElementById('auth-password');
             const btn = document.getElementById('auth-btn');
             const errorMsg = document.getElementById('auth-error');
@@ -569,9 +619,9 @@
             errorMsg.textContent = "Contraseña o PIN incorrecto"; errorMsg.classList.remove('hidden');
             setTimeout(() => { errorMsg.classList.add('hidden'); }, 2500);
             input.value = '';
-        };
+        }
 
-        window.changePassword = async function() {
+        async function changePassword() {
             const oldInput = document.getElementById('old-pwd').value; 
             const newInput = document.getElementById('new-pwd').value; 
             const msg = document.getElementById('pwd-msg');
@@ -586,8 +636,9 @@
                 msg.textContent = "Contraseña actual incorrecta"; msg.className = "text-sm md:text-base mt-3 font-black text-red-500 block"; 
             }
             setTimeout(() => msg.classList.add('hidden'), 2500);
-        };
+        }
 
+        // App States
         function unlockApp(mode, clientData = null) {
             document.getElementById('auth-screen').classList.add('opacity-0', 'pointer-events-none');
             if (globalUnsubscribe) { globalUnsubscribe(); globalUnsubscribe = null; }
@@ -619,7 +670,7 @@
             }, 300);
         }
 
-        window.lockApp = function() {
+        function lockApp() {
             if (globalUnsubscribe) { globalUnsubscribe(); globalUnsubscribe = null; }
             clients = [];
             document.getElementById('auth-screen').classList.remove('hidden');
@@ -628,9 +679,9 @@
                 document.getElementById('client-portal').classList.add('hidden');
                 document.getElementById('auth-screen').classList.remove('opacity-0', 'pointer-events-none');
             }, 50);
-        };
+        }
 
-        window.switchTab = function(tabId) {
+        function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
             
@@ -645,13 +696,14 @@
                     textEl.className = "text-[10px] mt-1.5 font-bold nav-text text-zinc-500 tracking-widest uppercase";
                 }
             });
-        };
+        }
 
-        window.setFilter = function(filter) {
+        function setFilter(filter) {
             currentFilter = filter;
             renderClients();
-        };
+        }
 
+        // Render VISTA CLIENTE
         function renderClientPortal(c) {
             const firstName = c.name.split(' ')[0];
             document.getElementById('cp-greeting').textContent = `¡Hola, ${escapeHTML(firstName)}!`;
@@ -666,7 +718,7 @@
             if (isCompleted) {
                 if (c.warranty && c.warranty.trim() !== '') {
                     const wDate = new Date(c.warranty + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
-                    deadlineWarranty.innerHTML = `<svg class="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg> Garantía válida hasta: <strong>${wDate}</strong>`;
+                    deadlineWarranty.innerHTML = `<svg class="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg> Garantía hasta: <strong>${wDate}</strong>`;
                     datesContainer.classList.remove('hidden');
                 } else {
                     datesContainer.classList.add('hidden');
@@ -692,7 +744,7 @@
             const waMsg = encodeURIComponent(`Hola EQB STUDIO, soy ${c.name}. Tengo una consulta sobre mi proyecto.`);
             document.getElementById('cp-whatsapp-fab').href = `https://wa.me/573021192800?text=${waMsg}`;
 
-            // Lógica Cofre / Regalo Streaming
+            // Sistema de Regalo Oculto
             const giftContainer = document.getElementById('cp-gift-container');
             if (c.giftEmail && c.giftPassword) {
                 const platform = c.giftPlatform || 'Plataforma Premium';
@@ -704,11 +756,11 @@
                             <div class="w-14 h-14 bg-brand-orange/20 text-brand-orange rounded-full flex items-center justify-center mb-4">
                                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"></path></svg>
                             </div>
-                            <p class="text-[10px] font-black text-brand-orange uppercase tracking-widest mb-1 flex items-center">Tienes un Regalo Oculto</p>
+                            <p class="text-[10px] font-black text-brand-orange uppercase tracking-widest mb-1">Tienes un Regalo Oculto</p>
                             <h4 class="text-xl md:text-2xl font-black text-white mb-2 leading-tight">Acceso a ${escapeHTML(platform)}</h4>
                             <p class="text-sm text-zinc-400 mb-6 font-medium">Para revelar tu regalo y obtener las credenciales, síguenos en Instagram.</p>
                             
-                            <button onclick="revealGift('${escapeHTML(c.giftEmail)}', '${escapeHTML(c.giftPassword)}', '${escapeHTML(platform)}')" class="bg-brand-orange text-white font-black px-6 py-3.5 rounded-2xl active:scale-95 transition-transform shadow-[0_5px_15px_rgba(255,85,0,0.3)] hover:brightness-110 flex items-center justify-center w-full md:w-auto">
+                            <button onclick="revealGift()" class="bg-brand-orange text-white font-black px-6 py-3.5 rounded-2xl active:scale-95 transition-transform shadow-[0_5px_15px_rgba(255,85,0,0.3)] hover:brightness-110 flex items-center justify-center w-full md:w-auto">
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
                                 Seguir para revelar
                             </button>
@@ -730,7 +782,7 @@
                                     <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Correo</p>
                                     <p class="text-white font-bold truncate text-sm md:text-base">${escapeHTML(c.giftEmail)}</p>
                                 </div>
-                                <button onclick="copyGiftData('${escapeHTML(c.giftEmail)}', this)" class="text-zinc-400 hover:text-white p-2 active:scale-90 transition-transform"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button>
+                                <button onclick="copyToClipboard('${escapeHTML(c.giftEmail)}', this, false)" class="text-zinc-400 hover:text-white p-2 active:scale-90 transition-transform"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button>
                             </div>
                             
                             <div class="w-full bg-[#1A1A1A] rounded-2xl border border-[#333] p-4 flex justify-between items-center">
@@ -738,7 +790,7 @@
                                     <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Contraseña</p>
                                     <p class="text-white font-bold truncate text-sm md:text-base">${escapeHTML(c.giftPassword)}</p>
                                 </div>
-                                <button onclick="copyGiftData('${escapeHTML(c.giftPassword)}', this)" class="text-zinc-400 hover:text-white p-2 active:scale-90 transition-transform"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button>
+                                <button onclick="copyToClipboard('${escapeHTML(c.giftPassword)}', this, false)" class="text-zinc-400 hover:text-white p-2 active:scale-90 transition-transform"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button>
                             </div>
                         </div>
                     </div>
@@ -774,7 +826,8 @@
             }
         }
 
-        window.renderClients = function() {
+        // Render VISTA ADMIN
+        function renderClients() {
             const activeClients = clients.filter(c => c.status && !c.status.includes('Finalizado') && c.status !== 'Pausado');
             let totalPaid = 0; let totalPending = 0;
             
@@ -788,13 +841,13 @@
             document.getElementById('stat-paid').textContent = formatMoney(totalPaid); 
             document.getElementById('stat-pending').textContent = formatMoney(totalPending);
             
-            const queryTxt = escapeHTML(document.getElementById('searchInput').value.toLowerCase());
+            const query = escapeHTML(document.getElementById('searchInput').value.toLowerCase());
             const list = document.getElementById('clientsList'); 
             const empty = document.getElementById('emptyState');
             list.innerHTML = '';
             
             const filtered = clients.filter(c => {
-                const matchSearch = c.name.toLowerCase().includes(queryTxt) || (c.service && c.service.toLowerCase().includes(queryTxt));
+                const matchSearch = c.name.toLowerCase().includes(query) || (c.service && c.service.toLowerCase().includes(query));
                 let matchFilter = true;
                 if (currentFilter === 'active') matchFilter = c.status && !c.status.includes('Finalizado');
                 else if (currentFilter === 'debt') matchFilter = ((parseFloat(c.price) || 0) - (parseFloat(c.paid) || 0)) > 0;
@@ -828,13 +881,14 @@
                     `);
                 });
             }
-        };
+        }
 
-        window.closeModals = function() { window.closeClientModal(); window.closeProfileModal(); };
+        // Modales
+        function closeModals() { closeClientModal(); closeProfileModal(); }
 
-        window.openClientModal = function(id = null) {
+        function openClientModal(id = null) {
             document.getElementById('profileModal').classList.remove('active');
-            ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientWarranty', 'clientPrice', 'clientPaid', 'clientNotes', 'clientExternalNotes', 'clientGiftPlatform', 'clientGiftEmail', 'clientGiftPassword'].forEach(i => document.getElementById(i).value = '');
+            ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientWarranty', 'clientPrice', 'clientPaid', 'clientNotes', 'clientExternalNotes', 'clientGiftPlatform', 'clientGiftEmail', 'clientGiftPassword'].forEach(id => document.getElementById(id).value = '');
             
             document.getElementById('clientStatus').value = 'Cotizando';
             document.getElementById('modal-title').textContent = 'Nuevo Proyecto';
@@ -856,31 +910,30 @@
                     document.getElementById('clientPaid').value = c.paid || '';
                     document.getElementById('clientNotes').value = c.notes || ''; 
                     document.getElementById('clientExternalNotes').value = c.externalNotes || '';
-                    
                     document.getElementById('clientGiftPlatform').value = c.giftPlatform || '';
                     document.getElementById('clientGiftEmail').value = c.giftEmail || '';
                     document.getElementById('clientGiftPassword').value = c.giftPassword || '';
-
-                    if (Array.isArray(c.assets)) c.assets.forEach(a => window.addAssetField(a.name, a.url));
-                    if (Array.isArray(c.budget)) c.budget.forEach(b => window.addBudgetField(b.concept, b.amount));
+                    
+                    if (Array.isArray(c.assets)) c.assets.forEach(a => addAssetField(a.name, a.url));
+                    if (Array.isArray(c.budget)) c.budget.forEach(b => addBudgetField(b.concept, b.amount));
                 }
             }
-            if (document.getElementById('assets-fields-container').children.length === 0) window.addAssetField(); 
-            window.calculateTotalBudget();
+            if (document.getElementById('assets-fields-container').children.length === 0) addAssetField(); 
+            calculateTotalBudget();
             
             document.getElementById('modal-overlay').classList.remove('hidden');
             setTimeout(() => { document.getElementById('modal-overlay').classList.remove('opacity-0'); document.getElementById('clientModal').classList.add('active'); }, 10);
-        };
+        }
 
-        window.closeClientModal = function() {
+        function closeClientModal() {
             document.getElementById('clientModal').classList.remove('active');
             if(!document.getElementById('profileModal').classList.contains('active')) {
                 document.getElementById('modal-overlay').classList.add('opacity-0');
                 setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 350);
             }
-        };
+        }
 
-        window.openProfileModal = function(id) {
+        function openProfileModal(id) {
             const c = clients.find(x => x.id === escapeHTML(id)); if (!c) return;
             currentProfileId = escapeHTML(id);
 
@@ -926,18 +979,19 @@
 
             document.getElementById('modal-overlay').classList.remove('hidden');
             setTimeout(() => { document.getElementById('modal-overlay').classList.remove('opacity-0'); document.getElementById('profileModal').classList.add('active'); }, 10);
-        };
+        }
 
-        window.closeProfileModal = function() {
+        function closeProfileModal() {
             document.getElementById('profileModal').classList.remove('active'); 
             currentProfileId = null;
             if(!document.getElementById('clientModal').classList.contains('active')) {
                 document.getElementById('modal-overlay').classList.add('opacity-0');
                 setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 350);
             }
-        };
+        }
 
-        window.addBudgetField = function(concept = '', amount = '') {
+        // Dinámica de Formularios
+        function addBudgetField(concept = '', amount = '') {
             document.getElementById('budget-fields-container').insertAdjacentHTML('beforeend', `
                 <div class="budget-item flex gap-2 items-center bg-[#1A1A1A] p-2 md:p-3 rounded-2xl border border-[#333]">
                     <input type="text" placeholder="Concepto" value="${escapeHTML(concept)}" class="budget-concept flex-1 px-3 py-2 text-sm font-bold text-white bg-transparent focus:outline-none focus:bg-[#222] rounded-xl transition-colors">
@@ -947,10 +1001,10 @@
                     </button>
                 </div>
             `);
-            window.calculateTotalBudget();
-        };
+            calculateTotalBudget();
+        }
 
-        window.calculateTotalBudget = function() {
+        function calculateTotalBudget() {
             const items = document.querySelectorAll('.budget-item');
             const priceInput = document.getElementById('clientPrice');
             if (items.length > 0) {
@@ -960,9 +1014,9 @@
             } else { 
                 priceInput.readOnly = false; 
             }
-        };
+        }
 
-        window.getBudgetFromForm = function() {
+        function getBudgetFromForm() {
             const budgetArray = [];
             document.querySelectorAll('.budget-item').forEach(item => {
                 const concept = item.querySelector('.budget-concept').value.trim();
@@ -970,9 +1024,9 @@
                 if (concept || amount > 0) budgetArray.push({ concept: concept || 'Item', amount: amount });
             });
             return budgetArray;
-        };
+        }
 
-        window.addAssetField = function(name = '', url = '') {
+        function addAssetField(name = '', url = '') {
             document.getElementById('assets-fields-container').insertAdjacentHTML('beforeend', `
                 <div class="asset-item flex flex-col gap-3 bg-[#1A1A1A] p-4 md:p-5 rounded-3xl border border-[#333] relative group transition-colors hover:border-brand-orange/50">
                     <button type="button" onclick="this.parentElement.remove()" class="absolute top-3 md:top-4 right-3 md:right-4 text-zinc-500 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-[#111] rounded-xl hover:bg-red-500/10 hover:text-red-500 active:scale-90 transition-all">
@@ -982,25 +1036,26 @@
                     <input type="url" placeholder="URL del enlace (Drive, etc.)" value="${escapeHTML(url)}" class="asset-url w-full px-4 py-3.5 md:py-4 text-sm font-semibold text-brand-orange rounded-xl md:rounded-2xl border border-[#222] focus:outline-none focus:border-brand-orange bg-[#111] transition-colors">
                 </div>
             `);
-        };
+        }
 
-        window.getAssetsFromForm = function() {
+        function getAssetsFromForm() {
             const assetsArray = [];
             document.querySelectorAll('.asset-item').forEach(item => {
                 const url = item.querySelector('.asset-url').value.trim();
                 if (url) assetsArray.push({ name: item.querySelector('.asset-name').value.trim() || 'Archivo', url: url });
             });
             return assetsArray;
-        };
+        }
 
-        window.saveClient = async function() {
+        // Acciones Base de Datos
+        async function saveClient() {
             const name = document.getElementById('clientName').value.trim();
             if (!name) return;
 
             const id = document.getElementById('clientId').value;
             const existingClient = clients.find(c => c.id === id);
-            const budgetData = window.getBudgetFromForm();
-            const autoService = budgetData.length > 0 ? budgetData.map(b => b.concept).join(' + ') : 'Diseño Especializado';
+            const budgetData = getBudgetFromForm();
+            const autoService = budgetData.length > 0 ? budgetData.map(b => b.concept).join(' + ') : 'Bóveda Segura';
 
             const newClient = {
                 id: id || generateId(),
@@ -1011,7 +1066,7 @@
                 status: escapeHTML(document.getElementById('clientStatus').value),
                 deadline: escapeHTML(document.getElementById('clientDeadline').value), 
                 warranty: escapeHTML(document.getElementById('clientWarranty').value.trim()),
-                assets: window.getAssetsFromForm(), 
+                assets: getAssetsFromForm(), 
                 budget: budgetData,
                 price: parseFloat(document.getElementById('clientPrice').value) || 0, 
                 paid: parseFloat(document.getElementById('clientPaid').value) || 0,
@@ -1032,22 +1087,22 @@
             }
 
             renderClients(); 
-            window.closeClientModal(); 
-            if(currentProfileId === newClient.id) window.openProfileModal(newClient.id);
+            closeClientModal(); 
+            if(currentProfileId === newClient.id) openProfileModal(newClient.id);
             try { await setDoc(doc(db, "proyectos_eqbito", newClient.id), newClient); } catch (e) {}
-        };
+        }
 
-        window.deleteCurrentClient = async function() {
+        async function deleteCurrentClient() {
             if (!currentProfileId) return;
             if (confirm('¿Eliminar este proyecto permanentemente?')) {
                 clients = clients.filter(c => c.id !== currentProfileId);
                 renderClients(); 
-                window.closeProfileModal();
+                closeProfileModal();
                 try { await deleteDoc(doc(db, "proyectos_eqbito", currentProfileId)); } catch(e) {}
             }
-        };
+        }
 
-        window.generateClientPIN = async function() {
+        async function generateClientPIN() {
             if(!currentProfileId) return;
             const c = clients.find(x => x.id === currentProfileId);
             if(c) {
@@ -1055,9 +1110,9 @@
                 document.getElementById('profilePINDisplay').textContent = c.clientCode;
                 try { await setDoc(doc(db, "proyectos_eqbito", c.id), c); } catch(e) {}
             }
-        };
+        }
 
-        window.exportData = function() {
+        function exportData() {
             if(clients.length === 0) return;
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clients, null, 2));
             const anchor = document.createElement('a'); 
@@ -1066,43 +1121,18 @@
             document.body.appendChild(anchor); 
             anchor.click(); 
             anchor.remove();
-        };
+        }
 
-        window.revealGift = function(email, password, platform) {
+        // Función del Regalo
+        window.revealGift = function() {
             window.open('https://instagram.com/eqbstudio', '_blank');
             document.getElementById('gift-locked').classList.add('hidden');
-            const unlockedEl = document.getElementById('gift-unlocked');
-            unlockedEl.classList.remove('hidden');
-            unlockedEl.classList.add('flex');
+            document.getElementById('gift-unlocked').classList.remove('hidden');
+            document.getElementById('gift-unlocked').classList.add('flex');
         };
 
-        window.copyPINToClipboard = function(btnEl) {
-            const text = document.getElementById('profilePINDisplay').innerText;
-            const tempInput = document.createElement("input");
-            tempInput.value = text;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand("copy");
-            document.body.removeChild(tempInput);
-            
-            const originalHTML = btnEl.innerHTML;
-            btnEl.innerHTML = `<svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>`;
-            setTimeout(() => { btnEl.innerHTML = originalHTML; }, 2000);
-        };
-
-        window.copyGiftData = function(text, btnEl) {
-            const tempInput = document.createElement("input");
-            tempInput.value = text;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand("copy");
-            document.body.removeChild(tempInput);
-            
-            const originalHTML = btnEl.innerHTML;
-            btnEl.innerHTML = `<svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>`;
-            setTimeout(() => { btnEl.innerHTML = originalHTML; }, 2000);
-        };
-
+        // Exportación absoluta para que no falle ni un solo botón
+        Object.assign(window, { handleAuth, lockApp, switchTab, openClientModal, closeClientModal, saveClient, deleteCurrentClient, exportData, generateClientPIN, openProfileModal, closeProfileModal, setFilter, renderClients, changePassword, addAssetField, addBudgetField, calculateTotalBudget, copyToClipboard });
     </script>
 </body>
 </html>
