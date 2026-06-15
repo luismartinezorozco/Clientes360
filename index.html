@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>EQB STUDIO - App</title>
+    <title>EQB STUDIO - Plataforma</title>
     
     <link rel="icon" type="image/svg+xml" href="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg">
     <link rel="apple-touch-icon" href="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg">
@@ -13,248 +13,202 @@
     <meta name="theme-color" content="#000000">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand: { orange: '#FF5500' } },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         
+        /* Bloqueo estricto para móvil */
         html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Nunito', sans-serif;
-            background-color: #000000;
-            color: #ffffff;
-            -webkit-tap-highlight-color: transparent;
-            overscroll-behavior-y: none;
+            margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+            background-color: #000000; -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none;
         }
 
-        @supports (height: 100dvh) {
-            html, body { height: 100dvh; }
-        }
+        @supports (height: 100dvh) { html, body { height: 100dvh; } }
 
+        /* Contenedor principal responsive */
         .app-frame {
-            width: 100%;
-            height: 100%;
-            background-color: #000000;
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            background-color: #050505; display: flex; flex-direction: column; overflow: hidden;
+            -webkit-user-select: none; user-select: none;
         }
 
+        /* DISEÑO PARA PC: Dashboard Flotante */
         @media (min-width: 768px) {
-            html, body {
-                background-color: #050505; 
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: static;
-            }
+            html, body { display: flex; align-items: center; justify-content: center; position: static; background-color: #000000; }
             .app-frame {
-                position: relative;
-                width: 100%;
-                max-width: 1200px;
-                height: 90vh;
-                max-height: 900px;
-                border-radius: 40px;
-                background-color: #0a0a0a;
-                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+                position: relative; width: 100%; max-width: 1200px; height: 90vh; max-height: 900px;
+                border-radius: 40px; box-shadow: 0 25px 50px -12px rgba(255, 85, 0, 0.15), 0 0 0 1px rgba(255,255,255,0.05);
+                border: 1px solid #1A1A1A;
             }
-            #scroll-container, #client-scroll-area {
-                padding-bottom: 120px !important;
-            }
+            #scroll-container, #client-scroll-area { padding-bottom: 120px !important; }
         }
 
-        input, textarea, select {
-            color: #ffffff;
+        /* Corrección vital para que se pueda escribir en PC */
+        input, textarea, select { 
+            -webkit-user-select: auto !important; 
+            user-select: auto !important; 
+            pointer-events: auto !important; 
         }
-
-        /* Colores del Tema EQB Studio */
-        .bg-brand-orange { background-color: #FF5500; }
-        .text-brand-orange { color: #FF5500; }
-        .border-brand-orange { border-color: #FF5500; }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .floating-fab {
-            box-shadow: 0 6px 20px rgba(255, 85, 0, 0.4);
-        }
+        .floating-fab { box-shadow: 0 8px 25px rgba(255, 85, 0, 0.4); }
 
-        .bottom-sheet {
-            transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s;
-            background-color: #111111;
-            border-top: 1px solid #222222;
-        }
-
+        /* Modales */
+        .bottom-sheet { transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s; }
         @media (max-width: 767px) {
             .bottom-sheet { transform: translateY(100%); }
             .bottom-sheet.active { transform: translateY(0); }
         }
-
         @media (min-width: 768px) {
             .bottom-sheet {
-                transform: translate(-50%, -45%) scale(0.95);
-                opacity: 0;
-                top: 50% !important;
-                left: 50% !important;
-                bottom: auto !important;
-                right: auto !important;
-                width: 90%;
-                max-width: 600px;
-                border-radius: 35px;
-                border: 1px solid #333333;
-                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+                transform: translate(-50%, -45%) scale(0.95); opacity: 0; top: 50% !important; left: 50% !important;
+                bottom: auto !important; right: auto !important; width: 90%; max-width: 600px; border-radius: 35px;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid #222;
             }
-            .bottom-sheet.active {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
+            .bottom-sheet.active { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
 
-        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .pb-safe { 
-            padding-bottom: max(env(safe-area-inset-bottom), 12px) !important; 
-        }
-
-        ::-webkit-calendar-picker-indicator {
-            filter: invert(1);
-        }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 12px) !important; }
+        .dark-glass { background: rgba(17, 17, 17, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
-<body>
+<body class="text-zinc-300">
 
     <div class="app-frame" id="app-container">
         
-        <!-- ========================================== -->
-        <!-- PANTALLA DE LOGIN (DARK)                   -->
-        <!-- ========================================== -->
         <div id="auth-screen" class="absolute inset-0 bg-[#000000] z-50 flex flex-col transition-opacity duration-300">
-            <div class="h-[35%] md:h-[45%] flex items-center justify-center relative shrink-0 overflow-hidden">
-                <div class="absolute w-40 h-40 bg-[#FF5500]/20 rounded-full blur-3xl"></div>
+            <div class="h-[40%] flex items-center justify-center relative shrink-0 overflow-hidden">
+                <div class="absolute -left-10 top-10 w-40 h-40 bg-brand-orange/20 rounded-full blur-3xl"></div>
+                <div class="absolute -right-10 bottom-10 w-32 h-32 bg-brand-orange/10 rounded-full blur-3xl"></div>
                 
                 <div class="flex flex-col items-center z-10">
-                    <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-16 md:h-20 w-auto invert brightness-0 mb-4 md:mb-5">
-                    <h1 class="text-white text-2xl md:text-3xl font-black tracking-[0.2em]">EQB STUDIO</h1>
+                    <!-- LOGO EN BLANCO: brightness-0 invert -->
+                    <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-20 md:h-24 w-auto mb-6 brightness-0 invert drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                    <h1 class="text-white text-2xl md:text-3xl font-black tracking-[0.2em] uppercase">EQB STUDIO</h1>
                 </div>
             </div>
 
-            <div class="flex-1 overflow-y-auto px-8 md:px-20 pt-10 pb-safe flex flex-col relative items-center bg-[#0a0a0a] rounded-t-[40px] border-t border-[#222222]">
-                <div class="w-full max-w-md flex flex-col items-center h-full">
-                    <h2 class="text-2xl md:text-3xl font-black text-white mb-2">ACCESO</h2>
-                    <p class="text-zinc-400 font-medium text-sm md:text-base mb-8 text-center">Ingresa tu código para abrir tu bóveda.</p>
+            <div class="flex-1 overflow-y-auto px-8 md:px-20 pt-6 pb-safe flex flex-col relative items-center">
+                <div class="w-full max-w-sm flex flex-col items-center h-full">
+                    <p class="text-zinc-400 font-medium text-sm md:text-base mb-8 text-center tracking-wide">Ingresa tu código de acceso para abrir tu bóveda.</p>
                     
-                    <div class="relative mb-6 w-full z-20">
-                        <p class="text-[10px] font-bold text-zinc-500 mb-2 uppercase tracking-widest pl-2">Contraseña o PIN</p>
-                        <input type="password" id="auth-password" onkeypress="if(event.key === 'Enter') handleAuth()" class="w-full bg-[#111111] rounded-2xl px-5 py-4 text-base font-bold text-white border border-[#333333] focus:outline-none focus:border-[#FF5500] focus:ring-1 focus:ring-[#FF5500] transition-all text-center tracking-widest placeholder-zinc-600">
+                    <div class="relative w-full">
+                        <input type="password" id="auth-password" onkeydown="if(event.key === 'Enter') handleAuth()" placeholder="Contraseña o PIN" class="w-full bg-[#111111] rounded-2xl px-5 py-4 text-base font-bold text-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] border border-[#222222] focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange transition-all text-center tracking-widest placeholder-zinc-600">
                     </div>
                     
-                    <button onclick="handleAuth()" id="auth-btn" class="w-full bg-brand-orange text-white font-bold rounded-2xl py-4 shadow-[0_8px_20px_rgba(255,85,0,0.25)] active:scale-[0.98] hover:brightness-110 transition-all text-lg mt-2 relative z-20">Ingresar</button>
+                    <button onclick="handleAuth()" id="auth-btn" class="w-full bg-brand-orange text-white font-black rounded-2xl py-4 shadow-[0_5px_20px_rgba(255,85,0,0.3)] active:scale-[0.98] hover:brightness-110 transition-all text-lg mt-5 uppercase tracking-wider">Ingresar</button>
                     
-                    <p id="auth-error" class="text-red-400 text-sm mt-4 hidden text-center font-bold bg-red-500/10 py-2 w-full rounded-xl border border-red-500/20">Credenciales incorrectas</p>
+                    <p id="auth-error" class="text-red-500 text-sm mt-5 hidden text-center font-bold bg-red-500/10 py-2 px-4 rounded-lg w-full">Credenciales incorrectas</p>
 
                     <div class="mt-auto pt-8 pb-4 text-center w-full">
-                        <p class="text-xs text-zinc-500 font-semibold">¿Necesitas ayuda? <a href="https://instagram.com/eqbstudio" target="_blank" class="text-brand-orange font-bold hover:underline">Contáctanos</a></p>
+                        <p class="text-xs text-zinc-500 font-medium">¿Necesitas ayuda? <a href="https://instagram.com/eqbstudio" target="_blank" class="text-brand-orange font-bold hover:underline">Contáctanos</a></p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- CONTENIDO PRINCIPAL ADMIN (DARK)           -->
-        <!-- ========================================== -->
-        <div id="main-app" class="flex-1 flex flex-col hidden relative overflow-hidden bg-[#000000]">
+        <div id="main-app" class="flex-1 flex flex-col hidden relative overflow-hidden bg-[#050505]">
             
             <div class="flex-1 overflow-y-auto no-scrollbar pt-10 md:pt-14 px-6 md:px-12" id="scroll-container">
                 
                 <!-- PESTAÑA: HOME -->
                 <div id="tab-home" class="tab-content pb-10">
-                    <div class="flex justify-between items-center mb-6 md:mb-10 max-w-6xl mx-auto">
+                    <div class="flex justify-between items-center mb-8 max-w-6xl mx-auto">
                         <div class="flex items-center">
-                            <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-6 md:h-8 w-auto mr-2 md:mr-3 invert brightness-0">
-                            <span class="font-black text-white tracking-[0.15em] text-sm md:text-base uppercase mt-1">EQB Studio</span>
+                            <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-6 md:h-8 w-auto mr-3 brightness-0 invert">
+                            <span class="font-black text-white tracking-widest text-sm md:text-base uppercase">EQB Studio</span>
                         </div>
-                        <button onclick="lockApp()" class="flex items-center text-xs md:text-sm font-bold text-red-400 bg-red-500/10 hover:bg-red-500/20 px-3 md:px-5 py-2 md:py-2.5 rounded-xl active:scale-95 transition-colors border border-red-500/20">
+                        <button onclick="lockApp()" class="flex items-center text-xs md:text-sm font-bold text-red-500 bg-[#111111] hover:bg-[#1A1A1A] px-4 py-2.5 rounded-xl active:scale-95 transition-colors border border-[#222222] shadow-sm cursor-pointer">
                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                             Salir
                         </button>
                     </div>
 
                     <div class="max-w-6xl mx-auto">
-                        <h1 class="text-3xl md:text-5xl font-black text-white leading-tight">¡Hola!</h1>
-                        <h2 class="text-3xl md:text-5xl font-black text-white leading-tight mb-2">Panel de Control</h2>
-                        <p class="text-zinc-400 text-sm md:text-lg font-medium mb-8 md:mb-12" id="current-date">Gestiona tus proyectos y clientes.</p>
+                        <h1 class="text-3xl md:text-5xl font-black text-white leading-tight">Panel de Control</h1>
+                        <p class="text-brand-orange text-sm md:text-lg font-bold mb-8 md:mb-12 mt-1 uppercase tracking-widest">Excelencia en Acción</p>
 
-                        <div class="relative mb-8 md:mb-10 md:w-1/2">
-                            <input type="text" id="searchInput" onkeyup="renderClients()" placeholder="Buscar clientes o proyectos..." class="w-full bg-[#111111] border border-[#222222] rounded-2xl pl-12 md:pl-14 pr-4 py-4 md:py-5 text-sm md:text-base font-bold focus:outline-none focus:border-[#FF5500] text-white placeholder-zinc-600 transition-colors">
-                            <div class="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-zinc-500">
+                        <div class="relative mb-8 md:mb-10 w-full md:w-1/2">
+                            <input type="text" id="searchInput" onkeyup="renderClients()" placeholder="Buscar cliente o proyecto..." class="w-full bg-[#111111] border border-[#222222] rounded-2xl pl-12 pr-4 py-4 md:py-5 text-sm md:text-base font-medium focus:outline-none text-white focus:border-brand-orange transition-colors">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                             </div>
                         </div>
 
-                        <!-- Dashboard Grid (Dark Theme) -->
+                        <!-- Dashboard Grid -->
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-10">
-                            <div class="bg-[#111111] border border-[#222222] rounded-3xl p-5 md:p-6 text-white relative overflow-hidden active:scale-95 hover:border-zinc-700 transition-all cursor-pointer" onclick="setFilter('active')">
-                                <div class="w-8 h-8 md:w-10 md:h-10 bg-[#222222] text-brand-orange rounded-xl flex items-center justify-center mb-3">
-                                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path></svg>
+                            <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] relative overflow-hidden active:scale-95 hover:border-brand-orange/50 transition-all cursor-pointer" onclick="setFilter('active')">
+                                <div class="w-10 h-10 bg-brand-orange/10 text-brand-orange rounded-xl flex items-center justify-center mb-3">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path></svg>
                                 </div>
-                                <p class="font-black tracking-wide text-lg md:text-xl">Activos</p>
-                                <p class="text-sm md:text-base font-medium text-zinc-400 mt-0.5"><span id="stat-active">0</span> Clientes</p>
+                                <p class="font-black tracking-wide text-lg md:text-xl text-white">Activos</p>
+                                <p class="text-sm font-medium text-zinc-500 mt-0.5"><span id="stat-active" class="font-bold text-zinc-300">0</span> Proyectos</p>
                             </div>
 
-                            <div class="bg-brand-orange rounded-3xl p-5 md:p-6 text-white shadow-[0_8px_20px_rgba(255,85,0,0.2)] relative overflow-hidden active:scale-95 hover:brightness-110 transition-all cursor-pointer" onclick="setFilter('completed')">
-                                <div class="w-8 h-8 md:w-10 md:h-10 bg-white/20 rounded-xl flex items-center justify-center mb-3">
-                                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] relative overflow-hidden active:scale-95 hover:border-brand-orange/50 transition-all cursor-pointer" onclick="setFilter('completed')">
+                                <div class="w-10 h-10 bg-brand-orange/10 text-brand-orange rounded-xl flex items-center justify-center mb-3">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 </div>
-                                <p class="font-black tracking-wide text-lg md:text-xl">Pagados</p>
-                                <p class="text-sm md:text-base font-bold opacity-90 mt-0.5 truncate" id="stat-paid">$0</p>
+                                <p class="font-black tracking-wide text-lg md:text-xl text-white">Pagados</p>
+                                <p class="text-sm font-bold text-emerald-500 mt-0.5 truncate" id="stat-paid">$0</p>
                             </div>
 
-                            <div class="bg-[#111111] border border-[#222222] rounded-3xl p-5 md:p-6 text-white relative overflow-hidden active:scale-95 hover:border-zinc-700 transition-all cursor-pointer" onclick="setFilter('debt')">
-                                <div class="w-8 h-8 md:w-10 md:h-10 bg-[#222222] text-red-400 rounded-xl flex items-center justify-center mb-3">
-                                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] relative overflow-hidden active:scale-95 hover:border-brand-orange/50 transition-all cursor-pointer" onclick="setFilter('debt')">
+                                <div class="w-10 h-10 bg-brand-orange/10 text-brand-orange rounded-xl flex items-center justify-center mb-3">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 </div>
-                                <p class="font-black tracking-wide text-lg md:text-xl">Deudas</p>
-                                <p class="text-sm md:text-base font-medium text-zinc-400 mt-0.5 truncate" id="stat-pending">$0</p>
+                                <p class="font-black tracking-wide text-lg md:text-xl text-white">Deudas</p>
+                                <p class="text-sm font-bold text-red-500 mt-0.5 truncate" id="stat-pending">$0</p>
                             </div>
 
-                            <div class="bg-[#111111] border border-[#222222] rounded-3xl p-5 md:p-6 text-white relative overflow-hidden active:scale-95 hover:border-zinc-700 transition-all cursor-pointer" onclick="setFilter('all')">
-                                <div class="w-8 h-8 md:w-10 md:h-10 bg-[#222222] text-zinc-400 rounded-xl flex items-center justify-center mb-3">
-                                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                            <div class="bg-brand-orange rounded-3xl p-5 md:p-6 text-white shadow-[0_10px_30px_rgba(255,85,0,0.2)] relative overflow-hidden active:scale-95 hover:brightness-110 transition-all cursor-pointer" onclick="setFilter('all')">
+                                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/20 rounded-full blur-xl"></div>
+                                <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-3 relative z-10">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                                 </div>
-                                <p class="font-black tracking-wide text-lg md:text-xl">Todos</p>
-                                <p class="text-sm md:text-base font-medium text-zinc-400 mt-0.5">Historial</p>
+                                <p class="font-black tracking-wide text-lg md:text-xl relative z-10">Historial</p>
+                                <p class="text-sm font-semibold opacity-90 mt-0.5 relative z-10">Ver Todos</p>
                             </div>
                         </div>
 
                         <h3 class="font-black text-white text-lg md:text-2xl mb-4 md:mb-6">Proyectos Recientes</h3>
                         <div id="clientsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
-                        <div id="emptyState" class="hidden text-center py-10 md:py-20 text-zinc-500 text-sm font-bold">No se encontraron datos.</div>
+                        <div id="emptyState" class="hidden text-center py-10 md:py-20 text-zinc-600 text-sm font-bold">No se encontraron datos.</div>
                     </div>
                 </div>
 
                 <!-- PESTAÑA: AJUSTES -->
                 <div id="tab-settings" class="tab-content hidden pb-10 max-w-2xl mx-auto">
-                    <div class="flex items-center mb-8 md:mb-12">
-                        <h1 class="text-3xl md:text-5xl font-black text-white">Ajustes</h1>
+                    <div class="flex items-center mb-8 md:mb-12 mt-4">
+                        <h1 class="text-3xl md:text-5xl font-black text-white">Ajustes Generales</h1>
                     </div>
                     
-                    <div class="bg-[#111111] border border-[#222222] rounded-3xl p-6 md:p-8 mb-6">
-                        <p class="text-[10px] md:text-xs font-bold text-zinc-500 uppercase tracking-widest mb-4">Seguridad</p>
-                        <input type="password" id="old-pwd" placeholder="Contraseña Actual" class="w-full bg-[#1A1A1A] rounded-xl px-5 py-4 text-sm font-bold mb-3 border border-[#333333] focus:outline-none focus:border-brand-orange placeholder-zinc-600">
-                        <input type="password" id="new-pwd" placeholder="Nueva Contraseña" class="w-full bg-[#1A1A1A] rounded-xl px-5 py-4 text-sm font-bold mb-4 border border-[#333333] focus:outline-none focus:border-brand-orange placeholder-zinc-600">
-                        <button onclick="changePassword()" class="w-full bg-brand-orange hover:brightness-110 text-white text-sm font-bold rounded-xl py-4 active:scale-95 transition-all">Actualizar Contraseña</button>
-                        <p id="pwd-msg" class="text-sm mt-3 text-center hidden"></p>
+                    <div class="bg-[#111111] rounded-3xl p-6 md:p-8 border border-[#222222] mb-6">
+                        <p class="text-xs font-black text-brand-orange uppercase tracking-widest mb-6">Seguridad del Sistema</p>
+                        <input type="password" id="old-pwd" placeholder="Contraseña Actual" class="w-full bg-[#1A1A1A] rounded-xl px-5 py-4 text-sm font-bold mb-4 border border-[#333333] focus:outline-none focus:border-brand-orange text-white placeholder-zinc-600 transition-colors">
+                        <input type="password" id="new-pwd" placeholder="Nueva Contraseña" class="w-full bg-[#1A1A1A] rounded-xl px-5 py-4 text-sm font-bold mb-6 border border-[#333333] focus:outline-none focus:border-brand-orange text-white placeholder-zinc-600 transition-colors">
+                        <button onclick="changePassword()" class="w-full bg-white hover:bg-zinc-200 text-black text-sm md:text-base font-black rounded-xl py-4 active:scale-95 transition-all">Actualizar Acceso</button>
+                        <p id="pwd-msg" class="text-sm mt-4 text-center hidden"></p>
                     </div>
 
-                    <div class="bg-[#111111] border border-[#222222] rounded-3xl p-6 md:p-8">
-                        <p class="text-[10px] md:text-xs font-bold text-zinc-500 uppercase tracking-widest mb-4">Datos</p>
-                        <button onclick="exportData()" class="flex items-center justify-between w-full p-4 bg-[#1A1A1A] hover:bg-[#222222] border border-[#333333] rounded-xl font-bold text-zinc-300 active:scale-95 transition-all hover:border-brand-orange">
-                            <span>Exportar Copia de Seguridad</span>
+                    <div class="bg-[#111111] rounded-3xl p-6 md:p-8 border border-[#222222]">
+                        <p class="text-xs font-black text-brand-orange uppercase tracking-widest mb-6">Base de Datos</p>
+                        <button onclick="exportData()" class="flex items-center justify-between w-full p-5 bg-[#1A1A1A] hover:bg-[#222222] border border-[#333333] rounded-xl font-bold text-white active:scale-95 transition-all">
+                            <span>Descargar Copia de Seguridad</span>
                             <svg class="w-5 h-5 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                         </button>
                     </div>
@@ -262,54 +216,55 @@
 
             </div>
 
-            <!-- Navegación Inferior Flotante (DARK) -->
+            <!-- Navegación Inferior Admin -->
             <div class="absolute bottom-0 w-full md:w-auto md:left-1/2 md:-translate-x-1/2 z-40">
-                <nav class="bg-[#111111]/90 backdrop-blur-xl border-t border-white/5 md:border md:rounded-[35px] md:shadow-[0_10px_40px_rgba(0,0,0,0.8)] md:mb-6 mx-0 md:mx-4 rounded-t-[30px]">
-                    <div class="flex justify-between items-center px-10 md:px-8 pt-4 md:py-3 pb-safe md:pb-3 relative gap-10 md:gap-16">
+                <nav class="dark-glass rounded-t-[30px] md:rounded-[35px] border-t border-white/5 md:border md:mb-6 mx-0 md:mx-4">
+                    <div class="flex justify-between items-center px-10 md:px-8 pt-4 md:py-3 pb-safe md:pb-3 relative gap-12 md:gap-16">
                         
-                        <button onclick="switchTab('home')" class="flex flex-col items-center justify-center w-16 nav-btn" data-tab="home">
-                            <div class="w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container text-brand-orange transition-colors active:scale-95">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 001 1m-6 0h6"></path></svg>
+                        <button onclick="switchTab('home')" class="flex flex-col items-center justify-center w-16 nav-btn group" data-tab="home">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container bg-brand-orange text-white transition-all active:scale-95 shadow-[0_0_15px_rgba(255,85,0,0.3)]">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                             </div>
+                            <span class="text-[10px] mt-1.5 font-bold nav-text text-brand-orange tracking-widest uppercase">Inicio</span>
                         </button>
                         
-                        <!-- FAB CENTRAL -->
+                        <!-- Botón Añadir -->
                         <div class="absolute left-1/2 -translate-x-1/2 -top-6 flex flex-col items-center justify-center">
-                            <button onclick="openClientModal()" class="w-14 h-14 md:w-16 md:h-16 bg-brand-orange rounded-full flex items-center justify-center text-white floating-fab active:scale-90 hover:scale-105 transition-transform border-[4px] border-[#0a0a0a]">
+                            <button onclick="openClientModal()" class="w-14 h-14 md:w-16 md:h-16 bg-white rounded-full flex items-center justify-center text-black floating-fab active:scale-90 hover:scale-105 transition-transform border-[4px] border-[#050505]">
                                 <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
                             </button>
+                            <span class="text-[10px] font-bold text-zinc-400 mt-1 tracking-widest uppercase md:hidden">Añadir</span>
                         </div>
 
-                        <button onclick="switchTab('settings')" class="flex flex-col items-center justify-center w-16 nav-btn" data-tab="settings">
-                            <div class="w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container text-zinc-600 hover:text-zinc-400 transition-colors active:scale-95">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <button onclick="switchTab('settings')" class="flex flex-col items-center justify-center w-16 nav-btn group" data-tab="settings">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container text-zinc-500 group-hover:text-zinc-300 transition-colors active:scale-95">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                             </div>
+                            <span class="text-[10px] mt-1.5 font-bold nav-text text-zinc-500 tracking-widest uppercase">Ajustes</span>
                         </button>
                     </div>
                 </nav>
             </div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- ENTORNO DEL CLIENTE (BÓVEDA DIGITAL DARK)  -->
-        <!-- ========================================== -->
         <div id="client-portal" class="flex-1 w-full h-full flex flex-col hidden relative bg-[#000000] overflow-hidden">
-            <div class="flex justify-between items-center px-6 md:px-12 pt-10 pb-4 bg-[#000000] border-b border-white/5 z-10 shrink-0">
+            <div class="flex justify-between items-center px-6 md:px-12 pt-10 pb-4 bg-[#000000] z-10 shrink-0 border-b border-white/5">
                 <div class="flex items-center">
-                    <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-6 w-auto mr-3 invert brightness-0">
+                    <img src="https://www.image2url.com/r2/default/images/1781298292628-1650e1c6-2a06-4150-914e-5df626363931.svg" alt="Logo" class="h-6 md:h-7 w-auto mr-3 brightness-0 invert">
+                    <span class="font-black text-white tracking-widest text-xs uppercase hidden md:block">Bóveda Digital</span>
                 </div>
-                <button onclick="lockApp()" class="flex items-center text-xs font-bold text-red-400 bg-red-500/10 hover:bg-red-500/20 px-3 py-2 rounded-xl active:scale-95 transition-transform border border-red-500/20 cursor-pointer">
+                <button onclick="lockApp()" class="flex items-center text-xs font-bold text-zinc-400 hover:text-white bg-[#111] hover:bg-[#222] px-4 py-2.5 rounded-xl active:scale-95 transition-all border border-[#333]">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                     Salir
                 </button>
             </div>
 
-            <div class="flex-1 overflow-y-auto no-scrollbar px-6 md:px-12 pt-6 pb-32 relative" id="client-scroll-area">
+            <div class="flex-1 overflow-y-auto no-scrollbar px-6 md:px-12 pt-8 pb-32 relative" id="client-scroll-area">
                 <div class="max-w-4xl mx-auto">
                     
-                    <div class="mb-6 md:mb-10">
-                        <h1 class="text-2xl md:text-4xl font-black text-white leading-tight" id="cp-greeting">¡Hola, Cliente!</h1>
-                        <p class="text-brand-orange text-xs md:text-sm font-bold tracking-widest uppercase mt-1">Tu Bóveda Digital</p>
+                    <div class="mb-8 md:mb-12">
+                        <p class="text-brand-orange text-xs font-black uppercase tracking-[0.2em] mb-2">Acceso Exclusivo</p>
+                        <h1 class="text-3xl md:text-5xl font-black text-white leading-tight" id="cp-greeting">¡Hola, Cliente!</h1>
                     </div>
 
                     <div class="bg-[#111111] border border-[#222222] rounded-3xl p-6 md:p-8 text-white mb-8 md:mb-12 relative overflow-hidden">
@@ -325,49 +280,52 @@
                             </div>
 
                             <div id="cp-dates-container" class="mt-4 md:mt-6 pt-4 md:pt-6 border-t border-[#333333] flex items-center">
-                                <svg class="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                <p class="text-xs md:text-sm font-semibold tracking-wide text-zinc-300" id="cp-deadline-warranty">Entrega estimada: --</p>
+                                <p class="text-xs md:text-sm font-semibold tracking-wide text-zinc-300 flex items-center" id="cp-deadline-warranty">
+                                    <svg class="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Entrega estimada: --
+                                </p>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Módulo Regalo (Cofre Oculto) -->
+                    <div id="cp-gift-container" class="hidden mb-8 md:mb-12"></div>
+
                     <h3 class="font-black text-white text-lg md:text-2xl mb-4 md:mb-6">Archivos Disponibles</h3>
                     <div id="cp-assets-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 md:mb-12"></div>
 
-                    <div id="cp-external-notes-container" class="bg-brand-orange/10 rounded-3xl p-5 md:p-8 border border-brand-orange/20 hidden mb-8">
-                        <h4 class="font-black text-brand-orange text-sm md:text-base tracking-wider uppercase mb-3">Nota del Estudio</h4>
-                        <p class="text-sm md:text-base text-zinc-300 font-medium select-text leading-relaxed whitespace-pre-wrap" id="cp-external-notes"></p>
+                    <div id="cp-external-notes-container" class="bg-[#111] rounded-3xl p-6 md:p-8 border border-[#222] hidden mb-8">
+                        <h4 class="font-black text-brand-orange text-xs md:text-sm tracking-widest uppercase mb-4">Mensaje del Estudio</h4>
+                        <p class="text-sm md:text-base text-zinc-400 font-medium select-text leading-relaxed whitespace-pre-wrap" id="cp-external-notes"></p>
                     </div>
                 </div>
             </div>
 
-            <!-- Botón WhatsApp Responsivo -->
-            <a id="cp-whatsapp-fab" href="#" target="_blank" class="absolute bottom-8 right-6 md:right-12 w-14 h-14 md:w-16 md:h-16 bg-brand-orange text-white rounded-full flex items-center justify-center shadow-[0_8px_25px_rgba(255,85,0,0.4)] hover:scale-105 active:scale-90 transition-transform z-30">
+            <!-- Botón WhatsApp Floating -->
+            <a id="cp-whatsapp-fab" href="#" target="_blank" class="absolute bottom-8 right-6 md:right-12 w-14 h-14 md:w-16 md:h-16 bg-white text-black rounded-full flex items-center justify-center shadow-[0_5px_20px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-90 transition-transform z-30">
                 <svg class="w-7 h-7 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
             </a>
         </div>
 
-        <!-- ========================================== -->
-        <!-- MODAL: CREAR/EDITAR CLIENTE (DARK)         -->
-        <!-- ========================================== -->
+        <!-- MODAL: CREAR/EDITAR CLIENTE -->
         <div id="modal-overlay" class="absolute inset-0 bg-black/70 z-40 hidden transition-opacity opacity-0 backdrop-blur-sm" onclick="closeModals()"></div>
         
-        <div id="clientModal" class="absolute inset-x-0 bottom-0 bg-[#0a0a0a] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] z-50 h-[92%] bottom-sheet flex flex-col overflow-hidden rounded-t-[40px]">
+        <div id="clientModal" class="absolute inset-x-0 bottom-0 bg-[#050505] shadow-2xl z-50 h-[92%] bottom-sheet flex flex-col overflow-hidden border-t border-[#222]">
             
-            <div class="w-12 h-1.5 bg-[#333333] rounded-full mx-auto mt-4 mb-2 shrink-0 md:hidden"></div>
+            <div class="w-12 h-1.5 bg-[#333] rounded-full mx-auto mt-4 mb-2 shrink-0 md:hidden"></div>
 
-            <div class="flex justify-between items-center px-8 py-4 md:py-6 border-b border-[#222222] shrink-0">
-                <button onclick="closeClientModal()" class="text-zinc-400 hover:text-white font-bold text-base active:opacity-50 transition-colors">Cancelar</button>
-                <h3 class="font-black text-xl text-white" id="modal-title">Nuevo Proyecto</h3>
-                <button onclick="saveClient()" class="text-brand-orange hover:brightness-110 font-bold text-base active:opacity-50 transition-colors">Guardar</button>
+            <div class="flex justify-between items-center px-6 md:px-8 py-4 border-b border-[#1A1A1A] shrink-0">
+                <button onclick="closeClientModal()" class="text-zinc-500 hover:text-white font-bold text-sm active:scale-95 transition-all">Cancelar</button>
+                <h3 class="font-black text-lg text-white" id="modal-title">Nuevo Proyecto</h3>
+                <button onclick="saveClient()" class="text-brand-orange hover:text-white font-black text-sm active:scale-95 transition-all">Guardar</button>
             </div>
             
-            <div class="flex-1 overflow-y-auto px-6 py-6 md:px-10 md:py-8 space-y-6 md:space-y-8 pb-32 md:pb-12">
+            <div class="flex-1 overflow-y-auto px-5 py-6 md:px-10 md:py-8 space-y-6 md:space-y-8 pb-32 md:pb-12">
                 <input type="hidden" id="clientId">
                 
                 <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] space-y-4">
                     <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Detalles del Cliente</p>
-                    <input type="text" id="clientName" placeholder="Nombre Completo" class="w-full bg-[#1A1A1A] rounded-xl px-4 py-3.5 md:py-4 text-sm font-bold border border-[#333] focus:border-brand-orange focus:outline-none transition-colors placeholder-zinc-600 text-white">
+                    <input type="text" id="clientName" placeholder="Nombre de la marca o empresa" class="w-full bg-[#1A1A1A] rounded-xl px-4 py-3.5 md:py-4 text-sm font-bold border border-[#333] focus:border-brand-orange focus:outline-none transition-colors placeholder-zinc-600 text-white">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <input type="tel" id="clientPhone" placeholder="Teléfono / WhatsApp" class="w-full bg-[#1A1A1A] rounded-xl px-4 py-3.5 md:py-4 text-sm font-bold border border-[#333] focus:border-brand-orange focus:outline-none transition-colors placeholder-zinc-600 text-white">
                         <input type="email" id="clientEmail" placeholder="Correo Electrónico" class="w-full bg-[#1A1A1A] rounded-xl px-4 py-3.5 md:py-4 text-sm font-bold border border-[#333] focus:border-brand-orange focus:outline-none transition-colors placeholder-zinc-600 text-white">
@@ -395,50 +353,63 @@
                     </div>
                 </div>
 
+                <!-- SECCIÓN REGALO OCULTO (ADMIN) -->
+                <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] space-y-4">
+                    <p class="text-[10px] font-black text-brand-orange uppercase tracking-widest flex items-center">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
+                        Regalo Sorpresa (Streaming)
+                    </p>
+                    <input type="text" id="clientGiftPlatform" placeholder="Plataforma (ej. Netflix, Max...)" class="w-full bg-[#1A1A1A] rounded-xl px-4 py-3.5 md:py-4 text-sm font-bold border border-[#333] focus:border-brand-orange focus:outline-none transition-colors placeholder-zinc-600 text-white">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="email" id="clientGiftEmail" placeholder="Correo del acceso" class="w-full bg-[#1A1A1A] rounded-xl px-4 py-3.5 md:py-4 text-sm font-bold border border-[#333] focus:border-brand-orange focus:outline-none transition-colors placeholder-zinc-600 text-white">
+                        <input type="text" id="clientGiftPassword" placeholder="Contraseña" class="w-full bg-[#1A1A1A] rounded-xl px-4 py-3.5 md:py-4 text-sm font-bold border border-[#333] focus:border-brand-orange focus:outline-none transition-colors placeholder-zinc-600 text-white">
+                    </div>
+                    <p class="text-[10px] font-bold text-zinc-500">Deja los campos en blanco si no aplicarás este bono.</p>
+                </div>
+
                 <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222]">
                     <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-4">Archivos y Entregables</p>
                     <div id="assets-fields-container" class="space-y-3 mb-4"></div>
-                    <button type="button" onclick="addAssetField()" class="w-full py-3.5 bg-brand-orange text-white rounded-2xl text-sm font-black active:scale-95 transition-all hover:brightness-110">+ Añadir Enlace</button>
+                    <button type="button" onclick="addAssetField()" class="w-full py-3.5 bg-[#1A1A1A] hover:bg-[#222] text-white border border-[#333] rounded-2xl text-sm font-black active:scale-95 transition-all">+ Añadir Enlace</button>
                 </div>
 
                 <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] space-y-4">
                     <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Finanzas</p>
                     <div id="budget-fields-container" class="space-y-2"></div>
-                    <button type="button" onclick="addBudgetField()" class="w-full py-3 bg-[#1A1A1A] hover:bg-[#222] text-zinc-400 hover:text-brand-orange rounded-xl text-sm font-bold border border-[#333] hover:border-brand-orange border-dashed active:scale-95 transition-all">+ Añadir Concepto</button>
+                    <button type="button" onclick="addBudgetField()" class="w-full py-3 bg-[#1A1A1A] hover:bg-[#222] text-zinc-400 rounded-xl text-sm font-bold border border-[#333] border-dashed active:scale-95 transition-all">+ Añadir Concepto</button>
                     
-                    <div class="flex space-x-3 md:space-x-4 mt-4">
-                        <input type="number" id="clientPrice" placeholder="Total ($)" class="w-1/2 bg-[#1A1A1A] rounded-xl px-4 py-3.5 md:py-4 text-sm font-black border border-[#333] focus:border-brand-orange focus:outline-none text-white placeholder-zinc-600">
-                        <input type="number" id="clientPaid" placeholder="Pagado ($)" class="w-1/2 bg-emerald-500/10 rounded-xl px-4 py-3.5 md:py-4 text-sm font-black text-emerald-400 border border-emerald-500/20 focus:outline-none placeholder-emerald-700/50">
+                    <div class="flex space-x-3 md:space-x-4 mt-4 pt-4 border-t border-[#222]">
+                        <input type="number" id="clientPrice" placeholder="Total ($)" class="w-1/2 bg-[#1A1A1A] rounded-xl px-4 py-3.5 md:py-4 text-sm font-black border border-[#333] focus:border-brand-orange focus:outline-none transition-colors text-white placeholder-zinc-600">
+                        <input type="number" id="clientPaid" placeholder="Pagado ($)" class="w-1/2 bg-[#1A1A1A] rounded-xl px-4 py-3.5 md:py-4 text-sm font-black text-emerald-500 border border-[#333] focus:border-brand-orange focus:outline-none transition-colors placeholder-zinc-600">
                     </div>
                 </div>
 
                 <div class="bg-[#111111] rounded-3xl p-5 md:p-6 border border-[#222222] space-y-4">
                     <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Notas Adicionales</p>
-                    <textarea id="clientNotes" rows="3" placeholder="Notas internas (solo admin)..." class="w-full bg-[#1A1A1A] rounded-xl px-4 py-3.5 text-sm font-semibold border border-[#333] focus:border-brand-orange focus:outline-none whitespace-pre-wrap text-white placeholder-zinc-600"></textarea>
-                    <textarea id="clientExternalNotes" rows="3" placeholder="Mensaje visible para el cliente..." class="w-full bg-brand-orange/5 rounded-xl px-4 py-3.5 text-sm font-semibold border border-brand-orange/20 text-brand-orange focus:outline-none placeholder-brand-orange/40 whitespace-pre-wrap"></textarea>
+                    <textarea id="clientNotes" rows="3" placeholder="Notas internas (solo admin)..." class="w-full bg-[#1A1A1A] rounded-xl px-4 py-3.5 text-sm font-semibold border border-[#333] focus:border-brand-orange focus:outline-none whitespace-pre-wrap transition-colors text-white placeholder-zinc-600"></textarea>
+                    <textarea id="clientExternalNotes" rows="3" placeholder="Mensaje visible para el cliente..." class="w-full bg-brand-blue/10 rounded-xl px-4 py-3.5 text-sm font-semibold border border-brand-blue/20 text-brand-blue focus:outline-none placeholder-brand-blue/50 whitespace-pre-wrap transition-colors"></textarea>
                 </div>
             </div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- MODAL: PERFIL 360 DEL CLIENTE (DARK)       -->
-        <!-- ========================================== -->
-        <div id="profileModal" class="absolute inset-x-0 bottom-0 bg-[#0a0a0a] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] z-50 h-[92%] bottom-sheet flex flex-col overflow-hidden rounded-t-[40px]">
+        <!-- MODAL: PERFIL 360 -->
+        <div id="profileModal" class="absolute inset-x-0 bottom-0 bg-[#050505] shadow-2xl z-50 h-[92%] bottom-sheet flex flex-col overflow-hidden border-t border-[#222]">
             
             <div class="w-12 h-1.5 bg-[#333] rounded-full mx-auto mt-4 mb-2 shrink-0 md:hidden"></div>
 
-            <div class="flex justify-between items-center px-8 py-3 md:py-4 border-b border-[#222] shrink-0">
+            <div class="flex justify-between items-center px-6 md:px-8 py-3 md:py-4 border-b border-[#1A1A1A] shrink-0">
                 <span class="w-10"></span>
-                <h3 class="font-black text-xl text-white">Perfil del Proyecto</h3>
-                <button onclick="closeProfileModal()" class="w-10 h-10 flex items-center justify-end text-zinc-400 hover:text-white active:opacity-50 transition-colors">
+                <h3 class="font-black text-lg text-white">Perfil del Proyecto</h3>
+                <button onclick="closeProfileModal()" class="w-10 h-10 flex items-center justify-end text-zinc-500 hover:text-white active:scale-90 transition-all">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             
-            <div class="flex-1 overflow-y-auto px-6 md:px-10 py-6 md:py-8 space-y-6 md:space-y-8 pb-32 md:pb-12">
+            <div class="flex-1 overflow-y-auto px-5 py-6 md:px-10 md:py-8 space-y-6 md:space-y-8 pb-32 md:pb-12">
                 
-                <div class="bg-[#111111] border border-[#222222] rounded-3xl p-6 md:p-8 text-white flex items-center relative overflow-hidden">
-                    <div class="w-14 h-14 md:w-16 md:h-16 bg-brand-orange rounded-full flex items-center justify-center text-white text-xl md:text-2xl font-black mr-4 md:mr-6 shadow-md z-10" id="profileInitials"></div>
+                <div class="bg-[#111] rounded-3xl p-6 md:p-8 text-white flex items-center border border-[#222] relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-32 md:w-48 h-32 md:h-48 bg-brand-orange/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-white text-black rounded-full flex items-center justify-center text-xl md:text-2xl font-black mr-4 md:mr-6 z-10" id="profileInitials"></div>
                     <div class="z-10 w-full overflow-hidden">
                         <h2 class="text-xl md:text-2xl font-black truncate w-full pr-2" id="profileName">Nombre</h2>
                         <p class="text-sm md:text-base font-semibold text-zinc-400 truncate w-full pr-2" id="profileService">Servicio</p>
@@ -447,53 +418,53 @@
 
                 <div class="flex space-x-3 md:space-x-4" id="profileActions"></div>
 
-                <div class="bg-[#111111] border border-[#222222] rounded-3xl p-5 md:p-6 flex justify-between items-center">
+                <div class="bg-[#111] rounded-3xl p-5 md:p-6 border border-[#222] flex justify-between items-center">
                     <div>
-                        <p class="text-[10px] md:text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1">PIN de Bóveda</p>
-                        <div class="flex items-center space-x-3">
-                            <p class="text-2xl md:text-3xl font-black text-white tracking-widest" id="profilePINDisplay">----</p>
-                            <button onclick="copyClientPIN()" id="btn-copy-pin" class="text-zinc-500 hover:text-brand-orange active:scale-90 transition-all cursor-pointer" title="Copiar PIN">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        <p class="text-[10px] md:text-xs font-black text-zinc-500 uppercase tracking-widest mb-1">PIN de Bóveda</p>
+                        <div class="flex items-center">
+                            <p class="text-2xl md:text-3xl font-black text-white mr-3 tracking-widest" id="profilePINDisplay">----</p>
+                            <button onclick="copyPINToClipboard(this)" class="text-zinc-500 hover:text-white active:scale-90 transition-transform" id="btn-copy-pin">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                             </button>
                         </div>
                     </div>
-                    <button onclick="generateClientPIN()" class="bg-[#1A1A1A] border border-[#333] hover:border-brand-orange text-white text-xs md:text-sm font-black px-4 md:px-6 py-2.5 md:py-3 rounded-xl active:scale-95 transition-all">Generar</button>
+                    <button onclick="generateClientPIN()" class="bg-brand-orange hover:brightness-110 text-white text-xs md:text-sm font-black px-4 md:px-6 py-2.5 md:py-3 rounded-xl shadow-md active:scale-95 transition-all">Regenerar</button>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 md:gap-6">
-                    <div class="bg-[#111111] border border-[#222222] rounded-3xl p-5 md:p-6">
-                        <p class="text-[10px] md:text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1.5">Estado</p>
+                    <div class="bg-[#111] rounded-3xl p-5 md:p-6 border border-[#222]">
+                        <p class="text-[10px] md:text-xs font-black text-zinc-500 uppercase tracking-widest mb-1.5">Estado</p>
                         <p class="text-sm md:text-base font-bold text-white" id="profileStatusBadge">Estado</p>
                     </div>
-                    <div class="bg-[#111111] border border-[#222222] rounded-3xl p-5 md:p-6">
-                        <p class="text-[10px] md:text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1.5">Fecha de Entrega</p>
+                    <div class="bg-[#111] rounded-3xl p-5 md:p-6 border border-[#222]">
+                        <p class="text-[10px] md:text-xs font-black text-zinc-500 uppercase tracking-widest mb-1.5">Fecha de Entrega</p>
                         <p class="text-sm md:text-base font-bold text-white" id="profileDeadline">Fecha</p>
                     </div>
                 </div>
 
-                <div class="bg-[#111111] border border-[#222222] rounded-3xl p-6 md:p-8">
-                    <p class="text-[10px] md:text-xs font-bold text-zinc-500 uppercase tracking-widest mb-4 md:mb-6">Resumen Financiero</p>
-                    <div class="flex justify-between text-sm md:text-base mb-2 font-bold">
+                <div class="bg-[#111] rounded-3xl p-6 md:p-8 border border-[#222]">
+                    <p class="text-[10px] md:text-xs font-black text-zinc-500 uppercase tracking-widest mb-4 md:mb-6">Resumen Financiero</p>
+                    <div class="flex justify-between text-sm md:text-base mb-3 font-bold">
                         <span class="text-zinc-400">Total: <span id="profileTotal" class="text-white"></span></span>
-                        <span class="text-red-400">Deuda: <span id="profileDebt"></span></span>
+                        <span class="text-red-500">Deuda: <span id="profileDebt"></span></span>
                     </div>
                     <div class="w-full bg-[#222] rounded-full h-2 md:h-3 mb-2 overflow-hidden">
                         <div id="profileProgress" class="bg-brand-orange h-2 md:h-3 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
                     </div>
                     
-                    <div id="profile-budget-container" class="mt-4 md:mt-6 pt-4 md:pt-6 border-t border-[#222] hidden">
+                    <div id="profile-budget-container" class="mt-5 md:mt-6 pt-5 md:pt-6 border-t border-[#222] hidden">
                         <div id="profile-budget-list" class="space-y-2 md:space-y-3"></div>
                     </div>
                 </div>
 
-                <div id="profileInternalNotesContainer" class="bg-[#1A1A1A] border border-[#333] p-5 md:p-6 rounded-2xl w-full hidden mt-4">
-                    <p class="text-[10px] md:text-xs text-zinc-500 font-bold uppercase mb-1 md:mb-2 tracking-widest">Notas Internas</p>
-                    <p class="text-sm md:text-base text-zinc-300 font-semibold select-text leading-relaxed whitespace-pre-wrap" id="profileInternalNotes"></p>
+                <div id="profileInternalNotesContainer" class="bg-amber-500/10 p-5 md:p-6 rounded-3xl border border-amber-500/20 w-full hidden mt-4">
+                    <p class="text-[10px] md:text-xs text-amber-500 font-black uppercase mb-2 tracking-widest">Notas Internas</p>
+                    <p class="text-sm md:text-base text-amber-100/80 font-medium select-text leading-relaxed whitespace-pre-wrap" id="profileInternalNotes"></p>
                 </div>
 
-                <div id="profileExternalNotesContainer" class="bg-brand-orange/10 border border-brand-orange/20 p-5 md:p-6 rounded-2xl w-full hidden mt-4">
-                    <p class="text-[10px] md:text-xs text-brand-orange font-bold uppercase mb-1 md:mb-2 tracking-widest">Mensaje al Cliente</p>
-                    <p class="text-sm md:text-base text-white font-semibold select-text leading-relaxed whitespace-pre-wrap" id="profileExternalNotes"></p>
+                <div id="profileExternalNotesContainer" class="bg-brand-blue/10 p-5 md:p-6 rounded-3xl border border-brand-blue/20 w-full hidden mt-4">
+                    <p class="text-[10px] md:text-xs text-brand-blue font-black uppercase mb-2 tracking-widest">Mensaje al Cliente</p>
+                    <p class="text-sm md:text-base text-brand-blue/80 font-medium select-text leading-relaxed whitespace-pre-wrap" id="profileExternalNotes"></p>
                 </div>
 
                 <button onclick="deleteCurrentClient()" class="w-full py-4 md:py-5 bg-[#111] hover:bg-red-500/10 text-red-500 text-sm md:text-base font-black rounded-2xl md:rounded-3xl border border-[#222] hover:border-red-500/30 active:scale-95 transition-all mt-6">Eliminar Proyecto</button>
@@ -502,9 +473,6 @@
 
     </div>
 
-    <!-- ========================================== -->
-    <!-- SCRIPT FIREBASE Y LÓGICA DE LA APP         -->
-    <!-- ========================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -529,10 +497,7 @@
         let dbReady = false;
         let globalUnsubscribe = null;
 
-        signInAnonymously(auth).then(() => { dbReady = true; }).catch(err => { console.error("Fallo Auth:", err); });
-        
-        // Configurar helpers básicos
-        document.getElementById('current-date').textContent = "Gestiona tus proyectos y clientes.";
+        signInAnonymously(auth).then(() => { dbReady = true; }).catch(err => {});
 
         async function hashPassword(password) {
             try {
@@ -570,7 +535,7 @@
             return (savedHash && inputHash === savedHash) || (!savedHash && inputHash === defaultHash);
         }
 
-        async function handleAuth() {
+        window.handleAuth = async function() {
             const input = document.getElementById('auth-password');
             const btn = document.getElementById('auth-btn');
             const errorMsg = document.getElementById('auth-error');
@@ -604,9 +569,9 @@
             errorMsg.textContent = "Contraseña o PIN incorrecto"; errorMsg.classList.remove('hidden');
             setTimeout(() => { errorMsg.classList.add('hidden'); }, 2500);
             input.value = '';
-        }
+        };
 
-        async function changePassword() {
+        window.changePassword = async function() {
             const oldInput = document.getElementById('old-pwd').value; 
             const newInput = document.getElementById('new-pwd').value; 
             const msg = document.getElementById('pwd-msg');
@@ -615,13 +580,13 @@
             const isAdmin = await verifyAdminAccess(oldInput);
             if (isAdmin) {
                 localStorage.setItem('eqbito360_auth', await hashPassword(newInput));
-                msg.textContent = "Contraseña actualizada"; msg.className = "text-sm md:text-base mt-3 font-bold text-emerald-400 block";
+                msg.textContent = "Contraseña actualizada"; msg.className = "text-sm md:text-base mt-3 font-black text-emerald-500 block";
                 document.getElementById('old-pwd').value = ''; document.getElementById('new-pwd').value = '';
             } else { 
-                msg.textContent = "Contraseña actual incorrecta"; msg.className = "text-sm md:text-base mt-3 font-bold text-red-400 block"; 
+                msg.textContent = "Contraseña actual incorrecta"; msg.className = "text-sm md:text-base mt-3 font-black text-red-500 block"; 
             }
             setTimeout(() => msg.classList.add('hidden'), 2500);
-        }
+        };
 
         function unlockApp(mode, clientData = null) {
             document.getElementById('auth-screen').classList.add('opacity-0', 'pointer-events-none');
@@ -654,7 +619,7 @@
             }, 300);
         }
 
-        function lockApp() {
+        window.lockApp = function() {
             if (globalUnsubscribe) { globalUnsubscribe(); globalUnsubscribe = null; }
             clients = [];
             document.getElementById('auth-screen').classList.remove('hidden');
@@ -663,26 +628,29 @@
                 document.getElementById('client-portal').classList.add('hidden');
                 document.getElementById('auth-screen').classList.remove('opacity-0', 'pointer-events-none');
             }, 50);
-        }
+        };
 
-        function switchTab(tabId) {
+        window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
             
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 const iconContainer = btn.querySelector('.nav-icon-container');
+                const textEl = btn.querySelector('.nav-text');
                 if (btn.dataset.tab === tabId) {
-                    iconContainer.className = "w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container text-brand-orange transition-colors active:scale-95";
+                    iconContainer.className = "w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container bg-brand-orange text-white transition-all active:scale-95 shadow-[0_0_15px_rgba(255,85,0,0.3)]";
+                    textEl.className = "text-[10px] mt-1.5 font-bold nav-text text-brand-orange tracking-widest uppercase";
                 } else {
-                    iconContainer.className = "w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container text-zinc-600 hover:text-zinc-400 transition-colors active:scale-95";
+                    iconContainer.className = "w-10 h-10 rounded-xl flex items-center justify-center nav-icon-container text-zinc-500 group-hover:text-zinc-300 transition-colors active:scale-95";
+                    textEl.className = "text-[10px] mt-1.5 font-bold nav-text text-zinc-500 tracking-widest uppercase";
                 }
             });
-        }
+        };
 
-        function setFilter(filter) {
+        window.setFilter = function(filter) {
             currentFilter = filter;
             renderClients();
-        }
+        };
 
         function renderClientPortal(c) {
             const firstName = c.name.split(' ')[0];
@@ -698,7 +666,7 @@
             if (isCompleted) {
                 if (c.warranty && c.warranty.trim() !== '') {
                     const wDate = new Date(c.warranty + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
-                    deadlineWarranty.innerHTML = `Garantía válida hasta: <strong>${wDate}</strong>`;
+                    deadlineWarranty.innerHTML = `<svg class="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg> Garantía válida hasta: <strong>${wDate}</strong>`;
                     datesContainer.classList.remove('hidden');
                 } else {
                     datesContainer.classList.add('hidden');
@@ -706,7 +674,7 @@
             } else {
                 if (c.deadline && c.deadline.trim() !== '') {
                     const dDate = new Date(c.deadline + 'T12:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
-                    deadlineWarranty.innerHTML = `Entrega estimada: <strong>${dDate}</strong>`;
+                    deadlineWarranty.innerHTML = `<svg class="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Entrega estimada: <strong>${dDate}</strong>`;
                     datesContainer.classList.remove('hidden');
                 } else {
                     datesContainer.classList.add('hidden');
@@ -724,6 +692,62 @@
             const waMsg = encodeURIComponent(`Hola EQB STUDIO, soy ${c.name}. Tengo una consulta sobre mi proyecto.`);
             document.getElementById('cp-whatsapp-fab').href = `https://wa.me/573021192800?text=${waMsg}`;
 
+            // Lógica Cofre / Regalo Streaming
+            const giftContainer = document.getElementById('cp-gift-container');
+            if (c.giftEmail && c.giftPassword) {
+                const platform = c.giftPlatform || 'Plataforma Premium';
+                giftContainer.innerHTML = `
+                    <div class="bg-[#111] border border-brand-orange/30 rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-[0_8px_30px_rgba(255,85,0,0.15)]">
+                        <div class="absolute right-0 top-0 w-32 h-32 bg-brand-orange/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl pointer-events-none"></div>
+                        
+                        <div id="gift-locked" class="flex flex-col items-center justify-center text-center relative z-10">
+                            <div class="w-14 h-14 bg-brand-orange/20 text-brand-orange rounded-full flex items-center justify-center mb-4">
+                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"></path></svg>
+                            </div>
+                            <p class="text-[10px] font-black text-brand-orange uppercase tracking-widest mb-1 flex items-center">Tienes un Regalo Oculto</p>
+                            <h4 class="text-xl md:text-2xl font-black text-white mb-2 leading-tight">Acceso a ${escapeHTML(platform)}</h4>
+                            <p class="text-sm text-zinc-400 mb-6 font-medium">Para revelar tu regalo y obtener las credenciales, síguenos en Instagram.</p>
+                            
+                            <button onclick="revealGift('${escapeHTML(c.giftEmail)}', '${escapeHTML(c.giftPassword)}', '${escapeHTML(platform)}')" class="bg-brand-orange text-white font-black px-6 py-3.5 rounded-2xl active:scale-95 transition-transform shadow-[0_5px_15px_rgba(255,85,0,0.3)] hover:brightness-110 flex items-center justify-center w-full md:w-auto">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                                Seguir para revelar
+                            </button>
+                        </div>
+
+                        <div id="gift-unlocked" class="hidden flex-col relative z-10 w-full fade-in">
+                            <div class="flex items-center mb-6">
+                                <div class="w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl flex items-center justify-center mr-4">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-0.5">Regalo Desbloqueado</p>
+                                    <h4 class="text-lg md:text-xl font-black text-white leading-tight">Cuenta de ${escapeHTML(platform)}</h4>
+                                </div>
+                            </div>
+                            
+                            <div class="w-full bg-[#1A1A1A] rounded-2xl border border-[#333] p-4 mb-3 flex justify-between items-center">
+                                <div class="overflow-hidden flex-1 pr-3">
+                                    <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Correo</p>
+                                    <p class="text-white font-bold truncate text-sm md:text-base">${escapeHTML(c.giftEmail)}</p>
+                                </div>
+                                <button onclick="copyGiftData('${escapeHTML(c.giftEmail)}', this)" class="text-zinc-400 hover:text-white p-2 active:scale-90 transition-transform"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button>
+                            </div>
+                            
+                            <div class="w-full bg-[#1A1A1A] rounded-2xl border border-[#333] p-4 flex justify-between items-center">
+                                <div class="overflow-hidden flex-1 pr-3">
+                                    <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Contraseña</p>
+                                    <p class="text-white font-bold truncate text-sm md:text-base">${escapeHTML(c.giftPassword)}</p>
+                                </div>
+                                <button onclick="copyGiftData('${escapeHTML(c.giftPassword)}', this)" class="text-zinc-400 hover:text-white p-2 active:scale-90 transition-transform"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                giftContainer.classList.remove('hidden');
+            } else {
+                giftContainer.classList.add('hidden');
+            }
+
             const assetsListEl = document.getElementById('cp-assets-list');
             assetsListEl.innerHTML = '';
             let parsedAssets = Array.isArray(c.assets) ? c.assets : [];
@@ -731,15 +755,15 @@
             if (parsedAssets.length > 0) {
                 parsedAssets.forEach((asset) => {
                     assetsListEl.insertAdjacentHTML('beforeend', `
-                        <a href="${encodeURI(asset.url)}" target="_blank" class="bg-[#111] border border-[#222] rounded-2xl md:rounded-3xl p-4 md:p-5 flex items-center active:scale-95 transition-transform hover:border-brand-orange group">
-                            <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mr-4 bg-[#1A1A1A] text-brand-orange group-hover:bg-brand-orange group-hover:text-white transition-colors">
+                        <a href="${encodeURI(asset.url)}" target="_blank" class="bg-[#111] rounded-2xl md:rounded-3xl p-4 md:p-5 border border-[#222] flex items-center active:scale-95 transition-all hover:border-brand-orange/50 group">
+                            <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mr-4 bg-brand-orange/10 text-brand-orange group-hover:bg-brand-orange group-hover:text-white transition-colors">
                                 <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                             </div>
                             <div class="flex-1 overflow-hidden">
                                 <h4 class="font-black text-white truncate text-base md:text-lg">${escapeHTML(asset.name)}</h4>
                                 <p class="text-[10px] md:text-xs font-bold text-zinc-500 uppercase tracking-widest mt-0.5">Tocar para abrir</p>
                             </div>
-                            <div class="text-zinc-600 group-hover:text-brand-orange transition-colors">
+                            <div class="text-zinc-500 group-hover:text-brand-orange transition-colors">
                                 <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
                             </div>
                         </a>
@@ -750,7 +774,7 @@
             }
         }
 
-        function renderClients() {
+        window.renderClients = function() {
             const activeClients = clients.filter(c => c.status && !c.status.includes('Finalizado') && c.status !== 'Pausado');
             let totalPaid = 0; let totalPending = 0;
             
@@ -764,13 +788,13 @@
             document.getElementById('stat-paid').textContent = formatMoney(totalPaid); 
             document.getElementById('stat-pending').textContent = formatMoney(totalPending);
             
-            const query = escapeHTML(document.getElementById('searchInput').value.toLowerCase());
+            const queryTxt = escapeHTML(document.getElementById('searchInput').value.toLowerCase());
             const list = document.getElementById('clientsList'); 
             const empty = document.getElementById('emptyState');
             list.innerHTML = '';
             
             const filtered = clients.filter(c => {
-                const matchSearch = c.name.toLowerCase().includes(query) || (c.service && c.service.toLowerCase().includes(query));
+                const matchSearch = c.name.toLowerCase().includes(queryTxt) || (c.service && c.service.toLowerCase().includes(queryTxt));
                 let matchFilter = true;
                 if (currentFilter === 'active') matchFilter = c.status && !c.status.includes('Finalizado');
                 else if (currentFilter === 'debt') matchFilter = ((parseFloat(c.price) || 0) - (parseFloat(c.paid) || 0)) > 0;
@@ -789,8 +813,8 @@
                     const pending = (parseFloat(c.price) || 0) - (parseFloat(c.paid) || 0);
                     
                     list.insertAdjacentHTML('beforeend', `
-                        <div class="bg-[#111111] border border-[#222222] rounded-3xl p-4 md:p-5 flex items-center cursor-pointer active:scale-95 hover:border-brand-orange transition-all group" onclick="openProfileModal('${escapeHTML(c.id)}')">
-                            <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center mr-4 bg-[#1A1A1A] text-zinc-500 group-hover:text-brand-orange transition-colors">
+                        <div class="bg-[#111] rounded-3xl p-4 md:p-5 border border-[#222] flex items-center cursor-pointer active:scale-95 hover:border-brand-orange/50 transition-all group" onclick="openProfileModal('${escapeHTML(c.id)}')">
+                            <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center mr-4 bg-zinc-800 text-zinc-400 group-hover:bg-brand-orange group-hover:text-white transition-colors">
                                 <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                             </div>
                             <div class="flex-1 overflow-hidden">
@@ -798,164 +822,19 @@
                                 <p class="text-[11px] md:text-xs font-bold text-zinc-500 truncate uppercase tracking-widest">${escapeHTML(c.status)}</p>
                             </div>
                             <div class="text-right pl-2">
-                                <span class="text-[10px] md:text-xs font-black uppercase tracking-widest px-2.5 py-1 rounded-md ${pending > 0 ? 'bg-red-500/10 text-red-400' : 'bg-emerald-500/10 text-emerald-400'}">${pending > 0 ? 'Deuda' : 'Pagado'}</span>
+                                <span class="text-xs md:text-sm font-black ${pending > 0 ? 'text-red-500' : 'text-emerald-500'}">${pending > 0 ? 'Deuda' : 'Pagado'}</span>
                             </div>
                         </div>
                     `);
                 });
             }
-        }
+        };
 
-        function addBudgetField(concept = '', amount = '') {
-            document.getElementById('budget-fields-container').insertAdjacentHTML('beforeend', `
-                <div class="budget-item flex gap-2 items-center bg-[#1A1A1A] p-2 md:p-3 rounded-2xl border border-[#333]">
-                    <input type="text" placeholder="Concepto" value="${escapeHTML(concept)}" class="budget-concept flex-1 px-3 py-2 text-sm font-bold bg-transparent text-white focus:outline-none">
-                    <input type="number" placeholder="$" value="${amount}" oninput="calculateTotalBudget()" class="budget-amount w-24 px-2 py-2 text-sm font-black text-brand-orange bg-[#111] border border-[#333] rounded-xl focus:outline-none text-center" min="0">
-                    <button type="button" onclick="this.parentElement.remove(); calculateTotalBudget();" class="text-red-400 p-2 hover:bg-red-500/10 rounded-xl transition-colors active:scale-95">
-                        <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
-                </div>
-            `);
-            calculateTotalBudget();
-        }
+        window.closeModals = function() { window.closeClientModal(); window.closeProfileModal(); };
 
-        function calculateTotalBudget() {
-            const items = document.querySelectorAll('.budget-item');
-            const priceInput = document.getElementById('clientPrice');
-            if (items.length > 0) {
-                let total = 0; 
-                items.forEach(item => total += parseFloat(item.querySelector('.budget-amount').value) || 0);
-                priceInput.value = total; priceInput.readOnly = true;
-            } else { 
-                priceInput.readOnly = false; 
-            }
-        }
-
-        function getBudgetFromForm() {
-            const budgetArray = [];
-            document.querySelectorAll('.budget-item').forEach(item => {
-                const concept = item.querySelector('.budget-concept').value.trim();
-                const amount = parseFloat(item.querySelector('.budget-amount').value) || 0;
-                if (concept || amount > 0) budgetArray.push({ concept: concept || 'Item', amount: amount });
-            });
-            return budgetArray;
-        }
-
-        function addAssetField(name = '', url = '') {
-            document.getElementById('assets-fields-container').insertAdjacentHTML('beforeend', `
-                <div class="asset-item flex flex-col gap-3 bg-[#1A1A1A] p-4 md:p-5 rounded-3xl border border-[#333] relative group hover:border-brand-orange transition-colors">
-                    <button type="button" onclick="this.parentElement.remove()" class="absolute top-3 md:top-4 right-3 md:right-4 text-red-400 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-[#111] border border-[#333] rounded-xl hover:border-red-400 active:scale-90 transition-all">
-                        <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
-                    <input type="text" placeholder="Nombre del archivo (ej. Logo)" value="${escapeHTML(name)}" class="asset-name w-full pr-12 md:pr-16 px-4 py-3.5 md:py-4 text-sm font-bold rounded-xl md:rounded-2xl bg-[#111] border border-[#333] focus:outline-none focus:border-brand-orange text-white transition-colors">
-                    <input type="url" placeholder="URL del enlace (Drive, etc.)" value="${escapeHTML(url)}" class="asset-url w-full px-4 py-3.5 md:py-4 text-sm font-semibold rounded-xl md:rounded-2xl bg-[#111] border border-[#333] focus:outline-none focus:border-brand-orange text-brand-orange transition-colors">
-                </div>
-            `);
-        }
-
-        function getAssetsFromForm() {
-            const assetsArray = [];
-            document.querySelectorAll('.asset-item').forEach(item => {
-                const url = item.querySelector('.asset-url').value.trim();
-                if (url) assetsArray.push({ name: item.querySelector('.asset-name').value.trim() || 'Archivo', url: url });
-            });
-            return assetsArray;
-        }
-
-        async function saveClient() {
-            const name = document.getElementById('clientName').value.trim();
-            if (!name) return;
-
-            const id = document.getElementById('clientId').value;
-            const existingClient = clients.find(c => c.id === id);
-            const budgetData = getBudgetFromForm();
-            const autoService = budgetData.length > 0 ? budgetData.map(b => b.concept).join(' + ') : 'Bóveda Segura';
-
-            const newClient = {
-                id: id || generateId(),
-                name: escapeHTML(name), 
-                phone: escapeHTML(document.getElementById('clientPhone').value.trim()), 
-                email: escapeHTML(document.getElementById('clientEmail').value.trim()),
-                service: autoService, 
-                status: escapeHTML(document.getElementById('clientStatus').value),
-                deadline: escapeHTML(document.getElementById('clientDeadline').value), 
-                warranty: escapeHTML(document.getElementById('clientWarranty').value.trim()),
-                assets: getAssetsFromForm(), 
-                budget: budgetData,
-                price: parseFloat(document.getElementById('clientPrice').value) || 0, 
-                paid: parseFloat(document.getElementById('clientPaid').value) || 0,
-                notes: escapeHTML(document.getElementById('clientNotes').value), 
-                externalNotes: escapeHTML(document.getElementById('clientExternalNotes').value),
-                clientCode: existingClient ? existingClient.clientCode : null, 
-                createdAt: existingClient ? existingClient.createdAt : new Date().toISOString()
-            };
-
-            if (id) { 
-                const idx = clients.findIndex(c => c.id === id); 
-                if (idx > -1) clients[idx] = newClient; 
-            } else {
-                clients.unshift(newClient);
-            }
-
-            renderClients(); 
-            closeClientModal(); 
-            if(currentProfileId === newClient.id) openProfileModal(newClient.id);
-            try { await setDoc(doc(db, "proyectos_eqbito", newClient.id), newClient); } catch (e) {}
-        }
-
-        async function deleteCurrentClient() {
-            if (!currentProfileId) return;
-            if (confirm('¿Eliminar este proyecto permanentemente?')) {
-                clients = clients.filter(c => c.id !== currentProfileId);
-                renderClients(); 
-                closeProfileModal();
-                try { await deleteDoc(doc(db, "proyectos_eqbito", currentProfileId)); } catch(e) {}
-            }
-        }
-
-        async function generateClientPIN() {
-            if(!currentProfileId) return;
-            const c = clients.find(x => x.id === currentProfileId);
-            if(c) {
-                c.clientCode = Math.floor(100000 + Math.random() * 900000).toString();
-                document.getElementById('profilePINDisplay').textContent = c.clientCode;
-                try { await setDoc(doc(db, "proyectos_eqbito", c.id), c); } catch(e) {}
-            }
-        }
-
-        function copyClientPIN() {
-            const pinText = document.getElementById('profilePINDisplay').textContent;
-            if (pinText && pinText !== '----') {
-                const tempInput = document.createElement("input");
-                tempInput.value = pinText;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand("copy");
-                document.body.removeChild(tempInput);
-
-                const btn = document.getElementById('btn-copy-pin');
-                const originalHTML = btn.innerHTML;
-                btn.innerHTML = `<svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>`;
-                setTimeout(() => { btn.innerHTML = originalHTML; }, 2000);
-            }
-        }
-
-        function exportData() {
-            if(clients.length === 0) return;
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clients, null, 2));
-            const anchor = document.createElement('a'); 
-            anchor.setAttribute("href", dataStr); 
-            anchor.setAttribute("download", `eqbstudio_crm.json`);
-            document.body.appendChild(anchor); 
-            anchor.click(); 
-            anchor.remove();
-        }
-
-        function closeModals() { closeClientModal(); closeProfileModal(); }
-
-        function openClientModal(id = null) {
+        window.openClientModal = function(id = null) {
             document.getElementById('profileModal').classList.remove('active');
-            ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientWarranty', 'clientPrice', 'clientPaid', 'clientNotes', 'clientExternalNotes'].forEach(id => document.getElementById(id).value = '');
+            ['clientId', 'clientName', 'clientPhone', 'clientEmail', 'clientDeadline', 'clientWarranty', 'clientPrice', 'clientPaid', 'clientNotes', 'clientExternalNotes', 'clientGiftPlatform', 'clientGiftEmail', 'clientGiftPassword'].forEach(i => document.getElementById(i).value = '');
             
             document.getElementById('clientStatus').value = 'Cotizando';
             document.getElementById('modal-title').textContent = 'Nuevo Proyecto';
@@ -978,26 +857,30 @@
                     document.getElementById('clientNotes').value = c.notes || ''; 
                     document.getElementById('clientExternalNotes').value = c.externalNotes || '';
                     
-                    if (Array.isArray(c.assets)) c.assets.forEach(a => addAssetField(a.name, a.url));
-                    if (Array.isArray(c.budget)) c.budget.forEach(b => addBudgetField(b.concept, b.amount));
+                    document.getElementById('clientGiftPlatform').value = c.giftPlatform || '';
+                    document.getElementById('clientGiftEmail').value = c.giftEmail || '';
+                    document.getElementById('clientGiftPassword').value = c.giftPassword || '';
+
+                    if (Array.isArray(c.assets)) c.assets.forEach(a => window.addAssetField(a.name, a.url));
+                    if (Array.isArray(c.budget)) c.budget.forEach(b => window.addBudgetField(b.concept, b.amount));
                 }
             }
-            if (document.getElementById('assets-fields-container').children.length === 0) addAssetField(); 
-            calculateTotalBudget();
+            if (document.getElementById('assets-fields-container').children.length === 0) window.addAssetField(); 
+            window.calculateTotalBudget();
             
             document.getElementById('modal-overlay').classList.remove('hidden');
             setTimeout(() => { document.getElementById('modal-overlay').classList.remove('opacity-0'); document.getElementById('clientModal').classList.add('active'); }, 10);
-        }
+        };
 
-        function closeClientModal() {
+        window.closeClientModal = function() {
             document.getElementById('clientModal').classList.remove('active');
             if(!document.getElementById('profileModal').classList.contains('active')) {
                 document.getElementById('modal-overlay').classList.add('opacity-0');
-                setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 300);
+                setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 350);
             }
-        }
+        };
 
-        function openProfileModal(id) {
+        window.openProfileModal = function(id) {
             const c = clients.find(x => x.id === escapeHTML(id)); if (!c) return;
             currentProfileId = escapeHTML(id);
 
@@ -1017,7 +900,7 @@
             const pBudgetList = document.getElementById('profile-budget-list');
             if (c.budget && c.budget.length > 0) {
                 pBudgetCont.classList.remove('hidden'); 
-                pBudgetList.innerHTML = c.budget.map(item => `<div class="flex justify-between items-center text-xs md:text-sm"><span class="font-bold text-zinc-500">${escapeHTML(item.concept)}</span><span class="font-black text-white">${formatMoney(item.amount)}</span></div>`).join('');
+                pBudgetList.innerHTML = c.budget.map(item => `<div class="flex justify-between items-center text-xs md:text-sm"><span class="font-bold text-zinc-400">${escapeHTML(item.concept)}</span><span class="font-black text-white">${formatMoney(item.amount)}</span></div>`).join('');
             } else { 
                 pBudgetCont.classList.add('hidden'); 
             }
@@ -1026,13 +909,13 @@
             if (c.phone) {
                 const msg = encodeURIComponent(`Hola ${c.name}. Accede a tu bóveda: http://eqbito.vercel.app | PIN: ${c.clientCode || ''}`);
                 actionsHTML += `
-                <a href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${msg}" target="_blank" class="flex-1 flex items-center justify-center bg-brand-orange/10 hover:bg-brand-orange/20 text-brand-orange py-3 md:py-4 rounded-2xl font-black text-sm md:text-base active:scale-95 transition-colors">
-                    <svg class="w-4 h-4 md:w-5 md:h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                <a href="https://wa.me/${c.phone.replace(/\D/g,'')}?text=${msg}" target="_blank" class="flex-1 flex items-center justify-center bg-[#1A1A1A] hover:bg-[#222] border border-[#333] text-white py-3 md:py-4 rounded-2xl font-black text-sm md:text-base active:scale-95 transition-all">
+                    <svg class="w-4 h-4 md:w-5 md:h-5 mr-2 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
                     Mensaje
                 </a>`;
             }
             actionsHTML += `
-            <button onclick="openClientModal('${c.id}')" class="flex-1 flex items-center justify-center bg-[#1A1A1A] hover:bg-[#222222] text-zinc-300 py-3 md:py-4 rounded-2xl font-black text-sm md:text-base active:scale-95 transition-colors border border-[#333]">
+            <button onclick="openClientModal('${c.id}')" class="flex-1 flex items-center justify-center bg-brand-orange hover:brightness-110 text-white py-3 md:py-4 rounded-2xl font-black text-sm md:text-base active:scale-95 transition-all">
                 <svg class="w-4 h-4 md:w-5 md:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                 Editar
             </button>`;
@@ -1043,25 +926,183 @@
 
             document.getElementById('modal-overlay').classList.remove('hidden');
             setTimeout(() => { document.getElementById('modal-overlay').classList.remove('opacity-0'); document.getElementById('profileModal').classList.add('active'); }, 10);
-        }
+        };
 
-        function closeProfileModal() {
+        window.closeProfileModal = function() {
             document.getElementById('profileModal').classList.remove('active'); 
             currentProfileId = null;
             if(!document.getElementById('clientModal').classList.contains('active')) {
                 document.getElementById('modal-overlay').classList.add('opacity-0');
-                setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 300);
+                setTimeout(() => document.getElementById('modal-overlay').classList.add('hidden'), 350);
             }
-        }
+        };
 
-        // Exportación global VITAL para el HTML
-        Object.assign(window, { 
-            handleAuth, lockApp, switchTab, 
-            openClientModal, closeClientModal, saveClient, deleteCurrentClient, 
-            exportData, generateClientPIN, copyClientPIN, openProfileModal, closeProfileModal, 
-            setFilter, renderClients, changePassword, addAssetField, 
-            addBudgetField, calculateTotalBudget 
-        });
+        window.addBudgetField = function(concept = '', amount = '') {
+            document.getElementById('budget-fields-container').insertAdjacentHTML('beforeend', `
+                <div class="budget-item flex gap-2 items-center bg-[#1A1A1A] p-2 md:p-3 rounded-2xl border border-[#333]">
+                    <input type="text" placeholder="Concepto" value="${escapeHTML(concept)}" class="budget-concept flex-1 px-3 py-2 text-sm font-bold text-white bg-transparent focus:outline-none focus:bg-[#222] rounded-xl transition-colors">
+                    <input type="number" placeholder="$" value="${amount}" oninput="calculateTotalBudget()" class="budget-amount w-24 px-2 py-2 text-sm font-black text-brand-orange bg-[#111] border border-[#222] rounded-xl focus:outline-none text-center" min="0">
+                    <button type="button" onclick="this.parentElement.remove(); calculateTotalBudget();" class="text-zinc-500 p-2 hover:bg-red-500/10 hover:text-red-500 rounded-xl transition-colors active:scale-95">
+                        <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            `);
+            window.calculateTotalBudget();
+        };
+
+        window.calculateTotalBudget = function() {
+            const items = document.querySelectorAll('.budget-item');
+            const priceInput = document.getElementById('clientPrice');
+            if (items.length > 0) {
+                let total = 0; 
+                items.forEach(item => total += parseFloat(item.querySelector('.budget-amount').value) || 0);
+                priceInput.value = total; priceInput.readOnly = true;
+            } else { 
+                priceInput.readOnly = false; 
+            }
+        };
+
+        window.getBudgetFromForm = function() {
+            const budgetArray = [];
+            document.querySelectorAll('.budget-item').forEach(item => {
+                const concept = item.querySelector('.budget-concept').value.trim();
+                const amount = parseFloat(item.querySelector('.budget-amount').value) || 0;
+                if (concept || amount > 0) budgetArray.push({ concept: concept || 'Item', amount: amount });
+            });
+            return budgetArray;
+        };
+
+        window.addAssetField = function(name = '', url = '') {
+            document.getElementById('assets-fields-container').insertAdjacentHTML('beforeend', `
+                <div class="asset-item flex flex-col gap-3 bg-[#1A1A1A] p-4 md:p-5 rounded-3xl border border-[#333] relative group transition-colors hover:border-brand-orange/50">
+                    <button type="button" onclick="this.parentElement.remove()" class="absolute top-3 md:top-4 right-3 md:right-4 text-zinc-500 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-[#111] rounded-xl hover:bg-red-500/10 hover:text-red-500 active:scale-90 transition-all">
+                        <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                    <input type="text" placeholder="Nombre del archivo (ej. Logo)" value="${escapeHTML(name)}" class="asset-name w-full pr-12 md:pr-16 px-4 py-3.5 md:py-4 text-sm font-bold text-white rounded-xl md:rounded-2xl border border-[#222] focus:outline-none focus:border-brand-orange bg-[#111] transition-colors">
+                    <input type="url" placeholder="URL del enlace (Drive, etc.)" value="${escapeHTML(url)}" class="asset-url w-full px-4 py-3.5 md:py-4 text-sm font-semibold text-brand-orange rounded-xl md:rounded-2xl border border-[#222] focus:outline-none focus:border-brand-orange bg-[#111] transition-colors">
+                </div>
+            `);
+        };
+
+        window.getAssetsFromForm = function() {
+            const assetsArray = [];
+            document.querySelectorAll('.asset-item').forEach(item => {
+                const url = item.querySelector('.asset-url').value.trim();
+                if (url) assetsArray.push({ name: item.querySelector('.asset-name').value.trim() || 'Archivo', url: url });
+            });
+            return assetsArray;
+        };
+
+        window.saveClient = async function() {
+            const name = document.getElementById('clientName').value.trim();
+            if (!name) return;
+
+            const id = document.getElementById('clientId').value;
+            const existingClient = clients.find(c => c.id === id);
+            const budgetData = window.getBudgetFromForm();
+            const autoService = budgetData.length > 0 ? budgetData.map(b => b.concept).join(' + ') : 'Diseño Especializado';
+
+            const newClient = {
+                id: id || generateId(),
+                name: escapeHTML(name), 
+                phone: escapeHTML(document.getElementById('clientPhone').value.trim()), 
+                email: escapeHTML(document.getElementById('clientEmail').value.trim()),
+                service: autoService, 
+                status: escapeHTML(document.getElementById('clientStatus').value),
+                deadline: escapeHTML(document.getElementById('clientDeadline').value), 
+                warranty: escapeHTML(document.getElementById('clientWarranty').value.trim()),
+                assets: window.getAssetsFromForm(), 
+                budget: budgetData,
+                price: parseFloat(document.getElementById('clientPrice').value) || 0, 
+                paid: parseFloat(document.getElementById('clientPaid').value) || 0,
+                notes: escapeHTML(document.getElementById('clientNotes').value), 
+                externalNotes: escapeHTML(document.getElementById('clientExternalNotes').value),
+                giftPlatform: escapeHTML(document.getElementById('clientGiftPlatform').value.trim()),
+                giftEmail: escapeHTML(document.getElementById('clientGiftEmail').value.trim()),
+                giftPassword: escapeHTML(document.getElementById('clientGiftPassword').value.trim()),
+                clientCode: existingClient ? existingClient.clientCode : null, 
+                createdAt: existingClient ? existingClient.createdAt : new Date().toISOString()
+            };
+
+            if (id) { 
+                const idx = clients.findIndex(c => c.id === id); 
+                if (idx > -1) clients[idx] = newClient; 
+            } else {
+                clients.unshift(newClient);
+            }
+
+            renderClients(); 
+            window.closeClientModal(); 
+            if(currentProfileId === newClient.id) window.openProfileModal(newClient.id);
+            try { await setDoc(doc(db, "proyectos_eqbito", newClient.id), newClient); } catch (e) {}
+        };
+
+        window.deleteCurrentClient = async function() {
+            if (!currentProfileId) return;
+            if (confirm('¿Eliminar este proyecto permanentemente?')) {
+                clients = clients.filter(c => c.id !== currentProfileId);
+                renderClients(); 
+                window.closeProfileModal();
+                try { await deleteDoc(doc(db, "proyectos_eqbito", currentProfileId)); } catch(e) {}
+            }
+        };
+
+        window.generateClientPIN = async function() {
+            if(!currentProfileId) return;
+            const c = clients.find(x => x.id === currentProfileId);
+            if(c) {
+                c.clientCode = Math.floor(100000 + Math.random() * 900000).toString();
+                document.getElementById('profilePINDisplay').textContent = c.clientCode;
+                try { await setDoc(doc(db, "proyectos_eqbito", c.id), c); } catch(e) {}
+            }
+        };
+
+        window.exportData = function() {
+            if(clients.length === 0) return;
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clients, null, 2));
+            const anchor = document.createElement('a'); 
+            anchor.setAttribute("href", dataStr); 
+            anchor.setAttribute("download", `eqbstudio_crm.json`);
+            document.body.appendChild(anchor); 
+            anchor.click(); 
+            anchor.remove();
+        };
+
+        window.revealGift = function(email, password, platform) {
+            window.open('https://instagram.com/eqbstudio', '_blank');
+            document.getElementById('gift-locked').classList.add('hidden');
+            const unlockedEl = document.getElementById('gift-unlocked');
+            unlockedEl.classList.remove('hidden');
+            unlockedEl.classList.add('flex');
+        };
+
+        window.copyPINToClipboard = function(btnEl) {
+            const text = document.getElementById('profilePINDisplay').innerText;
+            const tempInput = document.createElement("input");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            
+            const originalHTML = btnEl.innerHTML;
+            btnEl.innerHTML = `<svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>`;
+            setTimeout(() => { btnEl.innerHTML = originalHTML; }, 2000);
+        };
+
+        window.copyGiftData = function(text, btnEl) {
+            const tempInput = document.createElement("input");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            
+            const originalHTML = btnEl.innerHTML;
+            btnEl.innerHTML = `<svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>`;
+            setTimeout(() => { btnEl.innerHTML = originalHTML; }, 2000);
+        };
+
     </script>
 </body>
 </html>
